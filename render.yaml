@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: maison-xciv
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_JWT_SECRET
+        generateValue: true
+      - key: USER_JWT_SECRET
+        generateValue: true
+      - key: ADMINS_CONFIG
+        sync: false        # À renseigner manuellement dans le dashboard Render
+      - key: ALLOWED_ORIGINS
+        sync: false        # Ex: https://maison-xciv.onrender.com

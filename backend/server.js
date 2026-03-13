@@ -27,13 +27,18 @@ const { requireAuthPage } = require('./middleware/auth');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+const isProduction = process.env.NODE_ENV === 'production';
 
 // ─── Middlewares ─────────────────────────────────────────────
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+  : ['http://localhost:3000', 'http://127.0.0.1:3000'];
+
 app.use(cors({
-  origin:      ['http://localhost:3000', 'http://127.0.0.1:3000'],
-  methods:     ['GET', 'POST', 'PUT', 'DELETE'],
+  origin:         allowedOrigins,
+  methods:        ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-User-Token'],
-  credentials: true
+  credentials:    true
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));

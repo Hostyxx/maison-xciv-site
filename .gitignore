@@ -8,12 +8,16 @@ node_modules/
 database/users.json
 database/favorites.json
 database/invoices.json
-backend/config/admin.js
-backend/config/userConfig.js
 
-# Fichiers d'environnement
+# Les configs admin/user utilisent maintenant des variables d'env → versionnables
+# backend/config/admin.js      ← plus dans gitignore
+# backend/config/userConfig.js ← plus dans gitignore
+
+# Fichiers d'environnement (sauf .env.example qui sert de template)
 .env
-.env.*
+.env.local
+.env.production
+.env.development
 *.env
 
 # Logs

@@ -51,9 +51,9 @@ const AuthController = {
 
     // Envoi dans un cookie httpOnly (non accessible depuis JS)
     res.cookie(config.cookieName, token, {
-      httpOnly: true,       // inaccessible au JavaScript client
-      secure:   false,      // passer à true en HTTPS/production
-      sameSite: 'strict',   // protection CSRF
+      httpOnly: true,
+      secure:   process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
       maxAge:   config.cookieMaxAge
     });
 

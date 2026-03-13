@@ -139,7 +139,7 @@ function generateToken(user) {
 function setUserCookie(res, token) {
   res.cookie(config.cookieName, token, {
     httpOnly: true,
-    secure:   false, // true en HTTPS/production
+    secure:   process.env.NODE_ENV === 'production',
     sameSite: 'strict',
     maxAge:   config.cookieMaxAge
   });

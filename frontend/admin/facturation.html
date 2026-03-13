@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Facturation — Maison XCIV Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Jost:wght@200;300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="facturation.css">
+</head>
+<body class="dashboard-body">
+
+  <!-- ─── Sidebar ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-eyebrow">Maison</div>
+      <div class="sidebar-logo-main">XCIV</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="/admin/dashboard" class="sidebar-link" id="nav-catalogue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+        <span>Catalogue</span>
+      </a>
+      <a href="#" class="sidebar-link active" id="nav-factures" onclick="showView('list'); return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        <span>Factures</span>
+      </a>
+      <a href="#" class="sidebar-link" id="nav-clients" onclick="showView('clients'); return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+          <path d="M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+        <span>Clients</span>
+      </a>
+      <a href="/admin/merci" class="sidebar-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+        </svg>
+        <span>Remerciement</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="/" target="_blank" class="sidebar-site-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        <span>Voir le site</span>
+      </a>
+      <button class="sidebar-logout" onclick="logout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        <span>Déconnexion</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ─── Contenu principal ─── -->
+  <main class="dash-main">
+
+    <!-- Header dynamique -->
+    <header class="dash-header" id="pageHeader"></header>
+
+    <!-- Toast notifications -->
+    <div class="dash-toast-wrap" id="toastWrap"></div>
+
+    <!-- ═══════════════════════════════════════════
+         VUE : Liste des factures
+    ═══════════════════════════════════════════ -->
+    <div id="view-list" class="view">
+
+      <!-- Statistiques -->
+      <div class="fact-stats-row" id="statsRow">
+        <div class="fact-stat-card">
+          <div class="stat-icon stat-icon-total">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-value" id="stat-total">—</div>
+            <div class="stat-label">Factures</div>
+          </div>
+        </div>
+        <div class="fact-stat-card">
+          <div class="stat-icon stat-icon-volume">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-value" id="stat-volume">—</div>
+            <div class="stat-label">Volume TTC</div>
+          </div>
+        </div>
+        <div class="fact-stat-card">
+          <div class="stat-icon stat-icon-paid">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-value" id="stat-paid">—</div>
+            <div class="stat-label">Encaissé</div>
+          </div>
+        </div>
+        <div class="fact-stat-card">
+          <div class="stat-icon stat-icon-pending">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-value" id="stat-pending">—</div>
+            <div class="stat-label">En attente</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtres + tableau -->
+      <div class="dash-card">
+        <div class="fact-filters">
+          <div class="filter-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="filterSearch" placeholder="Rechercher client, numéro, produit…" oninput="debounceFilters()">
+          </div>
+          <select id="filterStatus" onchange="applyFilters()">
+            <option value="">Tous les statuts</option>
+            <option value="draft">Brouillon</option>
+            <option value="sent">Envoyée</option>
+            <option value="paid">Payée</option>
+            <option value="pending">En attente</option>
+            <option value="cancelled">Annulée</option>
+          </select>
+          <select id="filterPayStatus" onchange="applyFilters()">
+            <option value="">Tout paiement</option>
+            <option value="unpaid">Non payé</option>
+            <option value="partial">Partiel</option>
+            <option value="paid">Payé</option>
+          </select>
+          <input type="date" id="filterDateFrom" onchange="applyFilters()" title="Depuis">
+          <input type="date" id="filterDateTo" onchange="applyFilters()" title="Jusqu'au">
+          <button class="btn-ghost btn-sm" onclick="resetFilters()" title="Réinitialiser les filtres">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          </button>
+        </div>
+
+        <div class="fact-table-wrap">
+          <table class="fact-table" id="invoicesTable">
+            <thead>
+              <tr>
+                <th>N° Facture</th>
+                <th>Date</th>
+                <th>Client</th>
+                <th>Produit</th>
+                <th class="th-right">Montant TTC</th>
+                <th>Statut</th>
+                <th>Paiement</th>
+                <th class="th-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="invoicesTableBody">
+              <tr><td colspan="8" class="table-loading">Chargement…</td></tr>
+            </tbody>
+          </table>
+          <div id="emptyState" class="fact-empty hidden">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <p>Aucune facture trouvée</p>
+            <button class="btn-primary" onclick="openCreateForm()">Créer la première facture</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         VUE : Formulaire création / édition
+    ═══════════════════════════════════════════ -->
+    <div id="view-form" class="view hidden">
+      <div class="fact-layout">
+
+        <!-- Colonne gauche : formulaire -->
+        <section class="fact-form-section dash-card">
+          <form id="invoiceForm" onsubmit="return false">
+
+            <!-- ── Identité de la facture ── -->
+            <div class="fact-divider"><span>Identité de la facture</span></div>
+            <div class="fact-row">
+              <div class="form-field">
+                <label for="f_number">N° de facture <span class="req">*</span></label>
+                <input type="text" id="f_number" placeholder="XCIV-2026-001">
+              </div>
+              <div class="form-field">
+                <label for="f_date">Date <span class="req">*</span></label>
+                <input type="date" id="f_date">
+              </div>
+            </div>
+            <div class="fact-row">
+              <div class="form-field">
+                <label for="f_status">Statut de la facture</label>
+                <select id="f_status">
+                  <option value="draft">Brouillon</option>
+                  <option value="sent">Envoyée</option>
+                  <option value="paid">Payée</option>
+                  <option value="pending">En attente</option>
+                  <option value="cancelled">Annulée</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- ── Informations client ── -->
+            <div class="fact-divider"><span>Informations client</span></div>
+            <div class="fact-row">
+              <div class="form-field">
+                <label for="f_firstName">Prénom</label>
+                <input type="text" id="f_firstName" placeholder="Jean">
+              </div>
+              <div class="form-field">
+                <label for="f_lastName">Nom <span class="req">*</span></label>
+                <input type="text" id="f_lastName" placeholder="Dupont">
+              </div>
+            </div>
+            <div class="fact-row">
+              <div class="form-field">
+                <label for="f_email">Email</label>
+                <input type="email" id="f_email" placeholder="jean@exemple.com">
+              </div>
+              <div class="form-field">
+                <label for="f_phone">Téléphone</label>
+                <input type="tel" id="f_phone" placeholder="+33 6 12 34 56 78">
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="f_billingAddress">Adresse de facturation</label>
+              <textarea id="f_billingAddress" rows="3" placeholder="12 rue de la Paix&#10;75001 Paris&#10;France"></textarea>
+            </div>
+            <div class="form-field">
+              <label class="checkbox-label">
+                <input type="checkbox" id="f_shippingSame" checked onchange="toggleShipping()">
+                <span>Adresse de livraison identique</span>
+              </label>
+            </div>
+            <div id="f_shippingAddressWrap" class="form-field hidden">
+              <label for="f_shippingAddress">Adresse de livraison</label>
+              <textarea id="f_shippingAddress" rows="3" placeholder="Adresse de livraison si différente…"></textarea>
+            </div>
+
+            <!-- ── Détail du produit ── -->
+            <div class="fact-divider"><span>Détail du produit</span></div>
+            <div class="form-field">
+              <label for="f_productDesc">Description du produit <span class="req">*</span></label>
+              <input type="text" id="f_productDesc" placeholder="Montre de collection — Série limitée">
+            </div>
+            <div class="fact-row">
+              <div class="form-field">
+                <label for="f_brand">Marque</label>
+                <input type="text" id="f_brand" placeholder="Rolex">
+              </div>
+              <div class="form-field">
+                <label for="f_model">Modèle</label>
+                <input type="text" id="f_model" placeholder="Daytona">
+              </div>
+            </div>
+            <div class="fact-row">
+              <div class="form-field">
+                <label for="f_reference">Référence</label>
+                <input type="text" id="f_reference" placeholder="16520">
+              </div>
+              <div class="form-field">
+                <label for="f_year">Année</label>
+                <input type="text" id="f_year" placeholder="1990">
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="f_serial">Numéro de série</label>
+              <input type="text" id="f_serial" placeholder="K123456">
+            </div>
+
+            <!-- ── Montants ── -->
+            <div class="fact-divider"><span>Tarification</span></div>
+            <div class="fact-row">
+              <div class="form-field">
+                <label for="f_qty">Quantité</label>
+                <input type="number" id="f_qty" value="1" min="1" step="1" oninput="recalculate()">
+              </div>
+              <div class="form-field">
+                <label for="f_unitPrice">Prix unitaire HT (€) <span class="req">*</span></label>
+                <input type="number" id="f_unitPrice" placeholder="15000" min="0" step="0.01" oninput="recalculate()">
+              </div>
+            </div>
+            <div class="fact-row">
+              <div class="form-field">
+                <label for="f_ht">Total HT (€)</label>
+                <input type="number" id="f_ht" placeholder="0.00" readonly class="input-readonly">
+              </div>
+              <div class="form-field">
+                <label for="f_tvaRate">TVA (%)</label>
+                <input type="number" id="f_tvaRate" value="20" min="0" max="100" step="0.1" oninput="recalculate()">
+              </div>
+            </div>
+            <div class="fact-row">
+              <div class="form-field">
+                <label for="f_tva">Montant TVA (€)</label>
+                <input type="number" id="f_tva" placeholder="0.00" readonly class="input-readonly">
+              </div>
+              <div class="form-field">
+                <label for="f_ttc">Total TTC (€)</label>
+                <input type="number" id="f_ttc" placeholder="0.00" readonly class="input-readonly input-total">
+              </div>
+            </div>
+            <div class="fact-row">
+              <div class="form-field">
+                <label for="f_deposit">Acompte versé (€)</label>
+                <input type="number" id="f_deposit" placeholder="0" min="0" step="0.01" oninput="recalculate()">
+              </div>
+              <div class="form-field">
+                <label for="f_remaining">Reste à payer (€)</label>
+                <input type="number" id="f_remaining" placeholder="0.00" readonly class="input-readonly">
+              </div>
+            </div>
+
+            <!-- ── Paiement ── -->
+            <div class="fact-divider"><span>Paiement</span></div>
+            <div class="fact-row">
+              <div class="form-field">
+                <label for="f_paymentMethod">Mode de paiement</label>
+                <select id="f_paymentMethod">
+                  <option value="Virement bancaire">Virement bancaire</option>
+                  <option value="Espèces">Espèces</option>
+                  <option value="Carte bancaire">Carte bancaire</option>
+                  <option value="Chèque">Chèque</option>
+                  <option value="PayPal">PayPal</option>
+                  <option value="Crypto-monnaie">Crypto-monnaie</option>
+                  <option value="Autre">Autre</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="f_paymentStatus">Statut du paiement</label>
+                <select id="f_paymentStatus">
+                  <option value="unpaid">Non payé</option>
+                  <option value="partial">Partiellement payé</option>
+                  <option value="paid">Payé</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="f_paymentDate">Date du paiement</label>
+              <input type="date" id="f_paymentDate">
+            </div>
+
+            <!-- ── Notes ── -->
+            <div class="fact-divider"><span>Notes</span></div>
+            <div class="form-field">
+              <label for="f_noteInternal">
+                Note interne
+                <span class="field-hint">Non visible sur la facture PDF</span>
+              </label>
+              <textarea id="f_noteInternal" rows="2" placeholder="État du produit, conditions de la vente, remarques internes…"></textarea>
+            </div>
+            <div class="form-field">
+              <label for="f_noteClient">
+                Commentaire client
+                <span class="field-hint">Visible sur la facture PDF</span>
+              </label>
+              <textarea id="f_noteClient" rows="2" placeholder="Garantie incluse, accessoires fournis, conditions particulières…"></textarea>
+            </div>
+
+            <!-- ── Actions formulaire ── -->
+            <div class="fact-actions">
+              <button type="button" class="btn-secondary" onclick="showView('list')">Annuler</button>
+              <button type="button" class="btn-primary" onclick="handleFormSubmit()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Enregistrer
+              </button>
+            </div>
+
+          </form>
+        </section>
+
+        <!-- Colonne droite : aperçu PDF live -->
+        <section class="fact-preview-section">
+          <div class="fact-preview-label">Aperçu PDF en temps réel</div>
+          <div class="fact-preview-scale-wrap">
+            <div class="invoice-template" id="invoiceTemplate">
+              <!-- Peuplé par buildAndInjectTemplate() au chargement -->
+            </div>
+          </div>
+          <div class="fact-preview-actions">
+            <button class="btn-secondary btn-sm" onclick="generatePDFFromForm()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Générer PDF
+            </button>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         VUE : Clients
+    ═══════════════════════════════════════════ -->
+    <div id="view-clients" class="view hidden">
+
+      <div class="fact-stats-row" id="clientStatsRow">
+        <div class="fact-stat-card">
+          <div class="stat-icon stat-icon-total">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-value" id="cstat-total">—</div>
+            <div class="stat-label">Clients</div>
+          </div>
+        </div>
+        <div class="fact-stat-card">
+          <div class="stat-icon stat-icon-volume">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-value" id="cstat-volume">—</div>
+            <div class="stat-label">Volume total</div>
+          </div>
+        </div>
+        <div class="fact-stat-card">
+          <div class="stat-icon stat-icon-paid">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-value" id="cstat-paid">—</div>
+            <div class="stat-label">Encaissé</div>
+          </div>
+        </div>
+        <div class="fact-stat-card">
+          <div class="stat-icon stat-icon-pending">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-value" id="cstat-remaining">—</div>
+            <div class="stat-label">Reste à percevoir</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-card">
+        <div class="fact-table-wrap">
+          <table class="fact-table">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Email</th>
+                <th class="th-center">Factures</th>
+                <th class="th-right">Volume TTC</th>
+                <th class="th-right">Encaissé</th>
+                <th class="th-right">Reste</th>
+                <th>Dernier achat</th>
+                <th class="th-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="clientsTableBody">
+              <tr><td colspan="8" class="table-loading">Chargement…</td></tr>
+            </tbody>
+          </table>
+          <div id="clientEmptyState" class="fact-empty hidden">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <p>Aucun client pour l'instant</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       MODAL : Suppression
+  ═══════════════════════════════════════════ -->
+  <div class="modal-overlay hidden" id="deleteModal">
+    <div class="modal-card">
+      <div class="modal-icon modal-icon-danger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </div>
+      <h3 class="modal-title">Supprimer la facture</h3>
+      <p class="modal-text" id="deleteModalText">Cette action est irréversible.</p>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeDeleteModal()">Annuler</button>
+        <button class="btn-danger" onclick="confirmDelete()">Supprimer définitivement</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       MODAL : Aperçu PDF
+  ═══════════════════════════════════════════ -->
+  <div class="modal-overlay hidden" id="pdfModal">
+    <div class="pdf-modal-inner">
+      <div class="pdf-modal-header">
+        <span class="pdf-modal-title">Aperçu de la facture</span>
+        <button class="pdf-modal-close" onclick="closePDFModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="pdf-modal-body">
+        <div class="invoice-template" id="pdfInvoiceTemplate">
+          <!-- Peuplé dynamiquement par JS -->
+        </div>
+      </div>
+      <div class="pdf-modal-footer">
+        <button class="btn-secondary" onclick="closePDFModal()">Fermer</button>
+        <button class="btn-primary" id="pdfDownloadBtn" onclick="downloadPDFFromModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Télécharger PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       MODAL : Détail client
+  ═══════════════════════════════════════════ -->
+  <div class="modal-overlay hidden" id="clientModal">
+    <div class="modal-card modal-card-wide">
+      <div class="client-modal-header">
+        <div>
+          <h3 class="modal-title" id="clientModalName">—</h3>
+          <p class="modal-text" id="clientModalEmail">—</p>
+        </div>
+        <button class="pdf-modal-close" onclick="closeClientModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="client-modal-stats" id="clientModalStats"></div>
+      <div class="fact-table-wrap" style="max-height:340px;overflow-y:auto;">
+        <table class="fact-table">
+          <thead>
+            <tr>
+              <th>N° Facture</th>
+              <th>Date</th>
+              <th>Produit</th>
+              <th class="th-right">TTC</th>
+              <th>Statut</th>
+              <th>Paiement</th>
+              <th class="th-actions">Action</th>
+            </tr>
+          </thead>
+          <tbody id="clientModalInvoices"></tbody>
+        </table>
+      </div>
+      <div class="modal-actions" style="margin-top:20px">
+        <button class="btn-secondary" onclick="closeClientModal()">Fermer</button>
+        <button class="btn-primary" onclick="closeClientModal(); openCreateForm()">Nouvelle facture</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- jsPDF + html2canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="facturation.js"></script>
+</body>
+</html>

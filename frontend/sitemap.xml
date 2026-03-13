@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Page principale -->
+  <url>
+    <loc>https://maisonxciv.com/</loc>
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Section Horlogerie (ancre sur la page principale) -->
+  <url>
+    <loc>https://maisonxciv.com/#watches</loc>
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Section Nouveautés -->
+  <url>
+    <loc>https://maisonxciv.com/#nouveautes</loc>
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Section Services -->
+  <url>
+    <loc>https://maisonxciv.com/#services</loc>
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Section Contact -->
+  <url>
+    <loc>https://maisonxciv.com/#contact</loc>
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Connexion -->
+  <url>
+    <loc>https://maisonxciv.com/connexion</loc>
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+</urlset>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Maison XCIV Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Jost:wght@200;300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="dashboard-body">
+
+  <!-- ─── Sidebar ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-eyebrow">Maison</div>
+      <div class="sidebar-logo-main">XCIV</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#catalogue" class="sidebar-link active" data-section="catalogue" onclick="cancelForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+        <span>Catalogue</span>
+      </a>
+      <a href="#add" class="sidebar-link" data-section="add" onclick="showAddForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 8v8M8 12h8"/>
+        </svg>
+        <span>Ajouter</span>
+      </a>
+      <a href="#clients" class="sidebar-link" data-section="clients" onclick="showClients()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+          <path d="M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+        <span>Clients</span>
+      </a>
+
+      <a href="/admin/facturation" class="sidebar-link" data-section="facturation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <span>Facturation</span>
+      </a>
+      <a href="/admin/merci" class="sidebar-link" data-section="merci">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+        </svg>
+        <span>Remerciement</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <!-- Nom de l'admin connecté -->
+      <div class="sidebar-admin-badge" id="sidebarAdminBadge">
+        <div class="sidebar-admin-avatar" id="sidebarAdminAvatar">A</div>
+        <div class="sidebar-admin-info">
+          <div class="sidebar-admin-role">Administrateur</div>
+          <div class="sidebar-admin-name" id="sidebarAdminName">—</div>
+        </div>
+      </div>
+
+      <a href="/" target="_blank" class="sidebar-site-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        <span>Voir le site</span>
+      </a>
+      <button class="sidebar-logout" onclick="logout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        <span>Déconnexion</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ─── Contenu principal ─── -->
+  <main class="dash-main">
+
+    <!-- Header -->
+    <header class="dash-header">
+      <div class="dash-header-left">
+        <h1 class="dash-title" id="dashTitle">Catalogue de montres</h1>
+        <p class="dash-subtitle" id="dashSubtitle">Gérez votre collection</p>
+      </div>
+      <div class="dash-header-right">
+        <div class="dash-stats" id="dashStats"></div>
+        <button class="dash-add-btn" onclick="showAddForm()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          Ajouter une montre
+        </button>
+      </div>
+    </header>
+
+    <!-- Toast notifications -->
+    <div class="dash-toast-wrap" id="toastWrap"></div>
+
+    <!-- ─── Section : Formulaire (add / edit) ─── -->
+    <section class="dash-section" id="sectionForm" style="display:none">
+      <div class="dash-card">
+        <div class="form-header">
+          <h2 class="form-title" id="formTitle">Nouvelle montre</h2>
+          <button class="form-cancel" onclick="cancelForm()">✕ Annuler</button>
+        </div>
+
+        <form id="watchForm" onsubmit="submitWatch(event)">
+          <input type="hidden" id="fId">
+
+          <div class="form-grid">
+
+            <!-- Colonne gauche -->
+            <div class="form-col">
+
+              <div class="form-field">
+                <label for="fBrand">Marque <span class="req">*</span></label>
+                <input type="text" id="fBrand" placeholder="Ex: Rolex" required>
+              </div>
+
+              <div class="form-field">
+                <label for="fName">Modèle <span class="req">*</span></label>
+                <input type="text" id="fName" placeholder="Ex: Daytona" required>
+              </div>
+
+              <div class="form-field">
+                <label for="fPrice">Prix</label>
+                <input type="text" id="fPrice" placeholder="Sur demande  ou  15 500 €">
+              </div>
+
+              <div class="form-field">
+                <label for="fYear">Année</label>
+                <input type="number" id="fYear" placeholder="2023" min="1900" max="2099">
+              </div>
+
+              <div class="form-field">
+                <label for="fStatus">Statut</label>
+                <select id="fStatus">
+                  <option value="Disponible">✅  Disponible</option>
+                  <option value="Réservé">🟡  Réservé</option>
+                  <option value="Vendu">⭕  Vendu</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="fWhatsapp">Numéro WhatsApp</label>
+                <input type="text" id="fWhatsapp" placeholder="33601918798">
+              </div>
+
+            </div>
+
+            <!-- Colonne droite -->
+            <div class="form-col">
+
+              <div class="form-field">
+                <label for="fDescription">Description</label>
+                <textarea id="fDescription" rows="4" placeholder="Description élégante de la montre…"></textarea>
+              </div>
+
+              <!-- Upload image -->
+              <div class="form-field">
+                <label>Image</label>
+                <div class="img-upload-zone" id="imgUploadZone" onclick="document.getElementById('fImageFile').click()">
+                  <div class="img-upload-preview" id="imgPreview" style="display:none">
+                    <img id="imgPreviewEl" src="" alt="Aperçu">
+                    <button type="button" class="img-clear-btn" onclick="clearImage(event)">✕</button>
+                  </div>
+                  <div class="img-upload-placeholder" id="imgPlaceholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <span>Cliquer pour uploader</span>
+                    <small>JPG, PNG, WEBP — max 8 MB</small>
+                  </div>
+                  <div class="img-upload-loading" id="imgLoading" style="display:none">
+                    <div class="spinner"></div>
+                    <span>Upload en cours…</span>
+                  </div>
+                </div>
+                <input type="file" id="fImageFile" accept="image/jpeg,image/png,image/webp,image/avif" style="display:none" onchange="handleImageUpload(event)">
+                <!-- URL de l'image (remplie automatiquement après upload ou manuellement) -->
+                <input type="text" id="fImage" placeholder="URL de l'image (auto après upload)" style="margin-top:8px; font-size:11px; color: var(--c-grey)">
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" onclick="cancelForm()">Annuler</button>
+            <button type="submit" class="btn-primary" id="formSubmitBtn">
+              <span id="formSubmitText">Enregistrer</span>
+              <div class="btn-spinner" id="formSpinner" style="display:none"></div>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ─── Section : Liste des clients ─── -->
+    <section class="dash-section" id="sectionClients" style="display:none">
+      <div class="clients-summary" id="clientsSummary"></div>
+      <div class="dash-card table-card">
+        <div class="table-wrap">
+          <table class="watches-table" id="clientsTable">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Inscription</th>
+                <th>Favoris</th>
+                <th style="width:60px; text-align:right">Détail</th>
+              </tr>
+            </thead>
+            <tbody id="clientsTbody">
+              <tr><td colspan="4" class="table-loading">Chargement…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Section : Détail d'un client ─── -->
+    <section class="dash-section" id="sectionClientDetail" style="display:none">
+      <div class="client-detail-back">
+        <button class="btn-back" onclick="showClients()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Retour aux clients
+        </button>
+      </div>
+      <div id="clientDetailContent"></div>
+    </section>
+
+    <!-- ─── Section : Liste des montres ─── -->
+    <section class="dash-section" id="sectionCatalogue">
+
+      <!-- Barre de recherche + filtres -->
+      <div class="catalogue-toolbar">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Rechercher par nom ou marque…" oninput="filterList()">
+        </div>
+        <div class="filter-tabs" id="filterTabs">
+          <button class="filter-tab active" data-filter="all"        onclick="setFilter('all',this)">Toutes</button>
+          <button class="filter-tab"        data-filter="Disponible" onclick="setFilter('Disponible',this)">Disponibles</button>
+          <button class="filter-tab"        data-filter="Réservé"    onclick="setFilter('Réservé',this)">Réservées</button>
+          <button class="filter-tab"        data-filter="Vendu"      onclick="setFilter('Vendu',this)">Vendues</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="dash-card table-card">
+        <div class="table-wrap">
+          <table class="watches-table" id="watchesTable">
+            <thead>
+              <tr>
+                <th style="width:72px">Image</th>
+                <th>Marque / Modèle</th>
+                <th>Année</th>
+                <th>Prix</th>
+                <th>Statut</th>
+                <th style="width:120px; text-align:right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="watchesTbody">
+              <tr><td colspan="6" class="table-loading">Chargement…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ─── Modal de confirmation suppression ─── -->
+  <div class="modal-overlay" id="deleteModal" style="display:none">
+    <div class="modal-box">
+      <div class="modal-icon">⚠️</div>
+      <h3 class="modal-title">Supprimer cette montre ?</h3>
+      <p class="modal-desc" id="deleteModalDesc"></p>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeDeleteModal()">Annuler</button>
+        <button class="btn-danger"    onclick="confirmDelete()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

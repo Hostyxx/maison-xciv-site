@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maison XCIV — Administration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Jost:wght@200;300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="login-body">
+
+  <div class="login-wrap">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <div class="login-logo-eyebrow">Maison</div>
+      <div class="login-logo-main">XCIV</div>
+      <div class="login-logo-sub">Espace Administration</div>
+    </div>
+
+    <!-- Carte login -->
+    <div class="login-card">
+
+      <h1 class="login-title">Connexion</h1>
+      <p class="login-desc">Accès réservé aux administrateurs</p>
+
+      <!-- Message d'erreur -->
+      <div class="login-error" id="loginError" style="display:none"></div>
+
+      <!-- Formulaire -->
+      <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+
+        <div class="login-field">
+          <label for="email">Adresse email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="admin@maisonxciv.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="login-field">
+          <label for="password">Mot de passe</label>
+          <div class="login-pw-wrap">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="••••••••••"
+              autocomplete="current-password"
+              required
+            >
+            <button type="button" class="login-pw-toggle" onclick="togglePassword()" title="Afficher/masquer">
+              <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="login-btn" id="loginBtn">
+          <span id="loginBtnText">Connexion</span>
+          <div class="login-spinner" id="loginSpinner" style="display:none"></div>
+        </button>
+
+      </form>
+
+    </div>
+
+    <a href="/" class="login-back">← Retour au site</a>
+
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>

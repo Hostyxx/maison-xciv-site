@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Espace — Maison XCIV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Jost:wght@200;300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/connexion/auth.css">
+</head>
+<body>
+
+  <!-- Header espace client -->
+  <header class="espace-header">
+    <a href="/" class="espace-logo">XCIV</a>
+    <nav class="espace-nav">
+      <a href="/mon-espace" class="active">Mes favoris</a>
+      <a href="/#nouveautes">Collection</a>
+      <a href="#" id="logoutLink" onclick="logout(event)">Se déconnecter</a>
+    </nav>
+  </header>
+
+  <!-- Contenu principal -->
+  <main class="espace-main">
+
+    <!-- Chargement initial -->
+    <div id="loadingState" style="text-align:center; padding:80px; color:#7A7570; font-size:13px">
+      Chargement…
+    </div>
+
+    <!-- Contenu une fois chargé -->
+    <div id="espacContent" style="display:none">
+
+      <!-- Bienvenue -->
+      <div class="espace-welcome">
+        <div class="espace-welcome-eyebrow">Espace personnel</div>
+        <h1 class="espace-welcome-title">
+          Bonjour,<br><em id="userName"></em>
+        </h1>
+      </div>
+
+      <!-- Stats -->
+      <div class="espace-stats">
+        <div class="espace-stat">
+          <div class="espace-stat-n" id="statFavCount">0</div>
+          <div class="espace-stat-l">Pièces sauvegardées</div>
+        </div>
+        <div class="espace-stat">
+          <div class="espace-stat-n" id="statDispoCount">0</div>
+          <div class="espace-stat-l">Disponibles</div>
+        </div>
+        <div class="espace-stat">
+          <div class="espace-stat-n" id="statMemberSince"></div>
+          <div class="espace-stat-l">Membre depuis</div>
+        </div>
+      </div>
+
+      <!-- Favoris -->
+      <h2 class="fav-section-title">Mes montres sauvegardées</h2>
+      <div class="fav-grid" id="favGrid"></div>
+
+    </div>
+
+  </main>
+
+  <script src="profil.js"></script>
+</body>
+</html>

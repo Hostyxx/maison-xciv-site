@@ -1,0 +1,262 @@
+/* ═══════════════════════════════════════════════════════════════
+   merci.css — Maison XCIV Admin — Carte de Remerciement
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Layout deux colonnes ─── */
+.merci-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .merci-layout { grid-template-columns: 1fr; }
+}
+
+/* ─── Formulaire ─── */
+.merci-form-section { padding: 28px 32px; }
+
+/* ─── Sélecteur de ton ─── */
+.tone-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.tone-btn {
+  padding: 9px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  background: #F4EFE8;
+  border: 1px solid #E0DAD1;
+  border-radius: 4px;
+  color: #7A7570;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.tone-btn:hover { border-color: #C4AA8C; color: #0D0C0B; }
+.tone-btn.active { background: #0D0C0B; border-color: #0D0C0B; color: #FAF8F4; }
+
+/* ─── Toggle format ─── */
+.format-toggle {
+  display: flex;
+  gap: 4px;
+  background: #F4EFE8;
+  padding: 4px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.format-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: #7A7570;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.format-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+.format-btn.active { background: #0D0C0B; color: #FAF8F4; }
+
+/* ─── Aperçu ─── */
+.merci-preview-section { position: sticky; top: 24px; }
+
+.merci-preview-wrap {
+  background: #1A1917;
+  border-radius: 12px;
+  padding: 32px 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 360px;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TEMPLATE CARTE — capturé par html2canvas
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Carte postale paysage (défaut) : ratio 148/105 ≈ 1.41 ── */
+.merci-card {
+  position: relative;
+  background: #0D0C0B;
+  color: #FAF8F4;
+  box-sizing: border-box;
+  overflow: hidden;
+  font-family: 'Jost', sans-serif;
+  flex-shrink: 0;
+
+  width: 500px;
+  height: 354px;
+  padding: 30px 38px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* ── Format téléphone portrait : ratio 9/16 ── */
+.merci-card[data-format="phone"] {
+  width: 270px;
+  height: 480px;
+  padding: 36px 28px;
+}
+
+/* Fond texture subtile */
+.merci-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 10% 90%, rgba(196,170,140,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 10%, rgba(196,170,140,0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ─── Coins décoratifs ─── */
+.mc-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: #C4AA8C;
+  border-style: solid;
+  opacity: 0.55;
+}
+.mc-corner-tl { top: 12px;    left: 12px;   border-width: 1px 0 0 1px; }
+.mc-corner-tr { top: 12px;    right: 12px;  border-width: 1px 1px 0 0; }
+.mc-corner-bl { bottom: 12px; left: 12px;   border-width: 0 0 1px 1px; }
+.mc-corner-br { bottom: 12px; right: 12px;  border-width: 0 1px 1px 0; }
+
+/* ─── Logo ─── */
+.mc-logo-wrap { display: flex; align-items: center; }
+
+.mc-logo {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+.merci-card[data-format="phone"] .mc-logo { height: 44px; }
+
+/* ─── Lignes décoratives ─── */
+.mc-rule-top,
+.mc-rule-bottom {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(196,170,140,0.7) 0%, rgba(196,170,140,0.1) 100%);
+  flex-shrink: 0;
+}
+
+/* ─── Corps ─── */
+.mc-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 14px 0;
+  gap: 8px;
+}
+
+.mc-salut {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 20px;
+  font-style: italic;
+  color: #C4AA8C;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+.merci-card[data-format="phone"] .mc-salut { font-size: 24px; }
+
+.mc-message {
+  font-size: 11.5px;
+  line-height: 1.85;
+  color: rgba(254,253,251,0.72);
+  letter-spacing: 0.025em;
+  max-width: 90%;
+}
+.merci-card[data-format="phone"] .mc-message { font-size: 13px; }
+
+.mc-ref {
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(196,170,140,0.55);
+  margin-top: 2px;
+}
+
+/* ─── Footer ─── */
+.mc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.merci-card[data-format="phone"] .mc-footer {
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.mc-signature {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(254,253,251,0.55);
+}
+
+.mc-site {
+  font-size: 8.5px;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: rgba(196,170,140,0.35);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Classes form réutilisées depuis admin.css + fact
+   ═══════════════════════════════════════════════════════════════ */
+.fact-section-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #0D0C0B;
+  margin: 0 0 24px 0;
+  letter-spacing: 0.02em;
+}
+
+.fact-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 20px 0 16px;
+}
+.fact-divider::before,
+.fact-divider::after { content: ''; flex: 1; height: 1px; background: #E0DAD1; }
+.fact-divider span {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #7A7570;
+  white-space: nowrap;
+}
+
+.fact-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #E0DAD1;
+}
+
+/* ─── Spin ─── */
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.spin-icon { animation: spin 1s linear infinite; }

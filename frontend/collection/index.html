@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ═══════════════════════════════════════════
+       SEO
+  ═══════════════════════════════════════════ -->
+  <title>Collection — Maison XCIV | Montres de Prestige</title>
+  <meta name="description" content="Découvrez la collection complète de montres de prestige Maison XCIV. Rolex, Patek Philippe, Audemars Piguet — sélection exclusive, disponible à l'acquisition. Filtrez par marque, prix et année.">
+  <meta name="keywords" content="collection montres luxe, Rolex achat, Patek Philippe, Audemars Piguet, horlogerie prestige, Maison XCIV collection">
+  <meta name="author" content="Maison XCIV">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://maisonxciv.com/collection">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://maisonxciv.com/collection">
+  <meta property="og:title"       content="Collection Montres — Maison XCIV">
+  <meta property="og:description" content="Collection complète de montres de prestige. Rolex, Patek Philippe, Audemars Piguet et références emblématiques. Filtres avancés, favoris et service d'acquisition.">
+  <meta property="og:image"       content="https://maisonxciv.com/assets/images/og-preview.jpg">
+  <meta property="og:locale"      content="fr_FR">
+  <meta property="og:site_name"   content="Maison XCIV">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Collection Montres — Maison XCIV">
+  <meta name="twitter:description" content="Collection complète de montres de prestige. Filtres par marque, prix et année.">
+  <meta name="twitter:image"       content="https://maisonxciv.com/assets/images/og-preview.jpg">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Collection Montres — Maison XCIV",
+    "description": "Collection complète de montres de prestige",
+    "url": "https://maisonxciv.com/collection",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Maison XCIV",
+      "url": "https://maisonxciv.com"
+    }
+  }
+  </script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+  <link rel="apple-touch-icon"         href="/assets/images/apple-touch-icon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@200;300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="collection.css">
+</head>
+<body>
+
+<!-- ─── CURSOR (desktop) ─── -->
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- ─── MOBILE NAV ─── -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="/"           onclick="closeMobile()">Accueil</a>
+  <a href="/#services"  onclick="closeMobile()">Services</a>
+  <a href="/collection" onclick="closeMobile()" class="active">Collection</a>
+  <a href="/#about"     onclick="closeMobile()">Maison</a>
+  <a href="/#contact"   onclick="closeMobile()">Contact</a>
+  <div class="mobile-nav-divider"></div>
+  <div class="mobile-nav-auth-links" id="mobileNavAuth">
+    <a href="/connexion" onclick="closeMobile()">Mon compte</a>
+  </div>
+  <div class="mobile-nav-sub">@maisonxciv</div>
+</div>
+
+<!-- ─── NAVBAR ─── -->
+<nav id="nav" class="solid">
+  <a href="/" class="nav-logo" aria-label="Maison XCIV — Accueil">
+    <span class="nav-logo-text">XCIV</span>
+    <span class="nav-logo-eyebrow">Maison</span>
+  </a>
+
+  <ul class="nav-center">
+    <li><a href="/#services">Services</a></li>
+    <li><a href="/#watches">Horlogerie</a></li>
+    <li><a href="/collection" class="active">Collection</a></li>
+    <li><a href="/#about">Maison</a></li>
+    <li><a href="/#contact">Contact</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <div class="nav-auth" id="navAuth">
+      <a href="/connexion" class="nav-auth-link" id="navLogin" aria-label="Mon compte">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </a>
+      <div class="nav-user-menu" id="navUserMenu" style="display:none">
+        <a href="/mon-espace" class="nav-user-name" id="navUserName"></a>
+        <button class="nav-logout-btn" onclick="logoutUser()">Déconnexion</button>
+      </div>
+      <a href="/admin/dashboard" class="nav-admin-badge" id="navAdminBadge" style="display:none">Admin</a>
+    </div>
+    <a href="/#contact" class="nav-btn">Nous contacter</a>
+    <div class="hamburger" id="hamburger" onclick="toggleMobile()">
+      <span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── PAGE HERO ─── -->
+<header class="coll-hero" id="collHero">
+  <div class="coll-hero-inner">
+    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+      <a href="/">Accueil</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Collection</span>
+    </nav>
+    <h1 class="coll-hero-title">Notre <em>Collection</em></h1>
+    <p class="coll-hero-sub">Chaque pièce est sélectionnée avec soin — authenticité garantie, service d'exception.</p>
+    <div class="coll-hero-counts">
+      <span id="heroTotalCount">—</span> montres &nbsp;·&nbsp;
+      <span id="heroDispoCount">—</span> disponibles
+    </div>
+  </div>
+  <div class="coll-hero-glow"></div>
+</header>
+
+<!-- ─── FILTRES ─── -->
+<section class="coll-filters" id="collFilters" aria-label="Filtres et tri">
+  <div class="coll-filters-inner">
+
+    <!-- Filtre Marque -->
+    <div class="filter-group" role="group" aria-label="Filtrer par marque">
+      <span class="filter-group-label">Marque</span>
+      <div class="filter-tabs" id="brandTabs">
+        <button class="filter-tab active" data-brand="all"     onclick="setBrand('all',this)">Toutes</button>
+        <button class="filter-tab"        data-brand="rolex"   onclick="setBrand('rolex',this)">Rolex</button>
+        <button class="filter-tab"        data-brand="patek"   onclick="setBrand('patek',this)">Patek Philippe</button>
+        <button class="filter-tab"        data-brand="ap"      onclick="setBrand('ap',this)">Audemars Piguet</button>
+        <button class="filter-tab"        data-brand="autres"  onclick="setBrand('autres',this)">Autres</button>
+      </div>
+    </div>
+
+    <!-- Tri Prix + Année -->
+    <div class="filter-group filter-group-right" role="group" aria-label="Tri">
+      <span class="filter-group-label">Trier par</span>
+      <select id="sortSelect" class="sort-select" onchange="setSort(this.value)" aria-label="Tri des montres">
+        <option value="default">Plus récentes</option>
+        <option value="price-asc">Prix croissant</option>
+        <option value="price-desc">Prix décroissant</option>
+        <option value="year-desc">Année (récente)</option>
+        <option value="year-asc">Année (ancienne)</option>
+      </select>
+    </div>
+
+  </div>
+
+  <!-- Résultats / état -->
+  <div class="coll-results-bar">
+    <span class="coll-results-count" id="resultsCount">Chargement…</span>
+    <button class="coll-reset-btn" id="resetBtn" onclick="resetFilters()" style="display:none" aria-label="Réinitialiser les filtres">
+      Réinitialiser les filtres ✕
+    </button>
+  </div>
+</section>
+
+<!-- ─── GRILLE DE MONTRES ─── -->
+<main class="coll-main" id="collMain">
+  <div class="coll-grid" id="collGrid">
+    <div class="coll-loading" id="collLoading">
+      <div class="coll-spinner"></div>
+      <p>Chargement de la collection…</p>
+    </div>
+  </div>
+</main>
+
+<!-- ─── MODAL AUTH (favoris) ─── -->
+<div class="auth-modal-overlay" id="authModal" onclick="closeAuthModal(event)">
+  <div class="auth-modal-box">
+    <button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Fermer">✕</button>
+    <div class="auth-modal-eyebrow">Maison XCIV</div>
+    <h2 class="auth-modal-title">Sauvegardez vos <em>pièces favorites</em></h2>
+    <p class="auth-modal-desc">Créez votre espace personnel pour retrouver vos sélections à tout moment.</p>
+    <div class="auth-modal-actions">
+      <a href="/connexion" class="auth-modal-btn-primary">Se connecter</a>
+      <a href="/inscription" class="auth-modal-btn-secondary">Créer un compte</a>
+    </div>
+    <p class="auth-modal-foot">Service gratuit · Accès immédiat</p>
+  </div>
+</div>
+
+<!-- ─── TOAST ─── -->
+<div id="pubToast" class="pub-toast" role="alert" aria-live="polite"></div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">XCIV</div>
+      <div class="footer-tagline">Maison Digitale & Horlogère</div>
+      <p class="footer-desc">L'excellence au croisement du digital premium et de l'univers horloger de prestige. Des expériences inoubliables, des marques qui durent.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-t">Collection</div>
+      <ul>
+        <li><a href="/collection?brand=rolex">Rolex</a></li>
+        <li><a href="/collection?brand=patek">Patek Philippe</a></li>
+        <li><a href="/collection?brand=ap">Audemars Piguet</a></li>
+        <li><a href="/collection">Voir tout</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-t">Services</div>
+      <ul>
+        <li><a href="/#services">Sites web premium</a></li>
+        <li><a href="/#services">Design UI / UX</a></li>
+        <li><a href="/#services">Branding digital</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-t">Contact</div>
+      <ul>
+        <li><a href="https://instagram.com/maisonxciv" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://wa.me/33601918798" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="/#contact">Nous écrire</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Maison XCIV · Tous droits réservés</span>
+    <div class="footer-bottom-right">
+      <a href="#">Confidentialité</a>
+      <a href="#">Mentions légales</a>
+    </div>
+  </div>
+</footer>
+
+<script src="collection.js"></script>
+</body>
+</html>

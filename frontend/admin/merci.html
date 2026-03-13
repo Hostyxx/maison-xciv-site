@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Carte de Remerciement — Maison XCIV Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@200;300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="merci.css">
+</head>
+<body class="dashboard-body">
+
+  <!-- ─── Sidebar ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-eyebrow">Maison</div>
+      <div class="sidebar-logo-main">XCIV</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="/admin/dashboard" class="sidebar-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+        <span>Catalogue</span>
+      </a>
+      <a href="/admin/facturation" class="sidebar-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <span>Facturation</span>
+      </a>
+      <a href="#" class="sidebar-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+        </svg>
+        <span>Remerciement</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="/" target="_blank" class="sidebar-site-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        <span>Voir le site</span>
+      </a>
+      <button class="sidebar-logout" onclick="logout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        <span>Déconnexion</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ─── Contenu principal ─── -->
+  <main class="dash-main">
+
+    <header class="dash-header">
+      <div class="dash-header-left">
+        <h1 class="dash-title">Carte de Remerciement</h1>
+        <p class="dash-subtitle">Générez une carte personnalisée pour vos clients</p>
+      </div>
+      <div class="dash-header-right">
+        <!-- Choix du format -->
+        <div class="format-toggle" id="formatToggle">
+          <button class="format-btn active" data-format="postcard" onclick="setFormat('postcard', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="5" width="20" height="14" rx="2"/>
+            </svg>
+            Carte postale
+          </button>
+          <button class="format-btn" data-format="phone" onclick="setFormat('phone', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="7" y="2" width="10" height="20" rx="2"/>
+              <circle cx="12" cy="17" r="1"/>
+            </svg>
+            Format téléphone
+          </button>
+        </div>
+        <button class="dash-add-btn" onclick="generatePDF()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Télécharger PDF
+        </button>
+      </div>
+    </header>
+
+    <div class="dash-toast-wrap" id="toastWrap"></div>
+
+    <div class="merci-layout">
+
+      <!-- ─── Formulaire ─── -->
+      <section class="merci-form-section dash-card">
+        <h2 class="fact-section-title">Personnalisation</h2>
+
+        <form id="merciForm" onsubmit="return false">
+
+          <div class="fact-divider"><span>Client</span></div>
+
+          <div class="form-field">
+            <label for="mClientName">Prénom du client <span class="req">*</span></label>
+            <input type="text" id="mClientName" placeholder="Jean" required>
+          </div>
+
+          <div class="form-field">
+            <label for="mWatchRef">Référence de la montre</label>
+            <input type="text" id="mWatchRef" placeholder="Rolex Daytona Ref. 16520">
+          </div>
+
+          <div class="fact-divider"><span>Message</span></div>
+
+          <!-- Sélection du ton -->
+          <div class="form-field">
+            <label>Ton du message</label>
+            <div class="tone-grid" id="toneGrid">
+              <button type="button" class="tone-btn active" data-tone="elegant" onclick="setTone('elegant', this)">
+                Élégant
+              </button>
+              <button type="button" class="tone-btn" data-tone="chaleureux" onclick="setTone('chaleureux', this)">
+                Chaleureux
+              </button>
+              <button type="button" class="tone-btn" data-tone="poetique" onclick="setTone('poetique', this)">
+                Poétique
+              </button>
+              <button type="button" class="tone-btn" data-tone="custom" onclick="setTone('custom', this)">
+                Personnalisé
+              </button>
+            </div>
+          </div>
+
+          <!-- Message personnalisé (visible si "custom") -->
+          <div class="form-field" id="customMessageField" style="display:none">
+            <label for="mCustomMessage">Votre message</label>
+            <textarea id="mCustomMessage" rows="4" placeholder="Écrivez votre message personnalisé…" oninput="updateCustomMessage()"></textarea>
+          </div>
+
+          <div class="fact-divider"><span>Signature</span></div>
+
+          <div class="form-field">
+            <label for="mSignature">Signature</label>
+            <input type="text" id="mSignature" value="L'équipe Maison XCIV" placeholder="L'équipe Maison XCIV">
+          </div>
+
+          <div class="fact-actions">
+            <button type="button" class="btn-secondary" onclick="resetMerci()">Réinitialiser</button>
+            <button type="button" class="btn-primary" onclick="generatePDF()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Générer PDF
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ─── Aperçu ─── -->
+      <section class="merci-preview-section">
+        <div class="fact-preview-label">Aperçu</div>
+        <div class="merci-preview-wrap" id="previewWrap">
+
+          <!-- ══════════════════════════════════
+               TEMPLATE CARTE — id="merciCard"
+               Capturé par html2canvas pour PDF
+          ══════════════════════════════════ -->
+          <div class="merci-card" id="merciCard" data-format="postcard">
+
+            <!-- Coin décoratif haut-gauche -->
+            <div class="mc-corner mc-corner-tl"></div>
+            <div class="mc-corner mc-corner-tr"></div>
+            <div class="mc-corner mc-corner-bl"></div>
+            <div class="mc-corner mc-corner-br"></div>
+
+            <!-- Logo -->
+            <div class="mc-logo-wrap">
+              <svg class="mc-logo" version="1.0" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 390 1107 450"
+                preserveAspectRatio="xMinYMid meet"
+                aria-label="Maison XCIV">
+                <g transform="translate(0.000000,1212.000000) scale(0.100000,-0.100000)" fill="#C4AA8C" stroke="none">
+                  <path d="M5465 8181 c-79 -10 -131 -28 -182 -63 -51 -34 -70 -60 -84 -112 -18 -65 -3 -122 41 -165 53 -52 98 -62 295 -71 195 -8 229 -19 243 -73 16 -58 -11 -112 -73 -145 -45 -25 -261 -24 -333 2 -62 21 -122 69 -122 97 0 46 -28 3 -77 -117 -2 -7 11 -14 34 -17 21 -2 67 -17 103 -33 63 -28 70 -29 226 -29 l161 0 69 35 c89 46 127 102 127 188 0 68 -20 111 -68 148 -51 38 -130 54 -280 54 -71 0 -146 5 -166 10 -117 33 -100 142 29 190 48 18 73 21 157 18 119 -4 185 -30 212 -82 l16 -31 33 70 c18 39 33 75 33 80 1 6 -16 11 -36 11 -21 0 -65 7 -98 16 -75 21 -182 28 -260 19z"/>
+                  <path d="M6400 8179 c-121 -20 -228 -96 -277 -198 -25 -51 -28 -66 -28 -166 0 -102 2 -114 29 -168 58 -114 164 -182 307 -196 243 -25 412 57 475 231 21 58 20 199 -1 263 -41 121 -144 206 -282 230 -88 16 -143 17 -223 4z m263 -113 c68 -33 112 -84 132 -150 46 -153 -18 -315 -143 -363 -58 -22 -218 -25 -276 -4 -62 22 -133 94 -151 154 -42 142 6 301 109 354 100 52 234 56 329 9z"/>
+                  <path d="M2643 8162 c15 -17 17 -56 17 -353 0 -247 -3 -338 -12 -347 -9 -9 4 -12 62 -12 58 0 71 3 62 12 -9 9 -12 88 -12 297 1 260 2 284 16 266 9 -11 74 -137 146 -280 71 -143 133 -263 137 -268 4 -4 72 121 150 278 79 157 147 285 152 285 5 0 9 -125 9 -277 0 -243 -2 -279 -17 -295 -15 -17 -13 -18 72 -18 85 0 87 1 72 18 -15 17 -17 55 -17 345 0 276 2 328 15 341 8 8 15 17 15 20 0 3 -52 6 -117 6 -111 0 -115 -1 -100 -18 16 -17 14 -24 -27 -103 -128 -243 -195 -364 -202 -363 -11 2 -26 28 -140 255 -70 139 -93 194 -85 202 23 23 8 27 -101 27 -107 0 -110 -1 -95 -18z"/>
+                  <path d="M4021 8162 c14 -22 15 -19 -223 -537 -33 -71 -66 -137 -74 -146 -8 -8 -14 -19 -14 -22 0 -4 33 -7 74 -7 69 0 74 1 69 20 -6 24 42 150 65 168 11 8 67 12 197 12 209 0 196 5 241 -99 23 -52 25 -66 16 -82 -12 -18 -8 -19 79 -19 88 0 91 1 70 18 -31 25 -324 640 -325 680 l0 32 -93 0 c-87 0 -92 -1 -82 -18z m109 -148 c51 -100 127 -270 123 -276 -6 -11 -281 -10 -287 0 -8 13 127 313 139 309 5 -2 17 -17 25 -33z"/>
+                  <path d="M4756 8153 c11 -23 14 -90 14 -350 0 -204 -4 -324 -10 -328 -24 -15 -5 -23 63 -28 83 -6 95 -2 72 23 -14 15 -15 57 -13 346 2 181 7 337 12 347 7 15 1 17 -72 17 l-81 0 15 -27z"/>
+                  <path d="M7180 8171 c0 -5 6 -11 13 -13 18 -7 18 -668 -1 -691 -12 -13 -5 -16 55 -19 74 -4 92 2 68 22 -13 11 -15 53 -15 296 0 232 2 284 13 284 8 0 88 -84 178 -186 360 -410 341 -386 319 -399 -23 -14 2 -20 75 -17 57 3 74 7 66 15 -15 15 -16 683 -1 692 26 16 4 25 -61 25 -64 0 -70 -2 -63 -17 5 -10 10 -132 12 -270 3 -279 2 -284 -53 -214 -16 21 -109 127 -205 236 -213 240 -206 231 -190 250 11 13 -1 15 -99 15 -61 0 -111 -4 -111 -9z"/>
+                  <path d="M4485 7095 c-434 -65 -764 -300 -896 -639 -82 -212 -77 -528 12 -736 153 -358 502 -571 1005 -612 127 -11 163 -10 277 5 214 27 413 92 666 216 68 34 134 61 147 61 28 0 54 10 54 20 0 5 -52 93 -115 197 -94 153 -120 188 -138 188 -19 0 -23 -6 -27 -53 -4 -41 -12 -59 -35 -82 -89 -88 -310 -176 -526 -210 -103 -17 -354 -8 -439 15 -210 56 -387 190 -470 355 -50 100 -64 163 -64 295 1 102 5 132 27 200 71 214 263 381 512 446 126 33 302 37 445 10 196 -38 378 -109 437 -173 11 -12 26 -42 32 -65 19 -72 37 -59 141 105 51 81 113 177 137 213 25 39 41 73 37 82 -9 23 -35 29 -54 12 -25 -22 -56 -19 -150 18 -149 59 -376 115 -550 136 -113 15 -354 12 -465 -4z"/>
+                  <path d="M981 7072 c-14 -27 -1 -40 55 -57 100 -29 92 -21 465 -495 288 -366 319 -406 319 -419 0 -5 -109 -149 -242 -318 -134 -170 -288 -366 -343 -436 -106 -136 -147 -167 -217 -167 -37 0 -53 -17 -42 -44 4 -11 64 -14 322 -18 174 -2 327 -2 340 0 34 6 30 48 -7 67 -53 27 -49 71 11 149 97 125 381 477 390 482 5 4 18 -2 28 -12 38 -38 382 -490 401 -526 22 -44 13 -79 -28 -97 -17 -8 -23 -18 -21 -34 l3 -22 345 -5 c190 -3 356 -2 370 1 18 4 25 12 25 29 0 19 -9 26 -42 37 -50 17 -122 78 -165 142 -18 25 -82 109 -142 186 -369 468 -491 627 -494 638 -3 13 79 117 431 552 185 228 231 281 262 298 11 6 49 15 85 21 60 10 65 13 65 36 l0 25 -375 0 -375 0 0 -25 c0 -20 8 -27 45 -40 41 -14 45 -19 45 -47 0 -27 -35 -76 -199 -283 -109 -138 -203 -249 -210 -247 -19 6 -344 417 -367 464 -26 53 -17 83 29 107 32 17 45 38 36 61 -5 13 -59 15 -400 15 -369 0 -394 -1 -403 -18z"/>
+                  <path d="M6357 7083 c-18 -17 -4 -44 33 -63 21 -11 44 -29 50 -39 16 -31 14 -1728 -3 -1761 -7 -14 -28 -30 -47 -36 -39 -13 -60 -38 -45 -53 8 -7 541 -18 603 -12 6 0 12 12 12 26 0 19 -9 28 -45 44 l-45 20 2 893 3 893 43 20 c36 17 42 24 40 45 l-3 25 -296 3 c-162 1 -298 -1 -302 -5z"/>
+                  <path d="M7377 7083 c-4 -3 -7 -17 -7 -30 0 -19 10 -28 48 -44 26 -11 58 -30 71 -42 25 -24 70 -109 130 -246 21 -47 137 -300 258 -561 121 -261 266 -576 323 -699 l103 -224 -23 -42 c-42 -77 -47 -75 270 -75 l280 0 0 28 c0 15 -7 36 -15 46 -8 11 -15 30 -15 43 0 12 47 125 104 250 57 125 146 323 199 438 287 633 458 1001 480 1034 16 23 43 47 72 60 37 17 46 26 43 44 l-3 22 -322 3 -323 2 0 -29 c0 -23 5 -30 28 -36 46 -11 72 -33 72 -61 0 -14 -91 -222 -202 -462 -111 -241 -231 -502 -268 -582 -79 -170 -118 -250 -125 -250 -3 0 -26 44 -51 98 -144 302 -231 489 -274 582 -26 58 -94 202 -150 320 -56 118 -106 230 -112 249 -13 46 -3 78 31 95 31 17 43 38 35 61 -5 13 -51 15 -328 15 -178 0 -326 -3 -329 -7z"/>
+                </g>
+              </svg>
+            </div>
+
+            <!-- Ligne dorée haut -->
+            <div class="mc-rule-top"></div>
+
+            <!-- Corps du message -->
+            <div class="mc-body">
+              <div class="mc-salut" id="mcSalut">Cher Jean,</div>
+              <div class="mc-message" id="mcMessage">
+                Nous vous remercions pour votre confiance et votre choix de la Maison XCIV. Chaque pièce que nous vous confions est le fruit d'une sélection méticuleuse — l'excellence ne souffre d'aucun compromis.
+              </div>
+              <div class="mc-ref" id="mcRef"></div>
+            </div>
+
+            <!-- Ligne dorée bas -->
+            <div class="mc-rule-bottom"></div>
+
+            <!-- Signature -->
+            <div class="mc-footer">
+              <div class="mc-signature" id="mcSignature">L'équipe Maison XCIV</div>
+              <div class="mc-site">maisonxciv.com</div>
+            </div>
+
+          </div><!-- /merci-card -->
+
+        </div><!-- /merci-preview-wrap -->
+      </section>
+
+    </div><!-- /merci-layout -->
+
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="merci.js"></script>
+</body>
+</html>

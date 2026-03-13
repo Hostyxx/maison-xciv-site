@@ -1,0 +1,43 @@
+# Dépendances
+node_modules/
+
+# Fichier export standalone à la racine (non utilisé par le serveur, 2.5MB inutile)
+/index.html
+
+# Données sensibles — ne jamais versionner
+database/users.json
+database/favorites.json
+database/invoices.json
+backend/config/admin.js
+backend/config/userConfig.js
+
+# Fichiers d'environnement
+.env
+.env.*
+*.env
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Claude Code (mémoire locale, pas à versionner)
+.claude/
+
+# Build / cache
+.cache/
+dist/
+build/

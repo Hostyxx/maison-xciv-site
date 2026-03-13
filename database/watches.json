@@ -1,0 +1,89 @@
+{
+  "nextId": 8,
+  "watches": [
+    {
+      "id": 1,
+      "name": "Daytona",
+      "brand": "Rolex",
+      "price": "Sur demande",
+      "description": "Le chronographe de référence. Boîtier Oystersteel, cadran noir, lunette Cerachrom noire. Précision chronométrique absolue.",
+      "image": "",
+      "year": 2022,
+      "status": "Disponible",
+      "whatsapp": "33601918798",
+      "message": "Bonjour, je suis intéressé(e) par la Rolex Daytona disponible sur votre site.",
+      "created_at": "2026-03-12T15:05:06.413Z",
+      "updated_at": "2026-03-12T15:05:06.414Z"
+    },
+    {
+      "id": 2,
+      "name": "Datejust 36",
+      "brand": "Rolex",
+      "price": "Sur demande",
+      "description": "Icône intemporelle depuis 1945. Cadran olive, lunette cannelée, bracelet Jubilé. Élégance transcendant les modes.",
+      "image": "/assets/images/uploads/watch_1773331223485.avif",
+      "year": 2021,
+      "status": "Disponible",
+      "whatsapp": "33601918798",
+      "message": "Bonjour, je suis intéressé(e) par la Rolex Datejust 36.",
+      "created_at": "2026-03-12T15:05:06.414Z",
+      "updated_at": "2026-03-12T16:00:28.152Z"
+    },
+    {
+      "id": 3,
+      "name": "GMT-Master II Pepsi",
+      "brand": "Rolex",
+      "price": "Sur demande",
+      "description": "La montre des voyageurs d'exception. Lunette bicolore Pepsi Cerachrom, deux fuseaux horaires. Présence universelle.",
+      "image": "/assets/images/uploads/watch_1773331234836.avif",
+      "year": 2023,
+      "status": "Réservé",
+      "whatsapp": "33601918798",
+      "message": "Bonjour, je suis intéressé(e) par la Rolex GMT-Master II Pepsi.",
+      "created_at": "2026-03-12T15:05:06.414Z",
+      "updated_at": "2026-03-12T16:00:36.665Z"
+    },
+    {
+      "id": 4,
+      "name": "Submariner Date",
+      "brand": "Rolex",
+      "price": "Sur demande",
+      "description": "L'outil de plongée par excellence. Lunette Cerachrom noire, étanche à 300m. Une icône du design horloger moderne.",
+      "image": "/assets/images/uploads/watch_1773331243328.avif",
+      "year": 2022,
+      "status": "Disponible",
+      "whatsapp": "33601918798",
+      "message": "Bonjour, je suis intéressé(e) par la Rolex Submariner Date.",
+      "created_at": "2026-03-12T15:05:06.414Z",
+      "updated_at": "2026-03-12T16:00:44.862Z"
+    },
+    {
+      "id": 5,
+      "name": "Royal Oak 37mm",
+      "brand": "Audemars Piguet",
+      "price": "Sur demande",
+      "description": "Le luxe sportif réinventé par Gérald Genta. Boîtier octogonal signature, cadran tapisserie, bracelet intégré.",
+      "image": "/assets/images/uploads/watch_1773331251615.avif",
+      "year": 2020,
+      "status": "Vendu",
+      "whatsapp": "33601918798",
+      "message": "Bonjour, je suis intéressé(e) par la Audemars Piguet Royal Oak 37mm.",
+      "created_at": "2026-03-12T15:05:06.414Z",
+      "updated_at": "2026-03-12T16:00:53.378Z"
+    },
+    {
+      "id": 6,
+      "name": "Nautilus 5711",
+      "brand": "Patek Philippe",
+      "price": "Sur demande",
+      "description": "Le graal horloger. Réf. 5711/1A-010, acier, cadran vert olive. Pièce collector d'exception, très rare sur le marché.",
+      "image": "",
+      "year": 2019,
+      "status": "Vendu",
+      "whatsapp": "33601918798",
+      "message": "Bonjour, je suis intéressé(e) par la Patek Philippe Nautilus 5711.",
+      "created_at": "2026-03-12T15:05:06.414Z",
+      "updated_at": "2026-03-12T15:05:06.414Z"
+    }
+  ]
+}

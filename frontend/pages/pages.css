@@ -914,3 +914,29 @@ img {
     gap: 14px;
   }
 }
+
+/* ─── Responsive — 374px ─────────────────────────────────────── */
+@media (max-width: 374px) {
+  .pg-nav    { padding: 0 12px; height: 56px; }
+  .pg-hero   { padding: 32px 12px 28px; }
+  .pg-body   { padding: 32px 12px 52px; }
+  .pg-footer { padding: 40px 12px 24px; }
+}
+
+/* ── Anti tap-highlight & touch UX ──────────────────────────── */
+*, *::before, *::after { -webkit-tap-highlight-color: transparent; }
+a, button, [onclick], label, select { touch-action: manipulation; }
+
+/* ── Touch targets minimum 44×44 ────────────────────────────── */
+@media (pointer: coarse) {
+  .pg-btn        { min-height: 52px; }
+  .pg-faq-q      { min-height: 52px; }
+  .pg-nav-back   { min-height: 44px; }
+}
+
+/* ── Empêche zoom iOS sur les inputs ─────────────────────────── */
+@media (max-width: 768px) {
+  .pg-form-input,
+  .pg-form-textarea,
+  .pg-form-select { font-size: 16px; }
+}

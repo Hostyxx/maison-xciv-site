@@ -771,4 +771,30 @@
   .fact-form-section { padding: 20px 16px; }
   .pdf-modal-body { padding: 16px; }
   .pdf-modal-footer { padding: 12px 16px; }
+  .fact-actions { flex-direction: column; }
 }
+
+/* ── Touch targets minimum 44×44 ────────────────────────────── */
+@media (pointer: coarse) {
+  .btn-icon            { width: 44px; height: 44px; }
+  .btn-ghost           { min-height: 44px; padding: 10px 14px; }
+  .btn-danger          { min-height: 52px; }
+  .filter-search input { min-height: 48px; font-size: 16px; }
+  .fact-filters select,
+  .fact-filters input[type="date"] { min-height: 48px; font-size: 16px; }
+  .pdf-modal-close     { width: 44px; height: 44px; }
+}
+
+/* ── Empêche zoom iOS ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  .filter-search input,
+  .fact-filters select,
+  .fact-filters input[type="date"],
+  .form-field input,
+  .form-field select,
+  .form-field textarea { font-size: 16px; }
+}
+
+/* ── Anti tap-highlight ────────────────────────────────────── */
+*, *::before, *::after { -webkit-tap-highlight-color: transparent; }
+a, button, [onclick], label, select { touch-action: manipulation; }

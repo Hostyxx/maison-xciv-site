@@ -436,4 +436,21 @@ a, button, input, label, select { touch-action: manipulation; }
   .fav-empty           { padding: 40px 20px; }
   .fav-card-footer     { flex-direction: column; align-items: flex-start; gap: 12px; }
   .fav-remove-btn      { width: 100%; text-align: center; padding: 10px; min-height: 44px; }
+  .fav-grid            { grid-template-columns: 1fr; }
+  .espace-stats        { gap: 8px; }
+}
+
+@media (max-width: 374px) {
+  .auth-form-side   { padding: 24px 12px; }
+  .auth-form-title  { font-size: 22px; }
+  .espace-main      { padding: 20px 12px; }
+}
+
+/* ── Touch targets minimum 44×44 ───────────────────────────── */
+@media (pointer: coarse) {
+  .auth-btn         { min-height: 52px; }
+  .auth-back        { min-height: 44px; }
+  .pw-toggle        { min-width: 44px; min-height: 44px; right: 0; }
+  .fav-empty-btn    { min-height: 52px; }
+  .espace-nav a     { min-height: 44px; display: flex; align-items: center; }
 }

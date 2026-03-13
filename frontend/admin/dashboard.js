@@ -796,3 +796,25 @@ function formatDate(isoString, withTime = false) {
   const timeStr = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
   return `${dateStr} à ${timeStr}`;
 }
+
+
+// ═══════════════════════════════════════════════════════════
+//  MOBILE SIDEBAR TOGGLE
+// ═══════════════════════════════════════════════════════════
+
+/** Ouvre / ferme la sidebar en mode overlay sur mobile (≤ 600px) */
+function toggleMobileSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (!sidebar || !overlay) return;
+  const isOpen = sidebar.classList.toggle('mobile-open');
+  overlay.classList.toggle('show', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+/** Ferme la sidebar mobile après un clic sur un lien de navigation */
+document.querySelectorAll('.sidebar-link').forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 600) toggleMobileSidebar();
+  });
+});

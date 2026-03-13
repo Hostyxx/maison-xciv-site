@@ -719,9 +719,30 @@ footer {
 @media (max-width: 374px) {
   .coll-main { padding: 32px 12px 60px; }
   .coll-filters { padding: 0 12px; }
+  .coll-hero  { padding-left: 12px; padding-right: 12px; }
 }
 
 /* Curseur pointer sur éléments interactifs */
 @media (hover: hover) {
   a, button, .wc-item, select { cursor: none; }
+}
+
+/* ── Anti tap-highlight & touch UX ─────────────────────────── */
+*, *::before, *::after { -webkit-tap-highlight-color: transparent; }
+a, button, [onclick], label, select { touch-action: manipulation; }
+
+/* ── Touch targets minimum 44×44 ───────────────────────────── */
+@media (pointer: coarse) {
+  .filter-tab      { min-height: 44px; display: flex; align-items: center; }
+  .sort-select     { min-height: 44px; }
+  .wc-btn          { min-height: 48px; }
+  .wc-fav-btn      { width: 44px; height: 44px; }
+  .auth-modal-btn-primary,
+  .auth-modal-btn-secondary { min-height: 52px; display: flex; align-items: center; justify-content: center; }
+  .coll-empty-reset { min-height: 48px; }
+}
+
+/* ── Empêche zoom iOS sur les inputs ───────────────────────── */
+@media (max-width: 768px) {
+  input, select, textarea { font-size: 16px !important; }
 }

@@ -8,6 +8,8 @@
 
 'use strict';
 
+document.getElementById('loginForm').addEventListener('submit', handleLogin);
+
 /**
  * Soumission du formulaire de login.
  */
@@ -78,8 +80,7 @@ function togglePassword() {
   input.type  = input.type === 'password' ? 'text' : 'password';
 }
 
-// Expose aux handlers onclick du HTML
-window.handleLogin    = handleLogin;
+// togglePassword est appelé via onclick dans le HTML
 window.togglePassword = togglePassword;
 
 // Ajout d'une animation shake dans la page

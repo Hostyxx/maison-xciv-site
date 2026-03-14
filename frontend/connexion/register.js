@@ -1,5 +1,7 @@
 'use strict';
 
+document.getElementById('registerForm').addEventListener('submit', handleRegister);
+
 // Si déjà connecté → espace client
 (async function checkAlreadyLogged() {
   try {
@@ -71,5 +73,5 @@ function clearMessage() {
   document.getElementById('authMsg').className = 'auth-message';
 }
 
-window.handleRegister = handleRegister;
-window.togglePw       = togglePw;
+// togglePw est appelé via onclick dans le HTML
+window.togglePw = togglePw;

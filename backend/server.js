@@ -32,10 +32,10 @@ const app  = express();
 const PORT = process.env.PORT || 3000;
 const isProduction = process.env.NODE_ENV === 'production';
 
-// ─── Trust proxy (Nginx → cookies sécurisés HTTPS) ───────────
-if (isProduction) {
-  app.set('trust proxy', 1);
-}
+// ─── Trust proxy (Nginx/Render → X-Forwarded-For + cookies HTTPS) ─
+// Activé inconditionnellement : le serveur est toujours derrière
+// un reverse proxy (Render, Nginx) même en dehors de NODE_ENV=production.
+app.set('trust proxy', 1);
 
 // ─── Helmet — headers de sécurité HTTP ───────────────────────
 app.use(helmet({

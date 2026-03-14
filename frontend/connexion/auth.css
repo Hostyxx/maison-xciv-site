@@ -446,7 +446,15 @@ a, button, input, label, select { touch-action: manipulation; }
 @media (max-width: 374px) {
   .auth-form-side   { padding: 24px 12px; }
   .auth-form-title  { font-size: 22px; }
+  .espace-header    { padding: 14px 12px; }
+  .espace-logo      { font-size: 16px; letter-spacing: 4px; }
+  .espace-nav       { gap: 14px; }
+  .espace-nav a     { font-size: 8px; letter-spacing: 2px; }
   .espace-main      { padding: 20px 12px; }
+  .espace-stat      { padding: 14px 16px; }
+  .espace-stat-n    { font-size: 28px; }
+  .fav-empty        { padding: 32px 12px; }
+  .fav-card-body    { padding: 14px; }
 }
 
 /* ── Touch targets minimum 44×44 ───────────────────────────── */

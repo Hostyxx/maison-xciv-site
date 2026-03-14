@@ -717,9 +717,28 @@ footer {
 }
 
 @media (max-width: 374px) {
-  .coll-main { padding: 32px 12px 60px; }
+  .coll-main    { padding: 32px 12px 60px; }
   .coll-filters { padding: 0 12px; }
-  .coll-hero  { padding-left: 12px; padding-right: 12px; }
+  .coll-hero    { padding-left: 12px; padding-right: 12px; }
+
+  /* iPhone SE : hero plus compact */
+  .coll-hero-title { font-size: clamp(30px, 8vw, 48px); letter-spacing: -1px; }
+  .coll-hero-sub   { font-size: 12px; }
+
+  /* Grille : 1 colonne obligatoire (pas de 2 col sur iPhone SE) */
+  .coll-grid { grid-template-columns: 1fr !important; }
+
+  /* Filtres : tabs wrappent mieux */
+  .filter-tabs   { gap: 4px; }
+  .filter-tab    { font-size: 7px; padding: 5px 8px; letter-spacing: 1.5px; }
+
+  /* Cards : padding réduit */
+  .wc-body { padding: 14px; }
+  .wc-name { font-size: 18px; }
+
+  /* Footer nav */
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .footer-bottom-right { gap: 16px; flex-wrap: wrap; }
 }
 
 /* Curseur pointer sur éléments interactifs */

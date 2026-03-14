@@ -765,13 +765,52 @@
   .fact-filters input[type="date"] { width: 100%; }
 }
 
+/* ─── Sticky preview : désactiver sur mobile (1 colonne) ─── */
+@media (max-width: 1200px) {
+  .fact-preview-section { position: static; }
+}
+
+@media (max-width: 768px) {
+  /* Filtres en pleine largeur */
+  .filter-search { min-width: 100%; }
+
+  /* Header du tableau avec titre + bouton en colonne sur petit écran */
+  .dash-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+  /* Tableau : padding réduit */
+  .fact-table th,
+  .fact-table td { padding: 10px 10px; font-size: 12px; }
+
+  /* Masquer colonnes secondaires sur mobile */
+  .fact-table .th-hide-mobile,
+  .fact-table .td-hide-mobile { display: none; }
+}
+
 @media (max-width: 480px) {
   .fact-stat-card { padding: 14px 16px; }
   .stat-value { font-size: 20px; }
   .fact-form-section { padding: 20px 16px; }
   .pdf-modal-body { padding: 16px; }
-  .pdf-modal-footer { padding: 12px 16px; }
+  .pdf-modal-footer { padding: 12px 16px; flex-direction: column; gap: 8px; }
+  .pdf-modal-footer .btn-primary,
+  .pdf-modal-footer .btn-ghost,
+  .pdf-modal-footer .btn-danger { width: 100%; justify-content: center; }
   .fact-actions { flex-direction: column; }
+  .fact-actions .btn-primary,
+  .fact-actions .btn-ghost,
+  .fact-actions .btn-danger { width: 100%; justify-content: center; }
+
+  /* Stat cards : 2 colonnes au lieu de 1 */
+  .fact-stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 374px) {
+  .fact-stat-card { padding: 10px 12px; }
+  .stat-value     { font-size: 18px; }
+  .stat-icon      { width: 32px; height: 32px; }
+  .stat-icon svg  { width: 14px; height: 14px; }
+  .fact-form-section { padding: 16px 12px; }
+  .fact-stats-row { grid-template-columns: 1fr 1fr; gap: 8px; }
 }
 
 /* ── Touch targets minimum 44×44 ────────────────────────────── */

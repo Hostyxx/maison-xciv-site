@@ -919,8 +919,14 @@ img {
 @media (max-width: 374px) {
   .pg-nav    { padding: 0 12px; height: 56px; }
   .pg-hero   { padding: 32px 12px 28px; }
+  .pg-hero h1 { font-size: 1.6rem; }
   .pg-body   { padding: 32px 12px 52px; }
   .pg-footer { padding: 40px 12px 24px; }
+  .pg-footer-grid { grid-template-columns: 1fr; gap: 24px; }
+  .pg-cards  { grid-template-columns: 1fr; }
+  .pg-steps  { grid-template-columns: 1fr; }
+  .pg-actions { gap: 10px; }
+  .pg-btn    { padding: 14px 20px; font-size: 0.75rem; }
 }
 
 /* ── Anti tap-highlight & touch UX ──────────────────────────── */

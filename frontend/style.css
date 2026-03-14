@@ -24,7 +24,13 @@
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; font-size: 16px; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  /* Bloque le scroll horizontal sur Safari iOS (body seul ne suffit pas) */
+  overflow-x: hidden;
+}
 
 body {
   font-family: var(--f-sans);
@@ -33,6 +39,9 @@ body {
   overflow-x: hidden;
   cursor: none;
   -webkit-font-smoothing: antialiased;
+  /* Texte plus net sur iOS */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 img { display: block; max-width: 100%; }
@@ -108,7 +117,9 @@ body.hovering #cur-ring { width: 56px; height: 56px; border-color: var(--c-beige
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
   padding: 0 56px;
-  height: 80px;
+  padding-top: env(safe-area-inset-top, 0px);
+  /* Hauteur + safe area top pour le notch / Dynamic Island */
+  height: calc(80px + env(safe-area-inset-top, 0px));
   display: flex; align-items: center; justify-content: space-between;
   transition: background 0.6s var(--ease-luxury), border-color 0.6s, height 0.4s;
   border-bottom: 1px solid transparent;
@@ -118,7 +129,7 @@ nav.solid {
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-bottom-color: rgba(196,170,140,0.18);
-  height: 64px;
+  height: calc(64px + env(safe-area-inset-top, 0px));
 }
 nav.dark {
   background: rgba(8,7,6,0.94);
@@ -204,6 +215,9 @@ nav.solid .hamburger span { background: var(--c-ink); }
   background: var(--c-black);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 40px;
+  /* Safe area pour le notch en haut et l'indicateur home en bas */
+  padding-top:    env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   opacity: 0; visibility: hidden;
   transition: opacity 0.5s var(--ease-out), visibility 0.5s;
 }
@@ -230,7 +244,9 @@ body.menu-open nav .nav-logo-svg svg {
    HERO — Full immersive
 ═══════════════════════════════════════════ */
 #hero {
-  height: 100svh; min-height: 680px;
+  /* 100svh = small viewport height = correct sur Safari iOS (pas de barre d'URL) */
+  height: 100svh;
+  min-height: 680px;
   background: var(--c-black);
   position: relative; overflow: hidden;
   display: flex; align-items: flex-end;
@@ -1155,7 +1171,8 @@ footer {
   background: #06050400;
   background: var(--c-black);
   border-top: 1px solid rgba(196,170,140,0.08);
-  padding: 80px 56px 44px;
+  /* Safe area bottom : au-dessus de l'indicateur home iPhone */
+  padding: 80px 56px calc(44px + env(safe-area-inset-bottom, 0px));
 }
 .footer-top {
   display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr;
@@ -1830,8 +1847,8 @@ nav.solid .nav-logo-svg svg {
 /* Bouton flottant */
 .admin-fab {
   position: fixed;
-  bottom: 32px;
-  right: 32px;
+  bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+  right: calc(32px + env(safe-area-inset-right, 0px));
   z-index: 8000;
   width: 52px;
   height: 52px;
@@ -2109,8 +2126,8 @@ nav.solid .nav-logo-svg svg {
 /* Toast notification */
 .admin-toast {
   position: fixed;
-  bottom: 100px;
-  right: 32px;
+  bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  right: calc(32px + env(safe-area-inset-right, 0px));
   z-index: 9999;
   background: var(--c-ink);
   color: var(--c-bone);
@@ -2136,8 +2153,15 @@ nav.solid .nav-logo-svg svg {
 
 /* Responsive admin */
 @media (max-width: 768px) {
-  .admin-fab  { bottom: 20px; right: 20px; width: 46px; height: 46px; }
-  .admin-toast { right: 16px; bottom: 80px; }
+  .admin-fab  {
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    right: calc(20px + env(safe-area-inset-right, 0px));
+    width: 46px; height: 46px;
+  }
+  .admin-toast {
+    right: 16px;
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 /* ═══════════════════════════════════════════
@@ -2352,7 +2376,8 @@ nav.solid .nav-logout-btn:hover { color: var(--c-ink); }
 /* Toast public (léger, différent du toast admin) */
 .pub-toast {
   position: fixed;
-  bottom: 32px; left: 50%;
+  bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
   transform: translateX(-50%) translateY(12px);
   background: var(--c-ink);
   color: var(--c-bone);
@@ -2401,11 +2426,17 @@ a, button, [onclick], label, select {
 
 /* ── 1. NAVBAR — taille et espacement réduits ── */
 @media (max-width: 768px) {
-  nav             { padding: 0 20px; height: 68px; }
-  nav.solid       { height: 60px; }
-  .nav-logo-svg   { height: 68px; }
+  nav {
+    padding: 0 20px;
+    padding-top: env(safe-area-inset-top, 0px);
+    height: calc(68px + env(safe-area-inset-top, 0px));
+  }
+  nav.solid {
+    height: calc(60px + env(safe-area-inset-top, 0px));
+  }
+  .nav-logo-svg     { height: 68px; }
   .nav-logo-svg svg { height: 68px; max-width: 210px; }
-  .nav-right      { gap: 12px; }
+  .nav-right        { gap: 12px; }
 }
 
 @media (max-width: 480px) {
@@ -2505,6 +2536,20 @@ a, button, [onclick], label, select {
   }
   .s-arrow { display: none; }
   .s-name  { font-size: clamp(18px, 4.5vw, 24px); }
+
+  /* Descriptions services : toujours visibles sur mobile (pas de hover iOS) */
+  .s-desc {
+    max-height: none;
+    margin-top: 8px;
+    opacity: 1;
+    overflow: visible;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  /* Pas d'effet d'entrée sur hover sur mobile */
+  .service-row::before { display: none; }
+  .service-row:hover   { padding-left: 0; }
 }
 
 @media (max-width: 480px) {
@@ -2520,6 +2565,27 @@ a, button, [onclick], label, select {
   .watches-track  { padding: 0 20px; gap: 10px; }
   .watch-slide    { flex: 0 0 86%; }
   .watch-dot      { cursor: pointer; }
+
+  /* Descriptions montres : toujours visibles sur mobile (pas de hover iOS) */
+  .w-desc {
+    max-height: none;
+    opacity: 0.65;
+    overflow: visible;
+    margin-top: 10px;
+  }
+
+  /* Texte du projet : idem */
+  .proj-text {
+    max-height: none;
+    opacity: 0.75;
+    overflow: visible;
+  }
+  .proj-link {
+    max-height: none;
+    opacity: 1;
+    margin-top: 16px;
+    overflow: visible;
+  }
 }
 
 @media (max-width: 480px) {
@@ -2576,6 +2642,15 @@ a, button, [onclick], label, select {
   #contact                { padding: 100px 24px 80px; }
   .contact-form           { padding: 36px 28px; }
   .contact-form-row       { grid-template-columns: 1fr; gap: 0; }
+
+  /* iOS auto-zoom fix : font-size doit être ≥ 16px sur les inputs */
+  .contact-form-input,
+  .contact-form-textarea  { font-size: 16px; }
+
+  /* Admin panel inline — même fix */
+  .admin-field input,
+  .admin-field select,
+  .admin-field textarea   { font-size: 16px; }
 }
 
 @media (max-width: 480px) {
@@ -2636,8 +2711,15 @@ a, button, [onclick], label, select {
 
 /* ── 15. ADMIN FAB — mobile ── */
 @media (max-width: 480px) {
-  .admin-fab   { bottom: 20px; right: 16px; }
-  .admin-toast { right: 16px; left: 16px; bottom: 76px; text-align: center; }
+  .admin-fab   {
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    right: calc(16px + env(safe-area-inset-right, 0px));
+  }
+  .admin-toast {
+    right: 16px; left: 16px;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    text-align: center;
+  }
 }
 
 /* ── 16. ESPACE CLIENT (profil) — mobile ── */
@@ -2649,4 +2731,126 @@ a, button, [onclick], label, select {
 /* ── 17. AUTH PAGES (connexion/inscription) — petits mobiles ── */
 @media (max-width: 480px) {
   .auth-right { padding: 40px 20px !important; }
+}
+
+/* ── 18. iOS — footer safe area ── */
+@media (max-width: 768px) {
+  footer {
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ── 19. PREFERS-REDUCED-MOTION — respecter les préférences système iOS ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Loader : affiche directement sans attendre */
+  .loader-logo,
+  .loader-sub,
+  .loader-bar-fill {
+    animation: none !important;
+    opacity: 1 !important;
+    width: 100% !important;
+  }
+
+  /* Hero : contenu visible immédiatement */
+  .hero-eyebrow,
+  .hero-h1,
+  .hero-p,
+  .hero-actions,
+  .hero-stats,
+  .hero-scroll {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Grain animé désactivé (coûteux et non nécessaire) */
+  .hero-grain { animation: none !important; }
+
+  /* Scroll reveal instantané */
+  .sr, .sr-left, .sr-right, .sr-fade,
+  .wc-sr {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── 20. Sections qui commencent juste après la navbar — compensation hauteur ── */
+/* Le premier contenu après la nav fixe doit descendre en dessous de la barre */
+.marquee-band {
+  /* Sur les pages où le marquee est le premier élément visible, lui laisser de l'espace */
+  scroll-margin-top: calc(80px + env(safe-area-inset-top, 0px));
+}
+section, #watches, #services, #nouveautes, #about, #process, #projects, #contact {
+  scroll-margin-top: calc(80px + env(safe-area-inset-top, 0px));
+}
+
+/* ── 21. TOUCH DEVICE — amélioration des interactions tactiles ── */
+@media (hover: none), (pointer: coarse) {
+  /* Descriptions services toujours visibles */
+  .s-desc {
+    max-height: none !important;
+    margin-top: 8px !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+  }
+
+  /* Descriptions slider hero toujours visibles */
+  .w-desc {
+    max-height: none !important;
+    opacity: 0.65 !important;
+    overflow: visible !important;
+  }
+
+  /* Projets texte toujours visible */
+  .proj-text {
+    max-height: none !important;
+    opacity: 0.75 !important;
+    overflow: visible !important;
+  }
+  .proj-link {
+    max-height: none !important;
+    opacity: 1 !important;
+    margin-top: 16px !important;
+    overflow: visible !important;
+  }
+
+  /* Supprime les transforms au hover sur les cartes (pas de hover iOS) */
+  .watch-card-item:hover {
+    transform: none !important;
+    box-shadow:
+      0 1px 3px rgba(13,12,11,0.04),
+      0 8px 32px rgba(13,12,11,0.06) !important;
+  }
+  .watch-card-item:hover .wc-img-wrap img {
+    transform: none !important;
+  }
+
+  /* FAB admin — zone de tap suffisante */
+  .admin-fab { width: 52px; height: 52px; }
+
+  /* Bouton favori — zone de tap suffisante */
+  .wc-fav-btn { width: 44px; height: 44px; }
+
+  /* Dots du slider — zone de tap suffisante */
+  .watch-dot {
+    width: 40px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 8px 0;
+  }
+
+  /* Contact form — tap sur toute la hauteur */
+  .contact-form-input,
+  .contact-form-textarea {
+    padding: 14px 0;
+    font-size: 16px !important;
+  }
 }

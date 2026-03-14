@@ -17,6 +17,19 @@
 
 'use strict';
 
+// ─── Sécurité : échappement HTML anti-XSS ────────────────────
+// À utiliser systématiquement avant d'injecter des données
+// d'API dans le DOM via innerHTML ou les templates literals.
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g,  '&quot;')
+    .replace(/'/g,  '&#039;');
+}
+
 // ═══════════════════════════════════════════
 //  1. LOADER
 // ═══════════════════════════════════════════
@@ -223,8 +236,10 @@ function buildCard(watch, index) {
   const isVendu     = watch.status === 'Vendu';
   const delay       = (index % 4) * 80;
 
-  const imgContent = watch.image
-    ? `<img src="${watch.image}" alt="${watch.brand} ${watch.name}" loading="lazy" decoding="async">`
+  const safeImage = watch.image && watch.image.startsWith('/assets/')
+    ? watch.image : '';
+  const imgContent = safeImage
+    ? `<img src="${escapeHtml(safeImage)}" alt="${escapeHtml(watch.brand)} ${escapeHtml(watch.name)}" loading="lazy" decoding="async">`
     : `<div class="wc-img-placeholder">${watchSVGPlaceholder}</div>`;
 
   const btnContent = isVendu
@@ -236,38 +251,46 @@ function buildCard(watch, index) {
 
   const isFav = favoriteIds.has(watch.id);
 
+  const safeId     = parseInt(watch.id, 10);
+  const safeStatus = escapeHtml(watch.status);
+  const safeBrand  = escapeHtml(watch.brand);
+  const safeName   = escapeHtml(watch.name);
+  const safeDesc   = escapeHtml(watch.description);
+  const safePrice  = escapeHtml(watch.price);
+  const favLabel   = isFav ? 'Retirer des favoris' : 'Ajouter aux favoris';
+
   return `
   <article class="watch-card-item ${isVendu ? 'is-vendu' : ''} wc-sr"
            style="transition-delay:${delay}ms"
-           data-id="${watch.id}"
-           data-status="${watch.status}"
-           aria-label="${watch.brand} ${watch.name} — ${watch.status}">
+           data-id="${safeId}"
+           data-status="${safeStatus}"
+           aria-label="${safeBrand} ${safeName} — ${safeStatus}">
     <div class="wc-img-wrap">
       ${imgContent}
-      <span class="wc-badge ${statusClass}" aria-label="Statut: ${watch.status}">${watch.status}</span>
+      <span class="wc-badge ${statusClass}" aria-label="Statut: ${safeStatus}">${safeStatus}</span>
       <!-- Bouton favori : visible pour tous, action réservée aux connectés -->
       <button class="wc-fav-btn ${isFav ? 'is-fav' : ''}"
-              data-watch-id="${watch.id}"
-              onclick="toggleFavorite(${watch.id}, this)"
-              aria-label="${isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'}">
+              data-watch-id="${safeId}"
+              onclick="toggleFavorite(${safeId}, this)"
+              aria-label="${escapeHtml(favLabel)}">
         <svg class="heart-empty"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
         <svg class="heart-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
       </button>
     </div>
     <div class="wc-body">
-      <div class="wc-brand">${watch.brand}</div>
-      <h3 class="wc-name">${watch.name}</h3>
+      <div class="wc-brand">${safeBrand}</div>
+      <h3 class="wc-name">${safeName}</h3>
       <div class="wc-sep" aria-hidden="true"></div>
-      <p class="wc-desc">${watch.description}</p>
+      <p class="wc-desc">${safeDesc}</p>
       <div class="wc-footer">
-        <span class="wc-price">${watch.price}</span>
+        <span class="wc-price">${safePrice}</span>
         ${isVendu
           ? `<span class="wc-btn" aria-disabled="true" style="cursor:default"><span>Vendu</span></span>`
-          : `<a href="${buildWhatsAppURL(watch)}"
+          : `<a href="${escapeHtml(buildWhatsAppURL(watch))}"
                class="wc-btn"
                target="_blank"
                rel="noopener noreferrer"
-               aria-label="Contacter via WhatsApp pour ${watch.brand} ${watch.name}">
+               aria-label="Contacter via WhatsApp pour ${safeBrand} ${safeName}">
                ${btnContent}
              </a>`
         }
@@ -508,18 +531,20 @@ function renderAdminList() {
     return;
   }
 
-  list.innerHTML = watchesCache.map(w => `
-    <div class="admin-item" data-id="${w.id}">
+  list.innerHTML = watchesCache.map(w => {
+    const sid = parseInt(w.id, 10);
+    return `
+    <div class="admin-item" data-id="${sid}">
       <div class="admin-item-info">
-        <div class="admin-item-name">${w.brand} ${w.name}</div>
-        <div class="admin-item-status admin-status-${getStatusClass(w.status)}">${w.status}</div>
+        <div class="admin-item-name">${escapeHtml(w.brand)} ${escapeHtml(w.name)}</div>
+        <div class="admin-item-status admin-status-${escapeHtml(getStatusClass(w.status))}">${escapeHtml(w.status)}</div>
       </div>
       <div class="admin-item-actions">
-        <button class="admin-edit-btn"   onclick="editWatch(${w.id})"   title="Modifier">✎</button>
-        <button class="admin-delete-btn" onclick="deleteWatch(${w.id})" title="Supprimer">✕</button>
+        <button class="admin-edit-btn"   onclick="editWatch(${sid})"   title="Modifier">✎</button>
+        <button class="admin-delete-btn" onclick="deleteWatch(${sid})" title="Supprimer">✕</button>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 async function editWatch(id) {

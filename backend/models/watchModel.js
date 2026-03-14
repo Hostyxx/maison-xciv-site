@@ -99,21 +99,38 @@ const WatchModel = {
 // ─── Helper ──────────────────────────────────────────────────
 
 /**
- * Normalise et sécurise les données entrantes.
+ * Normalise, valide et sécurise les données entrantes.
+ * Les longueurs max protègent contre les attaques DoS et la corruption de la DB.
  */
 function sanitize(data) {
+  const name        = String(data.name        || '').trim().slice(0, 200);
+  const brand       = String(data.brand       || '').trim().slice(0, 100);
+  const price       = String(data.price       || 'Sur demande').trim().slice(0, 100);
+  const description = String(data.description || '').trim().slice(0, 2000);
+  const message     = String(data.message     || '').trim().slice(0, 500);
+
+  // Validation URL image : doit être une URL relative /assets/... ou vide
+  let image = String(data.image || '').trim().slice(0, 500);
+  if (image && !image.startsWith('/assets/') && !image.startsWith('http')) {
+    image = '';  // Rejette les valeurs non attendues
+  }
+
+  // WhatsApp : chiffres uniquement (format E.164 sans le +)
+  const whatsapp = String(data.whatsapp || '33601918798')
+    .replace(/\D/g, '')
+    .slice(0, 15);
+
+  // Année : entre 1900 et l'année courante + 1
+  let year = data.year ? parseInt(data.year, 10) : null;
+  if (year !== null && (isNaN(year) || year < 1900 || year > new Date().getFullYear() + 1)) {
+    year = null;
+  }
+
   return {
-    name:        String(data.name        || '').trim(),
-    brand:       String(data.brand       || '').trim(),
-    price:       String(data.price       || 'Sur demande').trim(),
-    description: String(data.description || '').trim(),
-    image:       String(data.image       || '').trim(),
-    year:        data.year ? parseInt(data.year, 10) : null,
-    status:      ['Disponible', 'Réservé', 'Vendu'].includes(data.status)
-                   ? data.status
-                   : 'Disponible',
-    whatsapp:    String(data.whatsapp    || '33601918798').trim(),
-    message:     String(data.message     || '').trim()
+    name, brand, price, description, image, year, whatsapp, message,
+    status: ['Disponible', 'Réservé', 'Vendu'].includes(data.status)
+              ? data.status
+              : 'Disponible',
   };
 }
 

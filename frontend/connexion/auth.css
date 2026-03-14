@@ -35,6 +35,7 @@ a    { text-decoration: none; color: inherit; }
 /* ─── Layout page ─────────────────────────────────────────── */
 .auth-page {
   min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -155,7 +156,8 @@ a    { text-decoration: none; color: inherit; }
   border: 1px solid rgba(196,170,140,0.25);
   color: var(--ink);
   font-family: var(--f-sans);
-  font-size: 14px; font-weight: 300;
+  /* 16px minimum requis pour éviter l'auto-zoom iOS Safari */
+  font-size: 16px; font-weight: 300;
   padding: 13px 16px;
   border-radius: 3px;
   outline: none;
@@ -295,6 +297,7 @@ a    { text-decoration: none; color: inherit; }
 .espace-main {
   background: var(--bg);
   min-height: calc(100vh - 100px);
+  min-height: calc(100dvh - 100px);
   padding: 60px 56px;
 }
 .espace-welcome {
@@ -417,7 +420,7 @@ a, button, input, label, select { touch-action: manipulation; }
 @media (max-width: 900px) {
   .auth-page           { grid-template-columns: 1fr; }
   .auth-visual         { display: none; }
-  .auth-form-side      { padding: 40px 24px; min-height: 100vh; }
+  .auth-form-side      { padding: 40px 24px; min-height: 100vh; min-height: 100dvh; }
   .espace-header       { padding: 20px 24px; flex-direction: column; gap: 16px; }
   .espace-main         { padding: 32px 20px; }
   .espace-stats        { flex-direction: column; }

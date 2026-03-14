@@ -14,9 +14,10 @@ const express               = require('express');
 const router                = express.Router();
 const ctrl                  = require('../controllers/userController');
 const { requireUserAuth, optionalUserAuth } = require('../middleware/auth');
+const { authLimiter, registerLimiter }     = require('../middleware/rateLimiter');
 
-router.post('/register', ctrl.register);
-router.post('/login',    ctrl.login);
+router.post('/register', registerLimiter, ctrl.register);
+router.post('/login',    authLimiter,     ctrl.login);
 router.post('/logout',   ctrl.logout);
 
 // session = jamais d'erreur — lit le token si présent, null sinon

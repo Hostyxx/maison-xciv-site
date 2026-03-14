@@ -10,11 +10,12 @@
  * Protégée par requireAuth : seul l'admin peut uploader.
  */
 
-const express        = require('express');
-const router         = express.Router();
-const multer         = require('multer');
-const path           = require('path');
-const fs             = require('fs');
+const express         = require('express');
+const router          = express.Router();
+const multer          = require('multer');
+const path            = require('path');
+const fs              = require('fs');
+const crypto          = require('crypto');
 const { requireAuth } = require('../middleware/auth');
 
 // ─── Dossier de destination ──────────────────────────────────
@@ -26,23 +27,30 @@ if (!fs.existsSync(UPLOAD_DIR)) {
 }
 
 // ─── Configuration Multer ────────────────────────────────────
+// Extensions et MIME types autorisés (whitelist stricte)
+const ALLOWED_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif']);
+const ALLOWED_MIMETYPES  = new Set([
+  'image/jpeg', 'image/png', 'image/webp', 'image/avif'
+]);
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, UPLOAD_DIR),
 
   filename: (req, file, cb) => {
-    // Nom unique : timestamp + extension originale
+    // UUID cryptographique → impossible à deviner, pas de path traversal
     const ext      = path.extname(file.originalname).toLowerCase();
-    const filename = `watch_${Date.now()}${ext}`;
+    const filename = `watch_${crypto.randomUUID()}${ext}`;
     cb(null, filename);
   }
 });
 
 const fileFilter = (req, file, cb) => {
-  // Accepte uniquement les images
-  const allowed = ['.jpg', '.jpeg', '.png', '.webp', '.avif'];
-  const ext     = path.extname(file.originalname).toLowerCase();
+  const ext      = path.extname(file.originalname).toLowerCase();
+  const mimeOk   = ALLOWED_MIMETYPES.has(file.mimetype);
+  const extOk    = ALLOWED_EXTENSIONS.has(ext);
 
-  if (allowed.includes(ext)) {
+  // Double validation : extension ET MIME type déclaré
+  if (mimeOk && extOk) {
     cb(null, true);
   } else {
     cb(new Error('Format non supporté. Utiliser : JPG, PNG, WEBP, AVIF.'), false);

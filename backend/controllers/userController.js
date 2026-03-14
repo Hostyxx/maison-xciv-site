@@ -21,10 +21,21 @@ const UserController = {
     try {
       const { name, email, password } = req.body;
 
-      // Validations
+      // Validations présence
       if (!name || !email || !password) {
         return res.status(400).json({ success: false, error: 'Tous les champs sont requis.' });
       }
+      // Validations longueur (protection DoS)
+      if (String(name).length > config.nameMaxLength) {
+        return res.status(400).json({ success: false, error: 'Nom trop long.' });
+      }
+      if (String(email).length > config.emailMaxLength) {
+        return res.status(400).json({ success: false, error: 'Email trop long.' });
+      }
+      if (String(password).length > config.passwordMaxLength) {
+        return res.status(400).json({ success: false, error: 'Mot de passe trop long.' });
+      }
+      // Validations format
       if (name.trim().length < config.nameMinLength) {
         return res.status(400).json({ success: false, error: 'Nom trop court (2 caractères minimum).' });
       }

@@ -43,6 +43,7 @@ input, textarea, select, button { font-family: inherit; }
 
 .login-body {
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--black);
   display: flex;
   align-items: center;
@@ -216,6 +217,7 @@ input, textarea, select, button { font-family: inherit; }
 
 .dashboard-body {
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg-dark);
   display: flex;
 }
@@ -370,6 +372,7 @@ input, textarea, select, button { font-family: inherit; }
   flex: 1;
   padding: 32px 36px;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* Header */

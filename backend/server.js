@@ -23,6 +23,7 @@ const favoritesRouter    = require('./routes/favorites');    // favoris
 const uploadRouter       = require('./routes/upload');
 const adminClientsRouter = require('./routes/adminClients'); // gestion clients (admin)
 const invoicesRouter     = require('./routes/invoices');     // facturation (🔒 admin)
+const sitemapRouter      = require('./routes/sitemap');      // sitemap.xml dynamique
 
 const { requireAuthPage }                   = require('./middleware/auth');
 const { authLimiter, registerLimiter,
@@ -88,6 +89,10 @@ app.use(cookieParser());
 
 // ─── Rate limiting global sur l'API ──────────────────────────
 app.use('/api/', apiLimiter);
+
+// ─── SEO — Sitemap dynamique (avant express.static) ─────────
+// Prioritaire sur frontend/sitemap.xml — reflète le catalogue live
+app.get('/sitemap.xml', sitemapRouter);
 
 // ─── Fichiers statiques ──────────────────────────────────────
 app.use(express.static(path.join(__dirname, '../frontend'), {

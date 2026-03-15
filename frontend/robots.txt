@@ -1,11 +1,8 @@
-# robots.txt — Maison XCIV
-# https://maisonxciv.com/robots.txt
-
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /api/
-Disallow: /mon-espace/
+Disallow: /admin
+Disallow: /api
+Disallow: /mon-espace
+Disallow: /inscription
 
-# Sitemap
 Sitemap: https://maisonxciv.com/sitemap.xml

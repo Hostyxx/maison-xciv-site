@@ -278,13 +278,13 @@ function renderInvoiceTable(invoices) {
       ? `${inv.product.brand} ${inv.product.model}`.trim()
       : inv.product.description || '—';
     return `<tr class="invoice-row">
-      <td class="td-number"><strong>${esc(inv.number)}</strong></td>
-      <td class="td-date">${formatDate(inv.created_at)}</td>
-      <td class="td-client">${esc(client)}</td>
-      <td class="td-product">${esc(product)}</td>
-      <td class="td-amount">${formatCurrency(inv.financial.totalTTC)}</td>
-      <td>${statusBadge(inv.status)}</td>
-      <td>${payBadge(inv.financial.paymentStatus)}</td>
+      <td class="td-number" data-label="N°"><strong>${esc(inv.number)}</strong></td>
+      <td class="td-date" data-label="Date">${formatDate(inv.created_at)}</td>
+      <td class="td-client" data-label="Client">${esc(client)}</td>
+      <td class="td-product" data-label="Montre">${esc(product)}</td>
+      <td class="td-amount" data-label="Montant">${formatCurrency(inv.financial.totalTTC)}</td>
+      <td data-label="Statut">${statusBadge(inv.status)}</td>
+      <td data-label="Paiement">${payBadge(inv.financial.paymentStatus)}</td>
       <td class="td-actions">
         <button class="btn-icon" title="Aperçu PDF" data-action="preview-pdf" data-id="${inv.id}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>

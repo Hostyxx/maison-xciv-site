@@ -1330,7 +1330,7 @@ input, textarea, select, button { font-family: inherit; }
   .sidebar-admin-badge { padding: 10px 12px; justify-content: flex-start; }
 
   /* Contenu principal pleine largeur */
-  .dash-main { margin-left: 0; padding: 16px; min-height: auto; }
+  .dash-main { margin-left: 0; padding: 16px; min-height: auto; overflow-x: hidden; }
 
   /* Login card */
   .login-card { padding: 28px 20px; }

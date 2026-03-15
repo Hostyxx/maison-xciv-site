@@ -175,7 +175,10 @@
 /* ═══════════════════════════════════════════════════════════════
    TABLEAU DES FACTURES / CLIENTS
 ═══════════════════════════════════════════════════════════════ */
-.fact-table-wrap { overflow-x: auto; }
+.fact-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 
 .fact-table {
   width: 100%;
@@ -313,8 +316,15 @@
 @media (max-width: 1200px) {
   .fact-layout { grid-template-columns: 1fr; }
 }
+@media (max-width: 768px) {
+  .fact-preview-section { position: static; }
+}
 
 .fact-form-section { padding: 32px; }
+
+@media (max-width: 600px) {
+  .fact-form-section { padding: 20px 16px; }
+}
 
 .fact-row {
   display: grid;
@@ -802,6 +812,45 @@
 
   /* Stat cards : 2 colonnes au lieu de 1 */
   .fact-stats-row { grid-template-columns: repeat(2, 1fr); }
+
+  /* Table : transformer en cartes empilées sur très petit écran */
+  .fact-table thead { display: none; }
+  .fact-table,
+  .fact-table tbody,
+  .fact-table tr,
+  .fact-table td { display: block; width: 100%; }
+  .fact-table tr {
+    background: #FAF8F4;
+    border: 1px solid #E8E2D9;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .fact-table tr:last-child { margin-bottom: 0; }
+  .fact-table td {
+    padding: 3px 0;
+    border-bottom: none;
+    font-size: 13px;
+  }
+  /* Libellé data-label affiché avant la valeur */
+  .fact-table td::before {
+    content: attr(data-label);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #B0AA9F;
+    display: block;
+    margin-bottom: 1px;
+  }
+  .fact-table td:empty { display: none; }
+  .fact-table .td-actions {
+    text-align: left;
+    padding-top: 10px;
+    margin-top: 8px;
+    border-top: 1px solid #F0EBE3;
+  }
+  .fact-table .td-actions::before { display: none; }
 }
 
 @media (max-width: 374px) {

@@ -195,8 +195,9 @@ nav.solid .nav-btn { color: var(--c-ink-soft); border-color: rgba(13,12,11,0.2);
 nav.solid .nav-btn:hover { background: var(--c-ink); color: var(--c-bone); border-color: var(--c-ink); }
 
 .hamburger {
-  /* button reset */
-  background: none; border: none; padding: 0;
+  /* reset complet Safari/iOS — supprime le carré blanc natif des <button> */
+  -webkit-appearance: none; appearance: none;
+  background: transparent; border: none; padding: 0; outline: none; box-shadow: none;
   /* layout */
   display: none; flex-direction: column; align-items: flex-end; justify-content: center; gap: 6px;
   /* touch target 44×44 minimum (Apple HIG) */
@@ -211,12 +212,13 @@ nav.solid .nav-btn:hover { background: var(--c-ink); color: var(--c-bone); borde
   display: block; height: 1px;
   background: rgba(255,255,255,0.6);
   transition: all 0.4s var(--ease-luxury);
+  pointer-events: none;
 }
-.hamburger span:nth-child(1) { width: 24px; }
-.hamburger span:nth-child(2) { width: 17px; }
+.hamburger span:nth-child(1) { width: 22px; }
+.hamburger span:nth-child(2) { width: 15px; }
 nav.solid .hamburger span { background: var(--c-ink); }
-.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); width: 24px; }
-.hamburger.open span:nth-child(2) { transform: rotate(-45deg) translate(4px, -4px); width: 24px; }
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); width: 22px; }
+.hamburger.open span:nth-child(2) { transform: rotate(-45deg) translate(4px, -4px); width: 22px; }
 
 /* Mobile nav */
 .mobile-nav {

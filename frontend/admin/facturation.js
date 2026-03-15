@@ -39,6 +39,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   buildAndInjectTemplate('pdfInvoiceTemplate', 'pdf');
   bindFormPreview();
 
+  // ── Header dynamique — délégation pour boutons injectés par updateHeader()
+  document.getElementById('pageHeader').addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    if (action === 'export-csv')   exportCSV();
+    else if (action === 'create-invoice')               openCreateForm();
+    else if (action === 'back-to-list' || action === 'cancel-form') showView('list');
+    else if (action === 'save-form')                    handleFormSubmit();
+  });
+
   // ── Sidebar nav ────────────────────────────────────────────
   document.getElementById('nav-factures')?.addEventListener('click', e => { e.preventDefault(); showView('list'); });
   document.getElementById('nav-clients')?.addEventListener('click', e => { e.preventDefault(); showView('clients'); });
@@ -54,6 +65,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ── Empty state ────────────────────────────────────────────
   document.getElementById('createFirstInvoiceBtn')?.addEventListener('click', openCreateForm);
+
+  // ── Tableau des factures — délégation pour boutons d'action
+  document.getElementById('invoicesTableBody').addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const id     = Number(btn.dataset.id);
+    const action = btn.dataset.action;
+    if (action === 'preview-pdf')       openPDFModal(id);
+    else if (action === 'edit-invoice')       openEditForm(id);
+    else if (action === 'duplicate-invoice')  duplicateInvoice(id);
+    else if (action === 'delete-invoice')     openDeleteModal(id, btn.dataset.number);
+  });
+
+  // ── Tableau des clients — délégation (lignes + bouton nouvelle facture)
+  document.getElementById('clientsTableBody').addEventListener('click', e => {
+    const prefillBtn = e.target.closest('[data-action="prefill-client"]');
+    if (prefillBtn) { e.stopPropagation(); prefillClient(Number(prefillBtn.dataset.idx)); return; }
+    const row = e.target.closest('[data-action="open-client-modal"]');
+    if (row) openClientModal(Number(row.dataset.idx));
+  });
+
+  // ── Modal client — délégation pour bouton Modifier dans la liste des factures
+  document.getElementById('clientModalInvoices').addEventListener('click', e => {
+    const btn = e.target.closest('[data-action="close-edit-invoice"]');
+    if (btn) { closeClientModal(); openEditForm(Number(btn.dataset.id)); }
+  });
 
   // ── Formulaire facture ─────────────────────────────────────
   document.getElementById('invoiceForm')?.addEventListener('submit', e => { e.preventDefault(); handleFormSubmit(); });
@@ -132,11 +169,11 @@ function updateHeader(view, extra) {
         <p class="dash-subtitle">Gérez vos factures Maison XCIV</p>
       </div>
       <div class="dash-header-right">
-        <button class="btn-secondary btn-sm" onclick="exportCSV()">
+        <button class="btn-secondary btn-sm" data-action="export-csv">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;margin-right:6px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Exporter CSV
         </button>
-        <button class="dash-add-btn" onclick="openCreateForm()">
+        <button class="dash-add-btn" data-action="create-invoice">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Nouvelle facture
         </button>
@@ -145,15 +182,15 @@ function updateHeader(view, extra) {
     const title = editingInvoiceId ? `Modifier la facture` : 'Nouvelle facture';
     h.innerHTML = `
       <div class="dash-header-left">
-        <button class="btn-back" onclick="showView('list')">
+        <button class="btn-back" data-action="back-to-list">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
           Retour
         </button>
         <h1 class="dash-title" id="formTitle">${title}</h1>
       </div>
       <div class="dash-header-right">
-        <button class="btn-secondary" onclick="showView('list')">Annuler</button>
-        <button class="dash-add-btn" onclick="handleFormSubmit()">
+        <button class="btn-secondary" data-action="cancel-form">Annuler</button>
+        <button class="dash-add-btn" data-action="save-form">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
           Enregistrer
         </button>
@@ -161,7 +198,7 @@ function updateHeader(view, extra) {
   } else if (view === 'clients') {
     h.innerHTML = `
       <div class="dash-header-left">
-        <button class="btn-back" onclick="showView('list')">
+        <button class="btn-back" data-action="back-to-list">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
           Factures
         </button>
@@ -249,16 +286,16 @@ function renderInvoiceTable(invoices) {
       <td>${statusBadge(inv.status)}</td>
       <td>${payBadge(inv.financial.paymentStatus)}</td>
       <td class="td-actions">
-        <button class="btn-icon" title="Aperçu PDF" onclick="openPDFModal(${inv.id})">
+        <button class="btn-icon" title="Aperçu PDF" data-action="preview-pdf" data-id="${inv.id}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
-        <button class="btn-icon" title="Modifier" onclick="openEditForm(${inv.id})">
+        <button class="btn-icon" title="Modifier" data-action="edit-invoice" data-id="${inv.id}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         </button>
-        <button class="btn-icon" title="Dupliquer" onclick="duplicateInvoice(${inv.id})">
+        <button class="btn-icon" title="Dupliquer" data-action="duplicate-invoice" data-id="${inv.id}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
         </button>
-        <button class="btn-icon btn-icon-danger" title="Supprimer" onclick="openDeleteModal(${inv.id}, '${esc(inv.number)}')">
+        <button class="btn-icon btn-icon-danger" title="Supprimer" data-action="delete-invoice" data-id="${inv.id}" data-number="${esc(inv.number)}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
         </button>
       </td>
@@ -290,7 +327,7 @@ function renderClientsView(clients) {
   empty.classList.add('hidden');
 
   tbody.innerHTML = clients.map((c, i) => `
-    <tr class="invoice-row" onclick="openClientModal(${i})" data-client-idx="${i}" style="cursor:pointer">
+    <tr class="invoice-row" data-action="open-client-modal" data-idx="${i}" data-client-idx="${i}" style="cursor:pointer">
       <td><strong>${esc(c.name)}</strong></td>
       <td class="td-muted">${esc(c.email || '—')}</td>
       <td class="td-center"><span class="count-badge">${c.invoiceCount}</span></td>
@@ -298,8 +335,8 @@ function renderClientsView(clients) {
       <td class="td-amount td-green">${formatCurrency(c.totalPaid)}</td>
       <td class="td-amount ${c.totalRemaining > 0 ? 'td-orange' : ''}">${formatCurrency(c.totalRemaining)}</td>
       <td class="td-date">${formatDate(c.lastDate)}</td>
-      <td class="td-actions" onclick="event.stopPropagation()">
-        <button class="btn-icon" title="Nouvelle facture pour ce client" onclick="prefillClient(${i})">
+      <td class="td-actions">
+        <button class="btn-icon" title="Nouvelle facture pour ce client" data-action="prefill-client" data-idx="${i}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
       </td>
@@ -335,7 +372,7 @@ function openClientModal(idx) {
       <td>${statusBadge(inv.status)}</td>
       <td>${payBadge(inv.paymentStatus)}</td>
       <td class="td-actions">
-        <button class="btn-icon" onclick="closeClientModal(); openEditForm(${inv.id})">
+        <button class="btn-icon" data-action="close-edit-invoice" data-id="${inv.id}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         </button>
       </td>
@@ -839,7 +876,7 @@ async function generatePDF(templateId, filename, btnId) {
   const template = document.getElementById(templateId);
   if (!template) return;
 
-  const btn = btnId ? document.getElementById(btnId) : document.querySelector(`[onclick*="generatePDFFromForm"]`);
+  const btn = btnId ? document.getElementById(btnId) : document.getElementById('generatePDFBtn');
   const origHTML = btn?.innerHTML;
   if (btn) { btn.disabled = true; btn.innerHTML = `<span class="spin-icon">⟳</span> Génération…`; }
 

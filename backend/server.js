@@ -91,10 +91,19 @@ app.use('/api/', apiLimiter);
 
 // ─── Fichiers statiques ──────────────────────────────────────
 app.use(express.static(path.join(__dirname, '../frontend'), {
-  // Empêche l'accès direct aux fichiers .env, .js de config, etc.
   dotfiles: 'deny',
-  // Cache 1h pour les assets en prod
-  maxAge: isProduction ? '1h' : 0,
+  // Images et fonts : cache 1h en prod
+  // HTML, JS, CSS : jamais mis en cache (no-cache) — évite les versions
+  // obsolètes sur iPhone/Safari après un déploiement
+  maxAge: 0,
+  setHeaders(res, filePath) {
+    const ext = filePath.split('.').pop().toLowerCase();
+    if (['html', 'js', 'css'].includes(ext)) {
+      res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+    } else if (['jpg', 'jpeg', 'png', 'webp', 'avif', 'ico', 'svg', 'woff', 'woff2'].includes(ext)) {
+      res.setHeader('Cache-Control', isProduction ? 'public, max-age=3600' : 'no-cache');
+    }
+  }
 }));
 
 // ─── Routes API ──────────────────────────────────────────────

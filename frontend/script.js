@@ -818,7 +818,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (navLogoutBtn) navLogoutBtn.addEventListener('click', logoutUser);
 
   // ── Hamburger ────────────────────────────────────────────────
-  document.getElementById('hamburger').addEventListener('click', toggleMobile);
+  document.getElementById('hamburger').addEventListener('click', () => {
+    console.log('[XCIV] hamburger tap → toggleMobile()');
+    toggleMobile();
+  });
 
   // ── Auth modal ───────────────────────────────────────────────
   document.getElementById('authModal').addEventListener('click', closeAuthModal);
@@ -836,7 +839,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ── Sélecteur de vue ─────────────────────────────────────────
   document.querySelectorAll('.view-btn').forEach(btn => {
-    btn.addEventListener('click', function () { setNouveautesView(this.dataset.view, this); });
+    btn.addEventListener('click', function () {
+      console.log('[XCIV] view-btn tap →', this.dataset.view);
+      setNouveautesView(this.dataset.view, this);
+    });
   });
 
   // ── Formulaire contact WhatsApp ──────────────────────────────
@@ -863,6 +869,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const adminForm = document.getElementById('adminForm');
   if (adminForm) adminForm.addEventListener('submit', handleFormSubmit);
 
+  console.log('[XCIV] script.js v3 chargé — DOMContentLoaded OK');
   restoreNouveautesView(); // restaure la vue choisie par l'utilisateur
   await initAuth();        // charge session + favoris en premier
   loadWatches();           // puis le catalogue (buildCard utilisera favoriteIds)

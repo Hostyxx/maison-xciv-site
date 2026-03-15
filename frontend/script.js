@@ -99,7 +99,9 @@ let mobileOpen = false;
 function toggleMobile() {
   mobileOpen = !mobileOpen;
   document.getElementById('mobileNav').classList.toggle('open', mobileOpen);
-  document.getElementById('hamburger').classList.toggle('open', mobileOpen);
+  const hbtn = document.getElementById('hamburger');
+  hbtn.classList.toggle('open', mobileOpen);
+  hbtn.setAttribute('aria-expanded', mobileOpen);
   document.body.style.overflow = mobileOpen ? 'hidden' : '';
   document.body.classList.toggle('menu-open', mobileOpen);
 }
@@ -107,7 +109,9 @@ function toggleMobile() {
 function closeMobile() {
   mobileOpen = false;
   document.getElementById('mobileNav').classList.remove('open');
-  document.getElementById('hamburger').classList.remove('open');
+  const hbtn = document.getElementById('hamburger');
+  hbtn.classList.remove('open');
+  hbtn.setAttribute('aria-expanded', 'false');
   document.body.style.overflow = '';
   document.body.classList.remove('menu-open');
 }

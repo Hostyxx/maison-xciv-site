@@ -195,19 +195,28 @@ nav.solid .nav-btn { color: var(--c-ink-soft); border-color: rgba(13,12,11,0.2);
 nav.solid .nav-btn:hover { background: var(--c-ink); color: var(--c-bone); border-color: var(--c-ink); }
 
 .hamburger {
-  display: none; flex-direction: column; gap: 6px;
-  width: 32px; padding: 8px 0; cursor: none;
+  /* button reset */
+  background: none; border: none; padding: 0;
+  /* layout */
+  display: none; flex-direction: column; align-items: flex-end; justify-content: center; gap: 6px;
+  /* touch target 44×44 minimum (Apple HIG) */
+  width: 44px; min-height: 44px;
+  /* cursor */
+  cursor: none;
+  /* Safari iOS : supprime le flash bleu au tap et le délai 300ms */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 .hamburger span {
   display: block; height: 1px;
   background: rgba(255,255,255,0.6);
   transition: all 0.4s var(--ease-luxury);
 }
-.hamburger span:nth-child(1) { width: 100%; }
-.hamburger span:nth-child(2) { width: 70%; }
+.hamburger span:nth-child(1) { width: 24px; }
+.hamburger span:nth-child(2) { width: 17px; }
 nav.solid .hamburger span { background: var(--c-ink); }
-.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); width: 100%; }
-.hamburger.open span:nth-child(2) { transform: rotate(-45deg) translate(5px, -5px); width: 100%; }
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); width: 24px; }
+.hamburger.open span:nth-child(2) { transform: rotate(-45deg) translate(4px, -4px); width: 24px; }
 
 /* Mobile nav */
 .mobile-nav {
@@ -1693,7 +1702,7 @@ footer {
   .nouv-header { padding: 0 12px; }
 }
 
-/* iPhone 12/14 standard (375–428px) */
+/* iPhone 12/14 standard (375–480px) */
 @media (max-width: 480px) {
   .wc-footer {
     flex-direction: column;
@@ -1703,6 +1712,13 @@ footer {
     width: 100%;
     justify-content: center;
   }
+  /* BUG 2 FIX — toggle de vue toujours entièrement visible sur iPhone.
+     Le count + les boutons de filtre dépassent la largeur disponible
+     (~350px) et font clipper le toggle à droite via overflow-x:hidden.
+     On les masque sur mobile : le toggle est l'UI la plus utile. */
+  .nouv-count      { display: none; }
+  .nouv-filter-btn { display: none; }
+  .nouv-header-right { gap: 0; }
 }
 
 /* ─── Anti-overflow global dans la section ─── */

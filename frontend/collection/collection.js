@@ -258,7 +258,6 @@ function buildCard(watch, index) {
       <span class="wc-badge ${statusClass}">${escHtml(watch.status)}</span>
       <button class="wc-fav-btn ${isFav ? 'is-fav' : ''}"
               data-watch-id="${watch.id}"
-              onclick="toggleFavorite(${watch.id}, this)"
               aria-label="${isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'}">
         <svg class="heart-empty"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
@@ -291,7 +290,7 @@ function renderGrid(watches) {
     grid.innerHTML = `
       <div class="coll-empty">
         <p>Aucune montre pour cette sélection.</p>
-        <button class="coll-empty-reset" onclick="resetFilters()">Voir toute la collection</button>
+        <button class="coll-empty-reset" data-action="reset-filters">Voir toute la collection</button>
       </div>`;
     return;
   }
@@ -328,8 +327,9 @@ function updateNavAuth() {
     if (navLogin)      navLogin.style.display     = '';
     if (navUserMenu)   navUserMenu.style.display   = 'none';
     if (navAdminBadge) navAdminBadge.style.display = 'none';
-    if (mobileAuth)    mobileAuth.innerHTML =
-      `<a href="/connexion" onclick="closeMobile()">Mon compte</a>`;
+    if (mobileAuth) {
+      mobileAuth.innerHTML = `<a href="/connexion">Mon compte</a>`;
+    }
     return;
   }
 
@@ -337,17 +337,24 @@ function updateNavAuth() {
     if (navLogin)      navLogin.style.display     = 'none';
     if (navUserMenu)   navUserMenu.style.display   = 'none';
     if (navAdminBadge) navAdminBadge.style.display = '';
-    if (mobileAuth)    mobileAuth.innerHTML =
-      `<a href="/admin/dashboard" onclick="closeMobile()">Dashboard</a>`;
+    if (mobileAuth) {
+      mobileAuth.innerHTML = `<a href="/admin/dashboard">Dashboard</a>`;
+    }
   } else {
     const prenom = currentUser.name.split(' ')[0];
     if (navLogin)      navLogin.style.display     = 'none';
     if (navAdminBadge) navAdminBadge.style.display = 'none';
     if (navUserMenu)   navUserMenu.style.display   = 'flex';
     if (navUserName)   navUserName.textContent     = prenom;
-    if (mobileAuth)    mobileAuth.innerHTML =
-      `<a href="/mon-espace" onclick="closeMobile()">Mon espace</a>
-       <a href="#" onclick="logoutUser();closeMobile();" style="font-size:12px;color:rgba(254,253,251,0.4)">Déconnexion</a>`;
+    if (mobileAuth) {
+      mobileAuth.innerHTML =
+        `<a href="/mon-espace">Mon espace</a>
+         <button class="mobile-nav-logout">Déconnexion</button>`;
+      mobileAuth.querySelector('.mobile-nav-logout').addEventListener('click', () => {
+        logoutUser();
+        closeMobile();
+      });
+    }
   }
 }
 
@@ -494,6 +501,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (authModal) authModal.addEventListener('click', closeAuthModal);
   const authClose = document.querySelector('.auth-modal-close');
   if (authClose) authClose.addEventListener('click', () => closeAuthModal({ target: authModal, currentTarget: authModal }));
+
+  // ── Délégation : boutons favoris + reset-filters dans la grille ─
+  const collGrid = document.getElementById('collGrid');
+  if (collGrid) {
+    collGrid.addEventListener('click', e => {
+      const favBtn   = e.target.closest('.wc-fav-btn');
+      const resetBtn = e.target.closest('[data-action="reset-filters"]');
+      if (favBtn)   toggleFavorite(parseInt(favBtn.dataset.watchId, 10), favBtn);
+      if (resetBtn) resetFilters();
+    });
+  }
 
   await initAuth();   // session + favoris
   await loadWatches(); // catalogue

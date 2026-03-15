@@ -294,6 +294,23 @@ a    { text-decoration: none; color: inherit; }
 }
 .espace-nav a:hover, .espace-nav a.active { color: var(--beige); }
 
+/* Bouton déconnexion — même apparence que les liens nav */
+.espace-nav .espace-nav-logout {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 9.5px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: inherit;
+  transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.espace-nav .espace-nav-logout:hover { color: var(--beige); }
+
 .espace-main {
   background: var(--bg);
   min-height: calc(100vh - 100px);
@@ -463,5 +480,6 @@ a, button, input, label, select { touch-action: manipulation; }
   .auth-back        { min-height: 44px; }
   .pw-toggle        { min-width: 44px; min-height: 44px; right: 0; }
   .fav-empty-btn    { min-height: 52px; }
-  .espace-nav a     { min-height: 44px; display: flex; align-items: center; }
+  .espace-nav a                 { min-height: 44px; display: flex; align-items: center; }
+  .espace-nav .espace-nav-logout { min-height: 44px; display: flex; align-items: center; }
 }

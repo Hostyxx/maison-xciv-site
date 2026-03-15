@@ -272,7 +272,6 @@ function buildCard(watch, index) {
       <!-- Bouton favori : visible pour tous, action réservée aux connectés -->
       <button class="wc-fav-btn ${isFav ? 'is-fav' : ''}"
               data-watch-id="${safeId}"
-              onclick="toggleFavorite(${safeId}, this)"
               aria-label="${escapeHtml(favLabel)}">
         <svg class="heart-empty"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
         <svg class="heart-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
@@ -535,8 +534,8 @@ function renderAdminList() {
         <div class="admin-item-status admin-status-${escapeHtml(getStatusClass(w.status))}">${escapeHtml(w.status)}</div>
       </div>
       <div class="admin-item-actions">
-        <button class="admin-edit-btn"   onclick="editWatch(${sid})"   title="Modifier">✎</button>
-        <button class="admin-delete-btn" onclick="deleteWatch(${sid})" title="Supprimer">✕</button>
+        <button class="admin-edit-btn"   data-action="edit"   data-id="${sid}" title="Modifier">✎</button>
+        <button class="admin-delete-btn" data-action="delete" data-id="${sid}" title="Supprimer">✕</button>
       </div>
     </div>`;
   }).join('');
@@ -636,8 +635,9 @@ function updateNavAuth() {
     if (navUserMenu)   navUserMenu.style.display    = 'none';
     if (navAdminBadge) navAdminBadge.style.display  = 'none';
     if (adminFab)      adminFab.style.display       = 'none';
-    if (mobileAuth)    mobileAuth.innerHTML =
-      `<a href="/connexion" onclick="closeMobile()">Mon compte</a>`;
+    if (mobileAuth) {
+      mobileAuth.innerHTML = `<a href="/connexion">Mon compte</a>`;
+    }
     return;
   }
 
@@ -647,8 +647,9 @@ function updateNavAuth() {
     if (navUserMenu)   navUserMenu.style.display    = 'none';
     if (navAdminBadge) navAdminBadge.style.display  = '';
     if (adminFab)      adminFab.style.display       = '';
-    if (mobileAuth)    mobileAuth.innerHTML =
-      `<a href="/admin/dashboard" onclick="closeMobile()">Dashboard</a>`;
+    if (mobileAuth) {
+      mobileAuth.innerHTML = `<a href="/admin/dashboard">Dashboard</a>`;
+    }
   } else {
     // Utilisateur standard — FAB invisible
     const prenom = currentUser.name.split(' ')[0];
@@ -657,9 +658,15 @@ function updateNavAuth() {
     if (adminFab)      adminFab.style.display       = 'none';
     if (navUserMenu)   navUserMenu.style.display    = 'flex';
     if (navUserName)   navUserName.textContent      = prenom;
-    if (mobileAuth)    mobileAuth.innerHTML =
-      `<a href="/mon-espace" onclick="closeMobile()">Mon espace</a>
-       <a href="#" onclick="logoutUser();closeMobile();" style="font-size:clamp(14px,3.5vw,18px);color:rgba(254,253,251,0.4)!important;letter-spacing:3px;text-transform:uppercase;font-family:var(--f-sans)">Déconnexion</a>`;
+    if (mobileAuth) {
+      mobileAuth.innerHTML =
+        `<a href="/mon-espace">Mon espace</a>
+         <button class="mobile-nav-logout">Déconnexion</button>`;
+      mobileAuth.querySelector('.mobile-nav-logout').addEventListener('click', () => {
+        logoutUser();
+        closeMobile();
+      });
+    }
   }
 }
 
@@ -812,6 +819,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('mobileNav').addEventListener('click', e => {
     if (e.target.tagName === 'A') closeMobile();
   });
+
+  // ── Délégation : boutons favoris dans la grille Nouveautés ───
+  document.getElementById('nouv-grid').addEventListener('click', e => {
+    const btn = e.target.closest('.wc-fav-btn');
+    if (btn) toggleFavorite(parseInt(btn.dataset.watchId, 10), btn);
+  });
+
+  // ── Délégation : boutons Modifier / Supprimer dans l'admin panel ─
+  const adminList = document.getElementById('adminList');
+  if (adminList) {
+    adminList.addEventListener('click', e => {
+      const editBtn = e.target.closest('[data-action="edit"]');
+      const delBtn  = e.target.closest('[data-action="delete"]');
+      if (editBtn) editWatch(Number(editBtn.dataset.id));
+      if (delBtn)  deleteWatch(Number(delBtn.dataset.id));
+    });
+  }
 
   // ── Nav logout ───────────────────────────────────────────────
   const navLogoutBtn = document.querySelector('.nav-logout-btn');

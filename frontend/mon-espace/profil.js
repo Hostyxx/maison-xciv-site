@@ -2,6 +2,12 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('logoutLink').addEventListener('click', logout);
+
+  // ── Délégation : bouton "Retirer" des favoris (contenu dynamique) ─
+  document.getElementById('favGrid').addEventListener('click', e => {
+    const btn = e.target.closest('.fav-remove-btn');
+    if (btn) removeFav(parseInt(btn.dataset.watchId, 10), btn);
+  });
   // Vérifie la session — si non connecté, redirige vers /connexion?from=/mon-espace
   let user;
   try {
@@ -66,7 +72,7 @@ function buildFavCard(watch) {
       <div class="fav-card-name">${escHtml(watch.name)}</div>
       <div class="fav-card-footer">
         <span class="fav-card-price">${escHtml(watch.price)}</span>
-        <button class="fav-remove-btn" onclick="removeFav(${watch.id}, this)">
+        <button class="fav-remove-btn" data-watch-id="${watch.id}">
           Retirer
         </button>
       </div>

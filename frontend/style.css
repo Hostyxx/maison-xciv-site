@@ -2531,6 +2531,25 @@ a, button, [onclick], label, select {
 }
 .mobile-nav-auth-links a:hover { color: var(--c-beige) !important; }
 
+/* Bouton déconnexion mobile nav (remplace l'ancien <a href="#"> avec onclick) */
+.mobile-nav-logout {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--f-serif);
+  font-size: clamp(24px, 6vw, 40px);
+  color: rgba(196, 170, 140, 0.4);
+  letter-spacing: 1px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.mobile-nav-logout:hover { color: rgba(196, 170, 140, 0.7); }
+
 /* ── 3. HERO — mobile ── */
 @media (max-width: 768px) {
   .hero-vline  { display: none; }

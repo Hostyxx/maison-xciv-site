@@ -1,6 +1,8 @@
 'use strict';
 
-document.getElementById('registerForm').addEventListener('submit', handleRegister);
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('registerForm').addEventListener('submit', handleRegister);
+});
 
 // Si déjà connecté → espace client
 (async function checkAlreadyLogged() {

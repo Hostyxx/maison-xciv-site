@@ -41,7 +41,7 @@
 
       <div class="auth-message" id="authMsg"></div>
 
-      <form id="registerForm" method="post" novalidate>
+      <form id="registerForm" novalidate onsubmit="event.preventDefault();">
 
         <div class="auth-field">
           <label for="name">Prénom et nom</label>

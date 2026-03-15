@@ -8,7 +8,9 @@
 
 'use strict';
 
-document.getElementById('loginForm').addEventListener('submit', handleLogin);
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('loginForm').addEventListener('submit', handleLogin);
+});
 
 /**
  * Soumission du formulaire de login.

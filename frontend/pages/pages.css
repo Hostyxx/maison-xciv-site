@@ -731,7 +731,7 @@ img {
 .pg-footer {
   background: var(--c-black);
   color: var(--c-bone);
-  padding: 64px 48px 32px;
+  padding: 64px 48px calc(32px + env(safe-area-inset-bottom, 0px));
 }
 .pg-footer-grid {
   display: grid;
@@ -857,7 +857,7 @@ img {
     grid-column: auto;
   }
   .pg-footer {
-    padding: 48px 24px 28px;
+    padding: 48px 24px calc(28px + env(safe-area-inset-bottom, 0px));
   }
   .pg-footer-grid {
     grid-template-columns: 1fr 1fr;
@@ -921,7 +921,7 @@ img {
   .pg-hero   { padding: 32px 12px 28px; }
   .pg-hero h1 { font-size: 1.6rem; }
   .pg-body   { padding: 32px 12px 52px; }
-  .pg-footer { padding: 40px 12px 24px; }
+  .pg-footer { padding: 40px 12px calc(24px + env(safe-area-inset-bottom, 0px)); }
   .pg-footer-grid { grid-template-columns: 1fr; gap: 24px; }
   .pg-cards  { grid-template-columns: 1fr; }
   .pg-steps  { grid-template-columns: 1fr; }

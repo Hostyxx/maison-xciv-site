@@ -630,7 +630,7 @@ body.hovering #cur-ring { width: 52px; height: 52px; border-color: var(--c-beige
    TOAST
 ═══════════════════════════════════════════════════════════ */
 .pub-toast {
-  position: fixed; bottom: 24px; left: 50%;
+  position: fixed; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); left: 50%;
   transform: translateX(-50%) translateY(16px);
   background: var(--c-ink); color: var(--c-bone);
   font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
@@ -687,7 +687,7 @@ footer {
 .footer-bottom {
   display: flex; align-items: center; justify-content: space-between;
   flex-wrap: wrap; gap: 12px;
-  padding: 20px 0;
+  padding: 20px 0 calc(20px + env(safe-area-inset-bottom, 0px));
 }
 .footer-copy {
   font-size: 10px; letter-spacing: 2px; text-transform: uppercase;

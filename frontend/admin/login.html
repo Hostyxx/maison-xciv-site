@@ -30,7 +30,7 @@
       <div class="login-error" id="loginError" style="display:none"></div>
 
       <!-- Formulaire -->
-      <form class="login-form" id="loginForm" novalidate onsubmit="event.preventDefault();">
+      <form class="login-form" id="loginForm" novalidate>
 
         <div class="login-field">
           <label for="email">Adresse email</label>
@@ -55,7 +55,7 @@
               autocomplete="current-password"
               required
             >
-            <button type="button" class="login-pw-toggle" onclick="togglePassword()" title="Afficher/masquer">
+            <button type="button" class="login-pw-toggle" title="Afficher/masquer">
               <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                 <circle cx="12" cy="12" r="3"/>

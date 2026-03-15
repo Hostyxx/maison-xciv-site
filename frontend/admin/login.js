@@ -10,6 +10,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('loginForm').addEventListener('submit', handleLogin);
+  document.querySelector('.login-pw-toggle').addEventListener('click', togglePassword);
 });
 
 /**
@@ -82,8 +83,6 @@ function togglePassword() {
   input.type  = input.type === 'password' ? 'text' : 'password';
 }
 
-// togglePassword est appelé via onclick dans le HTML
-window.togglePassword = togglePassword;
 
 // Ajout d'une animation shake dans la page
 const style       = document.createElement('style');

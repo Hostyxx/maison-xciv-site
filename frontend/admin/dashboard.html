@@ -14,7 +14,7 @@
   <!-- ─── Topbar mobile (≤ 600px) ─── -->
   <div class="mobile-topbar">
     <div class="mobile-topbar-logo">XCIV</div>
-    <button class="sidebar-toggle-btn" onclick="toggleMobileSidebar()" aria-label="Menu">
+    <button class="sidebar-toggle-btn" aria-label="Menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -24,7 +24,7 @@
   </div>
 
   <!-- ─── Overlay fond sidebar mobile ─── -->
-  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar()"></div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <!-- ─── Sidebar ─── -->
   <aside class="sidebar">
@@ -34,21 +34,21 @@
     </div>
 
     <nav class="sidebar-nav">
-      <a href="#catalogue" class="sidebar-link active" data-section="catalogue" onclick="cancelForm()">
+      <a href="#catalogue" class="sidebar-link active" data-section="catalogue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <rect x="2" y="3" width="20" height="14" rx="2"/>
           <path d="M8 21h8M12 17v4"/>
         </svg>
         <span>Catalogue</span>
       </a>
-      <a href="#add" class="sidebar-link" data-section="add" onclick="showAddForm()">
+      <a href="#add" class="sidebar-link" data-section="add">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <circle cx="12" cy="12" r="10"/>
           <path d="M12 8v8M8 12h8"/>
         </svg>
         <span>Ajouter</span>
       </a>
-      <a href="#clients" class="sidebar-link" data-section="clients" onclick="showClients()">
+      <a href="#clients" class="sidebar-link" data-section="clients">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
           <circle cx="9" cy="7" r="4"/>
@@ -94,7 +94,7 @@
         </svg>
         <span>Voir le site</span>
       </a>
-      <button class="sidebar-logout" onclick="logout()">
+      <button class="sidebar-logout">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
           <polyline points="16 17 21 12 16 7"/>
@@ -116,7 +116,7 @@
       </div>
       <div class="dash-header-right">
         <div class="dash-stats" id="dashStats"></div>
-        <button class="dash-add-btn" onclick="showAddForm()">
+        <button class="dash-add-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 5v14M5 12h14"/>
           </svg>
@@ -133,10 +133,10 @@
       <div class="dash-card">
         <div class="form-header">
           <h2 class="form-title" id="formTitle">Nouvelle montre</h2>
-          <button class="form-cancel" onclick="cancelForm()">✕ Annuler</button>
+          <button class="form-cancel">✕ Annuler</button>
         </div>
 
-        <form id="watchForm" onsubmit="submitWatch(event)">
+        <form id="watchForm">
           <input type="hidden" id="fId">
 
           <div class="form-grid">
@@ -191,10 +191,10 @@
               <!-- Upload image -->
               <div class="form-field">
                 <label>Image</label>
-                <div class="img-upload-zone" id="imgUploadZone" onclick="document.getElementById('fImageFile').click()">
+                <div class="img-upload-zone" id="imgUploadZone">
                   <div class="img-upload-preview" id="imgPreview" style="display:none">
                     <img id="imgPreviewEl" src="" alt="Aperçu">
-                    <button type="button" class="img-clear-btn" onclick="clearImage(event)">✕</button>
+                    <button type="button" class="img-clear-btn">✕</button>
                   </div>
                   <div class="img-upload-placeholder" id="imgPlaceholder">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -210,7 +210,7 @@
                     <span>Upload en cours…</span>
                   </div>
                 </div>
-                <input type="file" id="fImageFile" accept="image/jpeg,image/png,image/webp,image/avif" style="display:none" onchange="handleImageUpload(event)">
+                <input type="file" id="fImageFile" accept="image/jpeg,image/png,image/webp,image/avif" style="display:none">
                 <!-- URL de l'image (remplie automatiquement après upload ou manuellement) -->
                 <input type="text" id="fImage" placeholder="URL de l'image (auto après upload)" style="margin-top:8px; font-size:11px; color: var(--c-grey)">
               </div>
@@ -219,7 +219,7 @@
           </div>
 
           <div class="form-actions">
-            <button type="button" class="btn-secondary" onclick="cancelForm()">Annuler</button>
+            <button type="button" class="btn-secondary" data-action="cancel">Annuler</button>
             <button type="submit" class="btn-primary" id="formSubmitBtn">
               <span id="formSubmitText">Enregistrer</span>
               <div class="btn-spinner" id="formSpinner" style="display:none"></div>
@@ -254,7 +254,7 @@
     <!-- ─── Section : Détail d'un client ─── -->
     <section class="dash-section" id="sectionClientDetail" style="display:none">
       <div class="client-detail-back">
-        <button class="btn-back" onclick="showClients()">
+        <button class="btn-back">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <polyline points="15 18 9 12 15 6"/>
           </svg>
@@ -274,13 +274,13 @@
             <circle cx="11" cy="11" r="8"/>
             <path d="m21 21-4.35-4.35"/>
           </svg>
-          <input type="text" id="searchInput" placeholder="Rechercher par nom ou marque…" oninput="filterList()">
+          <input type="text" id="searchInput" placeholder="Rechercher par nom ou marque…">
         </div>
         <div class="filter-tabs" id="filterTabs">
-          <button class="filter-tab active" data-filter="all"        onclick="setFilter('all',this)">Toutes</button>
-          <button class="filter-tab"        data-filter="Disponible" onclick="setFilter('Disponible',this)">Disponibles</button>
-          <button class="filter-tab"        data-filter="Réservé"    onclick="setFilter('Réservé',this)">Réservées</button>
-          <button class="filter-tab"        data-filter="Vendu"      onclick="setFilter('Vendu',this)">Vendues</button>
+          <button class="filter-tab active" data-filter="all">Toutes</button>
+          <button class="filter-tab"        data-filter="Disponible">Disponibles</button>
+          <button class="filter-tab"        data-filter="Réservé">Réservées</button>
+          <button class="filter-tab"        data-filter="Vendu">Vendues</button>
         </div>
       </div>
 
@@ -316,8 +316,8 @@
       <h3 class="modal-title">Supprimer cette montre ?</h3>
       <p class="modal-desc" id="deleteModalDesc"></p>
       <div class="modal-actions">
-        <button class="btn-secondary" onclick="closeDeleteModal()">Annuler</button>
-        <button class="btn-danger"    onclick="confirmDelete()">Supprimer</button>
+        <button class="btn-secondary" data-action="close-delete">Annuler</button>
+        <button class="btn-danger"    data-action="confirm-delete">Supprimer</button>
       </div>
     </div>
   </div>

@@ -38,6 +38,51 @@ document.addEventListener('DOMContentLoaded', async () => {
   buildAndInjectTemplate('invoiceTemplate',    'prev');
   buildAndInjectTemplate('pdfInvoiceTemplate', 'pdf');
   bindFormPreview();
+
+  // ── Sidebar nav ────────────────────────────────────────────
+  document.getElementById('nav-factures')?.addEventListener('click', e => { e.preventDefault(); showView('list'); });
+  document.getElementById('nav-clients')?.addEventListener('click', e => { e.preventDefault(); showView('clients'); });
+  document.querySelector('.sidebar-logout')?.addEventListener('click', logout);
+
+  // ── Filtres ────────────────────────────────────────────────
+  document.getElementById('filterSearch')?.addEventListener('input', debounceFilters);
+  document.getElementById('filterStatus')?.addEventListener('change', applyFilters);
+  document.getElementById('filterPayStatus')?.addEventListener('change', applyFilters);
+  document.getElementById('filterDateFrom')?.addEventListener('change', applyFilters);
+  document.getElementById('filterDateTo')?.addEventListener('change', applyFilters);
+  document.getElementById('resetFiltersBtn')?.addEventListener('click', resetFilters);
+
+  // ── Empty state ────────────────────────────────────────────
+  document.getElementById('createFirstInvoiceBtn')?.addEventListener('click', openCreateForm);
+
+  // ── Formulaire facture ─────────────────────────────────────
+  document.getElementById('invoiceForm')?.addEventListener('submit', e => { e.preventDefault(); handleFormSubmit(); });
+  document.getElementById('cancelFormBtn')?.addEventListener('click', () => showView('list'));
+  document.getElementById('saveInvoiceBtn')?.addEventListener('click', handleFormSubmit);
+  document.getElementById('generatePDFBtn')?.addEventListener('click', generatePDFFromForm);
+
+  // ── Shipping toggle ────────────────────────────────────────
+  document.getElementById('f_shippingSame')?.addEventListener('change', toggleShipping);
+
+  // ── Recalcul montants ──────────────────────────────────────
+  ['f_qty', 'f_unitPrice', 'f_tvaRate', 'f_deposit'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', recalculate);
+  });
+
+  // ── Modal suppression ──────────────────────────────────────
+  document.getElementById('deleteModalCancelBtn')?.addEventListener('click', closeDeleteModal);
+  document.getElementById('deleteModalConfirmBtn')?.addEventListener('click', confirmDelete);
+
+  // ── Modal PDF ──────────────────────────────────────────────
+  document.getElementById('pdfModalCloseBtn')?.addEventListener('click', closePDFModal);
+  document.getElementById('pdfModalFooterCloseBtn')?.addEventListener('click', closePDFModal);
+  document.getElementById('pdfDownloadBtn')?.addEventListener('click', downloadPDFFromModal);
+
+  // ── Modal client ───────────────────────────────────────────
+  document.getElementById('clientModalCloseBtn')?.addEventListener('click', closeClientModal);
+  document.getElementById('clientModalFooterCloseBtn')?.addEventListener('click', closeClientModal);
+  document.getElementById('clientModalNewInvoiceBtn')?.addEventListener('click', () => { closeClientModal(); openCreateForm(); });
+
   showView('list');
 });
 

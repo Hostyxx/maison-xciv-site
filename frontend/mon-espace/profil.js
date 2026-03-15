@@ -1,6 +1,7 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('logoutLink').addEventListener('click', logout);
   // Vérifie la session — si non connecté, redirige vers /connexion?from=/mon-espace
   let user;
   try {
@@ -132,4 +133,3 @@ function escHtml(str) {
 }
 
 window.removeFav = removeFav;
-window.logout    = logout;

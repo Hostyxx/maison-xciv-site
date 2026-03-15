@@ -41,7 +41,7 @@
 
       <div class="auth-message" id="authMsg"></div>
 
-      <form id="registerForm" novalidate onsubmit="event.preventDefault();">
+      <form id="registerForm" novalidate>
 
         <div class="auth-field">
           <label for="name">Prénom et nom</label>
@@ -57,7 +57,7 @@
           <label for="password">Mot de passe</label>
           <div class="pw-wrap">
             <input type="password" id="password" placeholder="8 caractères minimum" autocomplete="new-password" required>
-            <button type="button" class="pw-toggle" onclick="togglePw('password')">
+            <button type="button" class="pw-toggle">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                 <circle cx="12" cy="12" r="3"/>
@@ -70,7 +70,7 @@
           <label for="confirm">Confirmer le mot de passe</label>
           <div class="pw-wrap">
             <input type="password" id="confirm" placeholder="••••••••" autocomplete="new-password" required>
-            <button type="button" class="pw-toggle" onclick="togglePw('confirm')">
+            <button type="button" class="pw-toggle">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                 <circle cx="12" cy="12" r="3"/>

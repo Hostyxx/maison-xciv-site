@@ -28,7 +28,7 @@
         </svg>
         <span>Catalogue</span>
       </a>
-      <a href="#" class="sidebar-link active" id="nav-factures" onclick="showView('list'); return false;">
+      <a href="#" class="sidebar-link active" id="nav-factures">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
           <polyline points="14 2 14 8 20 8"/>
@@ -37,7 +37,7 @@
         </svg>
         <span>Factures</span>
       </a>
-      <a href="#" class="sidebar-link" id="nav-clients" onclick="showView('clients'); return false;">
+      <a href="#" class="sidebar-link" id="nav-clients">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
           <circle cx="9" cy="7" r="4"/>
@@ -63,7 +63,7 @@
         </svg>
         <span>Voir le site</span>
       </a>
-      <button class="sidebar-logout" onclick="logout()">
+      <button class="sidebar-logout">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
           <polyline points="16 17 21 12 16 7"/>
@@ -133,9 +133,9 @@
         <div class="fact-filters">
           <div class="filter-search">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="filterSearch" placeholder="Rechercher client, numéro, produit…" oninput="debounceFilters()">
+            <input type="text" id="filterSearch" placeholder="Rechercher client, numéro, produit…">
           </div>
-          <select id="filterStatus" onchange="applyFilters()">
+          <select id="filterStatus">
             <option value="">Tous les statuts</option>
             <option value="draft">Brouillon</option>
             <option value="sent">Envoyée</option>
@@ -143,15 +143,15 @@
             <option value="pending">En attente</option>
             <option value="cancelled">Annulée</option>
           </select>
-          <select id="filterPayStatus" onchange="applyFilters()">
+          <select id="filterPayStatus">
             <option value="">Tout paiement</option>
             <option value="unpaid">Non payé</option>
             <option value="partial">Partiel</option>
             <option value="paid">Payé</option>
           </select>
-          <input type="date" id="filterDateFrom" onchange="applyFilters()" title="Depuis">
-          <input type="date" id="filterDateTo" onchange="applyFilters()" title="Jusqu'au">
-          <button class="btn-ghost btn-sm" onclick="resetFilters()" title="Réinitialiser les filtres">
+          <input type="date" id="filterDateFrom" title="Depuis">
+          <input type="date" id="filterDateTo" title="Jusqu'au">
+          <button class="btn-ghost btn-sm" id="resetFiltersBtn" title="Réinitialiser les filtres">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
           </button>
         </div>
@@ -177,7 +177,7 @@
           <div id="emptyState" class="fact-empty hidden">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             <p>Aucune facture trouvée</p>
-            <button class="btn-primary" onclick="openCreateForm()">Créer la première facture</button>
+            <button class="btn-primary" id="createFirstInvoiceBtn">Créer la première facture</button>
           </div>
         </div>
       </div>
@@ -191,7 +191,7 @@
 
         <!-- Colonne gauche : formulaire -->
         <section class="fact-form-section dash-card">
-          <form id="invoiceForm" onsubmit="return false">
+          <form id="invoiceForm">
 
             <!-- ── Identité de la facture ── -->
             <div class="fact-divider"><span>Identité de la facture</span></div>
@@ -246,7 +246,7 @@
             </div>
             <div class="form-field">
               <label class="checkbox-label">
-                <input type="checkbox" id="f_shippingSame" checked onchange="toggleShipping()">
+                <input type="checkbox" id="f_shippingSame" checked>
                 <span>Adresse de livraison identique</span>
               </label>
             </div>
@@ -291,11 +291,11 @@
             <div class="fact-row">
               <div class="form-field">
                 <label for="f_qty">Quantité</label>
-                <input type="number" id="f_qty" value="1" min="1" step="1" oninput="recalculate()">
+                <input type="number" id="f_qty" value="1" min="1" step="1">
               </div>
               <div class="form-field">
                 <label for="f_unitPrice">Prix unitaire HT (€) <span class="req">*</span></label>
-                <input type="number" id="f_unitPrice" placeholder="15000" min="0" step="0.01" oninput="recalculate()">
+                <input type="number" id="f_unitPrice" placeholder="15000" min="0" step="0.01">
               </div>
             </div>
             <div class="fact-row">
@@ -305,7 +305,7 @@
               </div>
               <div class="form-field">
                 <label for="f_tvaRate">TVA (%)</label>
-                <input type="number" id="f_tvaRate" value="20" min="0" max="100" step="0.1" oninput="recalculate()">
+                <input type="number" id="f_tvaRate" value="20" min="0" max="100" step="0.1">
               </div>
             </div>
             <div class="fact-row">
@@ -321,7 +321,7 @@
             <div class="fact-row">
               <div class="form-field">
                 <label for="f_deposit">Acompte versé (€)</label>
-                <input type="number" id="f_deposit" placeholder="0" min="0" step="0.01" oninput="recalculate()">
+                <input type="number" id="f_deposit" placeholder="0" min="0" step="0.01">
               </div>
               <div class="form-field">
                 <label for="f_remaining">Reste à payer (€)</label>
@@ -377,8 +377,8 @@
 
             <!-- ── Actions formulaire ── -->
             <div class="fact-actions">
-              <button type="button" class="btn-secondary" onclick="showView('list')">Annuler</button>
-              <button type="button" class="btn-primary" onclick="handleFormSubmit()">
+              <button type="button" class="btn-secondary" id="cancelFormBtn">Annuler</button>
+              <button type="button" class="btn-primary" id="saveInvoiceBtn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                 Enregistrer
               </button>
@@ -396,7 +396,7 @@
             </div>
           </div>
           <div class="fact-preview-actions">
-            <button class="btn-secondary btn-sm" onclick="generatePDFFromForm()">
+            <button class="btn-secondary btn-sm" id="generatePDFBtn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               Générer PDF
             </button>
@@ -490,8 +490,8 @@
       <h3 class="modal-title">Supprimer la facture</h3>
       <p class="modal-text" id="deleteModalText">Cette action est irréversible.</p>
       <div class="modal-actions">
-        <button class="btn-secondary" onclick="closeDeleteModal()">Annuler</button>
-        <button class="btn-danger" onclick="confirmDelete()">Supprimer définitivement</button>
+        <button class="btn-secondary" id="deleteModalCancelBtn">Annuler</button>
+        <button class="btn-danger" id="deleteModalConfirmBtn">Supprimer définitivement</button>
       </div>
     </div>
   </div>
@@ -503,7 +503,7 @@
     <div class="pdf-modal-inner">
       <div class="pdf-modal-header">
         <span class="pdf-modal-title">Aperçu de la facture</span>
-        <button class="pdf-modal-close" onclick="closePDFModal()">
+        <button class="pdf-modal-close" id="pdfModalCloseBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
@@ -513,8 +513,8 @@
         </div>
       </div>
       <div class="pdf-modal-footer">
-        <button class="btn-secondary" onclick="closePDFModal()">Fermer</button>
-        <button class="btn-primary" id="pdfDownloadBtn" onclick="downloadPDFFromModal()">
+        <button class="btn-secondary" id="pdfModalFooterCloseBtn">Fermer</button>
+        <button class="btn-primary" id="pdfDownloadBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Télécharger PDF
         </button>
@@ -532,7 +532,7 @@
           <h3 class="modal-title" id="clientModalName">—</h3>
           <p class="modal-text" id="clientModalEmail">—</p>
         </div>
-        <button class="pdf-modal-close" onclick="closeClientModal()">
+        <button class="pdf-modal-close" id="clientModalCloseBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
@@ -554,8 +554,8 @@
         </table>
       </div>
       <div class="modal-actions" style="margin-top:20px">
-        <button class="btn-secondary" onclick="closeClientModal()">Fermer</button>
-        <button class="btn-primary" onclick="closeClientModal(); openCreateForm()">Nouvelle facture</button>
+        <button class="btn-secondary" id="clientModalFooterCloseBtn">Fermer</button>
+        <button class="btn-primary" id="clientModalNewInvoiceBtn">Nouvelle facture</button>
       </div>
     </div>
   </div>

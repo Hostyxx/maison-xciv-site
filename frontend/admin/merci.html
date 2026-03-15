@@ -55,7 +55,7 @@
         </svg>
         <span>Voir le site</span>
       </a>
-      <button class="sidebar-logout" onclick="logout()">
+      <button class="sidebar-logout">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
           <polyline points="16 17 21 12 16 7"/>
@@ -77,13 +77,13 @@
       <div class="dash-header-right">
         <!-- Choix du format -->
         <div class="format-toggle" id="formatToggle">
-          <button class="format-btn active" data-format="postcard" onclick="setFormat('postcard', this)">
+          <button class="format-btn active" data-format="postcard">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <rect x="2" y="5" width="20" height="14" rx="2"/>
             </svg>
             Carte postale
           </button>
-          <button class="format-btn" data-format="phone" onclick="setFormat('phone', this)">
+          <button class="format-btn" data-format="phone">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <rect x="7" y="2" width="10" height="20" rx="2"/>
               <circle cx="12" cy="17" r="1"/>
@@ -91,7 +91,7 @@
             Format téléphone
           </button>
         </div>
-        <button class="dash-add-btn" onclick="generatePDF()">
+        <button class="dash-add-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
             <polyline points="7 10 12 15 17 10"/>
@@ -110,7 +110,7 @@
       <section class="merci-form-section dash-card">
         <h2 class="fact-section-title">Personnalisation</h2>
 
-        <form id="merciForm" onsubmit="return false">
+        <form id="merciForm">
 
           <div class="fact-divider"><span>Client</span></div>
 
@@ -130,16 +130,16 @@
           <div class="form-field">
             <label>Ton du message</label>
             <div class="tone-grid" id="toneGrid">
-              <button type="button" class="tone-btn active" data-tone="elegant" onclick="setTone('elegant', this)">
+              <button type="button" class="tone-btn active" data-tone="elegant">
                 Élégant
               </button>
-              <button type="button" class="tone-btn" data-tone="chaleureux" onclick="setTone('chaleureux', this)">
+              <button type="button" class="tone-btn" data-tone="chaleureux">
                 Chaleureux
               </button>
-              <button type="button" class="tone-btn" data-tone="poetique" onclick="setTone('poetique', this)">
+              <button type="button" class="tone-btn" data-tone="poetique">
                 Poétique
               </button>
-              <button type="button" class="tone-btn" data-tone="custom" onclick="setTone('custom', this)">
+              <button type="button" class="tone-btn" data-tone="custom">
                 Personnalisé
               </button>
             </div>
@@ -148,7 +148,7 @@
           <!-- Message personnalisé (visible si "custom") -->
           <div class="form-field" id="customMessageField" style="display:none">
             <label for="mCustomMessage">Votre message</label>
-            <textarea id="mCustomMessage" rows="4" placeholder="Écrivez votre message personnalisé…" oninput="updateCustomMessage()"></textarea>
+            <textarea id="mCustomMessage" rows="4" placeholder="Écrivez votre message personnalisé…"></textarea>
           </div>
 
           <div class="fact-divider"><span>Signature</span></div>
@@ -159,8 +159,8 @@
           </div>
 
           <div class="fact-actions">
-            <button type="button" class="btn-secondary" onclick="resetMerci()">Réinitialiser</button>
-            <button type="button" class="btn-primary" onclick="generatePDF()">
+            <button type="button" class="btn-secondary">Réinitialiser</button>
+            <button type="button" class="btn-primary">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
                 <polyline points="7 10 12 15 17 10"/>

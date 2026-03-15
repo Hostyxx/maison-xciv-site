@@ -59,8 +59,7 @@ function closeMobile() {
   document.body.style.overflow = '';
 }
 
-window.toggleMobile = toggleMobile;
-window.closeMobile  = closeMobile;
+window.closeMobile  = closeMobile; // used in dynamically generated HTML (updateNavAuth)
 
 
 // ═══════════════════════════════════════════
@@ -173,9 +172,7 @@ function updateResultsBar(count) {
   }
 }
 
-window.setBrand      = setBrand;
-window.setSort       = setSort;
-window.resetFilters  = resetFilters;
+window.resetFilters  = resetFilters; // used in dynamically generated HTML (renderGrid)
 
 
 // ═══════════════════════════════════════════
@@ -416,8 +413,7 @@ async function logoutUser() {
   }
 }
 
-window.toggleFavorite = toggleFavorite;
-window.logoutUser     = logoutUser;
+window.toggleFavorite = toggleFavorite; // used in dynamically generated HTML (buildCard)
 
 
 // ─── Modal auth ──────────────────────────────────────────────
@@ -437,8 +433,6 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeAuthModal({ target: document.getElementById('authModal') });
 });
 
-window.openAuthModal  = openAuthModal;
-window.closeAuthModal = closeAuthModal;
 
 
 // ─── Toast ───────────────────────────────────────────────────
@@ -475,6 +469,32 @@ function buildWAUrl(watch) {
 //  INIT
 // ═══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
+  // Mobile nav
+  document.getElementById('mobileNav').addEventListener('click', e => {
+    if (e.target.tagName === 'A') closeMobile();
+  });
+  // Nav logout
+  const navLogoutBtn = document.querySelector('.nav-logout-btn');
+  if (navLogoutBtn) navLogoutBtn.addEventListener('click', logoutUser);
+  // Hamburger
+  const hamburger = document.getElementById('hamburger');
+  if (hamburger) hamburger.addEventListener('click', toggleMobile);
+  // Filter tabs
+  document.querySelectorAll('.filter-tab').forEach(btn => {
+    btn.addEventListener('click', function () { setBrand(this.dataset.brand, this); });
+  });
+  // Sort
+  const sortSelect = document.getElementById('sortSelect');
+  if (sortSelect) sortSelect.addEventListener('change', () => setSort(sortSelect.value));
+  // Reset filters
+  const resetBtn = document.getElementById('resetBtn');
+  if (resetBtn) resetBtn.addEventListener('click', resetFilters);
+  // Auth modal
+  const authModal = document.getElementById('authModal');
+  if (authModal) authModal.addEventListener('click', closeAuthModal);
+  const authClose = document.querySelector('.auth-modal-close');
+  if (authClose) authClose.addEventListener('click', () => closeAuthModal({ target: authModal, currentTarget: authModal }));
+
   await initAuth();   // session + favoris
   await loadWatches(); // catalogue
 });

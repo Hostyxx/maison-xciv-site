@@ -41,6 +41,32 @@ document.addEventListener('DOMContentLoaded', () => {
   verifyAdminSession();
   bindInputs();
   updatePreview();
+
+  // Logout
+  document.querySelector('.sidebar-logout')?.addEventListener('click', logout);
+
+  // Format toggle (postcard / phone)
+  document.querySelectorAll('.format-btn').forEach(btn => {
+    btn.addEventListener('click', function () { setFormat(this.dataset.format, this); });
+  });
+
+  // Ton du message
+  document.querySelectorAll('.tone-btn').forEach(btn => {
+    btn.addEventListener('click', function () { setTone(this.dataset.tone, this); });
+  });
+
+  // Message personnalisé
+  document.getElementById('mCustomMessage')?.addEventListener('input', updateCustomMessage);
+
+  // Bouton PDF header
+  document.querySelector('.dash-add-btn')?.addEventListener('click', generatePDF);
+
+  // Boutons de la form
+  document.querySelector('.btn-secondary')?.addEventListener('click', resetMerci);
+  document.querySelector('.btn-primary')?.addEventListener('click', generatePDF);
+
+  // Empêche la soumission native du formulaire
+  document.getElementById('merciForm')?.addEventListener('submit', e => e.preventDefault());
 });
 
 /* ─── Vérification session ──────────────────────────────────── */
@@ -83,7 +109,7 @@ function updateCustomMessage() {
   document.getElementById('mcMessage').textContent = val;
   document.getElementById('mcRef').textContent     = '';
 }
-window.updateCustomMessage = updateCustomMessage;
+
 
 /* ─── Sélection du ton ──────────────────────────────────────── */
 function setTone(tone, btn) {
@@ -97,7 +123,7 @@ function setTone(tone, btn) {
 
   updatePreview();
 }
-window.setTone = setTone;
+
 
 /* ─── Sélection du format ───────────────────────────────────── */
 function setFormat(format, btn) {
@@ -108,7 +134,7 @@ function setFormat(format, btn) {
 
   document.getElementById('merciCard').setAttribute('data-format', format);
 }
-window.setFormat = setFormat;
+
 
 /* ─── Génération PDF ─────────────────────────────────────────── */
 async function generatePDF() {
@@ -176,7 +202,7 @@ async function generatePDF() {
     btn.innerHTML = originalHTML;
   }
 }
-window.generatePDF = generatePDF;
+
 
 /* ─── Réinitialisation ──────────────────────────────────────── */
 function resetMerci() {
@@ -195,7 +221,7 @@ function resetMerci() {
   updatePreview();
   showToast('Réinitialisé', 'success');
 }
-window.resetMerci = resetMerci;
+
 
 /* ─── Déconnexion ───────────────────────────────────────────── */
 async function logout() {
@@ -205,7 +231,7 @@ async function logout() {
     window.location.href = '/admin/login';
   }
 }
-window.logout = logout;
+
 
 /* ─── Toast ─────────────────────────────────────────────────── */
 function showToast(message, type = 'success') {

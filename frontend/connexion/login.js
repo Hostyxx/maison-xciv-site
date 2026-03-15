@@ -2,6 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('loginForm').addEventListener('submit', handleLogin);
+  document.querySelector('.pw-toggle').addEventListener('click', () => togglePw('password'));
 });
 
 // Si déjà connecté → espace client
@@ -63,5 +64,3 @@ function clearMessage() {
   el.className = 'auth-message';
 }
 
-// togglePw est appelé via onclick dans le HTML
-window.togglePw = togglePw;

@@ -2,6 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('registerForm').addEventListener('submit', handleRegister);
+  document.querySelectorAll('.pw-toggle').forEach(btn => {
+    btn.addEventListener('click', () => togglePw(btn.closest('.pw-wrap').querySelector('input').id));
+  });
 });
 
 // Si déjà connecté → espace client
@@ -75,5 +78,3 @@ function clearMessage() {
   document.getElementById('authMsg').className = 'auth-message';
 }
 
-// togglePw est appelé via onclick dans le HTML
-window.togglePw = togglePw;

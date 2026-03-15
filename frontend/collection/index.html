@@ -64,14 +64,14 @@
 
 <!-- ─── MOBILE NAV ─── -->
 <div class="mobile-nav" id="mobileNav">
-  <a href="/"           onclick="closeMobile()">Accueil</a>
-  <a href="/#services"  onclick="closeMobile()">Services</a>
-  <a href="/collection" onclick="closeMobile()" class="active">Collection</a>
-  <a href="/#about"     onclick="closeMobile()">Maison</a>
-  <a href="/#contact"   onclick="closeMobile()">Contact</a>
+  <a href="/">Accueil</a>
+  <a href="/#services">Services</a>
+  <a href="/collection" class="active">Collection</a>
+  <a href="/#about">Maison</a>
+  <a href="/#contact">Contact</a>
   <div class="mobile-nav-divider"></div>
   <div class="mobile-nav-auth-links" id="mobileNavAuth">
-    <a href="/connexion" onclick="closeMobile()">Mon compte</a>
+    <a href="/connexion">Mon compte</a>
   </div>
   <div class="mobile-nav-sub">@maisonxciv</div>
 </div>
@@ -101,14 +101,14 @@
       </a>
       <div class="nav-user-menu" id="navUserMenu" style="display:none">
         <a href="/mon-espace" class="nav-user-name" id="navUserName"></a>
-        <button class="nav-logout-btn" onclick="logoutUser()">Déconnexion</button>
+        <button class="nav-logout-btn">Déconnexion</button>
       </div>
       <a href="/admin/dashboard" class="nav-admin-badge" id="navAdminBadge" style="display:none">Admin</a>
     </div>
     <a href="/#contact" class="nav-btn">Nous contacter</a>
-    <div class="hamburger" id="hamburger" onclick="toggleMobile()">
+    <button class="hamburger" type="button" id="hamburger">
       <span></span><span></span>
-    </div>
+    </button>
   </div>
 </nav>
 
@@ -138,18 +138,18 @@
     <div class="filter-group" role="group" aria-label="Filtrer par marque">
       <span class="filter-group-label">Marque</span>
       <div class="filter-tabs" id="brandTabs">
-        <button class="filter-tab active" data-brand="all"     onclick="setBrand('all',this)">Toutes</button>
-        <button class="filter-tab"        data-brand="rolex"   onclick="setBrand('rolex',this)">Rolex</button>
-        <button class="filter-tab"        data-brand="patek"   onclick="setBrand('patek',this)">Patek Philippe</button>
-        <button class="filter-tab"        data-brand="ap"      onclick="setBrand('ap',this)">Audemars Piguet</button>
-        <button class="filter-tab"        data-brand="autres"  onclick="setBrand('autres',this)">Autres</button>
+        <button class="filter-tab active" data-brand="all">Toutes</button>
+        <button class="filter-tab"        data-brand="rolex">Rolex</button>
+        <button class="filter-tab"        data-brand="patek">Patek Philippe</button>
+        <button class="filter-tab"        data-brand="ap">Audemars Piguet</button>
+        <button class="filter-tab"        data-brand="autres">Autres</button>
       </div>
     </div>
 
     <!-- Tri Prix + Année -->
     <div class="filter-group filter-group-right" role="group" aria-label="Tri">
       <span class="filter-group-label">Trier par</span>
-      <select id="sortSelect" class="sort-select" onchange="setSort(this.value)" aria-label="Tri des montres">
+      <select id="sortSelect" class="sort-select" aria-label="Tri des montres">
         <option value="default">Plus récentes</option>
         <option value="price-asc">Prix croissant</option>
         <option value="price-desc">Prix décroissant</option>
@@ -163,7 +163,7 @@
   <!-- Résultats / état -->
   <div class="coll-results-bar">
     <span class="coll-results-count" id="resultsCount">Chargement…</span>
-    <button class="coll-reset-btn" id="resetBtn" onclick="resetFilters()" style="display:none" aria-label="Réinitialiser les filtres">
+    <button class="coll-reset-btn" id="resetBtn" style="display:none" aria-label="Réinitialiser les filtres">
       Réinitialiser les filtres ✕
     </button>
   </div>
@@ -180,9 +180,9 @@
 </main>
 
 <!-- ─── MODAL AUTH (favoris) ─── -->
-<div class="auth-modal-overlay" id="authModal" onclick="closeAuthModal(event)">
+<div class="auth-modal-overlay" id="authModal">
   <div class="auth-modal-box">
-    <button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Fermer">✕</button>
+    <button class="auth-modal-close" aria-label="Fermer">✕</button>
     <div class="auth-modal-eyebrow">Maison XCIV</div>
     <h2 class="auth-modal-title">Sauvegardez vos <em>pièces favorites</em></h2>
     <p class="auth-modal-desc">Créez votre espace personnel pour retrouver vos sélections à tout moment.</p>

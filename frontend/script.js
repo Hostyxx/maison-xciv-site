@@ -117,8 +117,6 @@ function closeMobile() {
 }
 
 // Expose aux onclick inline du HTML
-window.toggleMobile = toggleMobile;
-window.closeMobile  = closeMobile;
 
 
 // ═══════════════════════════════════════════
@@ -148,7 +146,6 @@ function goToWatch(index) {
   track.style.transform = `translateX(-${index * slideWidth}px)`;
   dots.forEach((d, i) => d.classList.toggle('active', i === index));
 }
-window.goToWatch = goToWatch;
 
 // Swipe tactile
 let startX = 0, isDragging = false;
@@ -347,7 +344,6 @@ function filterWatches(filter, btn) {
   if (btn) btn.classList.add('active');
   renderWatches(filter);
 }
-window.filterWatches = filterWatches;
 
 /**
  * Bascule entre vue 1 colonne et vue 2 colonnes.
@@ -365,7 +361,6 @@ function setNouveautesView(view, btn) {
 
   try { localStorage.setItem('xciv_view', view); } catch {}
 }
-window.setNouveautesView = setNouveautesView;
 
 /** Restaure la vue enregistrée au chargement. */
 function restoreNouveautesView() {
@@ -416,7 +411,6 @@ let editingId      = null; // null = ajout, number = modification
 function toggleAdminPanel() {
   adminPanelOpen ? closeAdminPanel() : openAdminPanel();
 }
-window.toggleAdminPanel = toggleAdminPanel;
 
 function openAdminPanel() {
   adminPanelOpen = true;
@@ -433,7 +427,6 @@ function closeAdminPanel() {
   document.body.style.overflow = '';
   resetAdminForm();
 }
-window.closeAdminPanel = closeAdminPanel;
 
 // ── Formulaire ───────────────────────────────────────────────
 
@@ -451,7 +444,6 @@ function resetAdminForm() {
   document.getElementById('formTitle').textContent      = 'Ajouter une montre';
   document.getElementById('formSubmitBtn').textContent  = 'Ajouter';
 }
-window.resetAdminForm = resetAdminForm;
 
 function populateEditForm(watch) {
   editingId = watch.id;
@@ -519,7 +511,6 @@ async function handleFormSubmit(event) {
     btn.textContent = editingId !== null ? 'Enregistrer' : 'Ajouter';
   }
 }
-window.handleFormSubmit = handleFormSubmit;
 
 // ── Liste admin ──────────────────────────────────────────────
 
@@ -555,7 +546,6 @@ async function editWatch(id) {
   const watch = watchesCache.find(w => w.id === id);
   if (watch) populateEditForm(watch);
 }
-window.editWatch = editWatch;
 
 async function deleteWatch(id) {
   const watch = watchesCache.find(w => w.id === id);
@@ -578,6 +568,9 @@ async function deleteWatch(id) {
     showAdminToast('Erreur : ' + err.message, true);
   }
 }
+
+// editWatch and deleteWatch are called from dynamically generated HTML (renderAdminList)
+window.editWatch   = editWatch;
 window.deleteWatch = deleteWatch;
 
 // ── Toast notification ───────────────────────────────────────
@@ -742,7 +735,6 @@ async function logoutUser() {
     showPubToast('Vous êtes déconnecté(e)');
   }
 }
-window.logoutUser = logoutUser;
 
 // ─── Modal auth ──────────────────────────────────────────────
 
@@ -764,8 +756,6 @@ function closeAuthModal(event) {
     document.body.style.overflow = '';
   }
 }
-window.openAuthModal  = openAuthModal;
-window.closeAuthModal = closeAuthModal;
 
 // Ferme la modal avec Escape
 document.addEventListener('keydown', e => {
@@ -802,7 +792,6 @@ function sendContactWhatsApp(e) {
   );
   window.open(`https://wa.me/33601918798?text=${text}`, '_blank');
 }
-window.sendContactWhatsApp = sendContactWhatsApp;
 
 function sendContactInstagram() {
   const nom     = (document.getElementById('cfNom').value     || '').trim();
@@ -814,12 +803,66 @@ function sendContactInstagram() {
   }
   window.open('https://instagram.com/maisonxciv', '_blank');
 }
-window.sendContactInstagram = sendContactInstagram;
 
 // ═══════════════════════════════════════════
 //  INIT — Lancement au chargement de la page
 // ═══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
+  // ── Mobile nav — fermeture au clic sur un lien ──────────────
+  document.getElementById('mobileNav').addEventListener('click', e => {
+    if (e.target.tagName === 'A') closeMobile();
+  });
+
+  // ── Nav logout ───────────────────────────────────────────────
+  const navLogoutBtn = document.querySelector('.nav-logout-btn');
+  if (navLogoutBtn) navLogoutBtn.addEventListener('click', logoutUser);
+
+  // ── Hamburger ────────────────────────────────────────────────
+  document.getElementById('hamburger').addEventListener('click', toggleMobile);
+
+  // ── Auth modal ───────────────────────────────────────────────
+  document.getElementById('authModal').addEventListener('click', closeAuthModal);
+  document.querySelector('.auth-modal-close').addEventListener('click', () => closeAuthModal({ target: document.getElementById('authModal'), currentTarget: document.getElementById('authModal') }));
+
+  // ── Watch dots ───────────────────────────────────────────────
+  document.querySelectorAll('.watch-dot').forEach(dot => {
+    dot.addEventListener('click', () => goToWatch(parseInt(dot.dataset.index, 10)));
+  });
+
+  // ── Filtre montres ───────────────────────────────────────────
+  document.querySelectorAll('.nouv-filter-btn').forEach(btn => {
+    btn.addEventListener('click', function () { filterWatches(this.dataset.filter, this); });
+  });
+
+  // ── Sélecteur de vue ─────────────────────────────────────────
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', function () { setNouveautesView(this.dataset.view, this); });
+  });
+
+  // ── Formulaire contact WhatsApp ──────────────────────────────
+  const contactForm = document.querySelector('.contact-form');
+  if (contactForm) contactForm.addEventListener('submit', sendContactWhatsApp);
+
+  // ── Formulaire contact Instagram ─────────────────────────────
+  const igBtn = document.querySelector('.contact-form-btn--ig');
+  if (igBtn) igBtn.addEventListener('click', sendContactInstagram);
+
+  // ── Admin FAB ────────────────────────────────────────────────
+  const adminFab = document.getElementById('adminFab');
+  if (adminFab) adminFab.addEventListener('click', toggleAdminPanel);
+
+  // ── Admin overlay + close ────────────────────────────────────
+  const adminOverlay = document.getElementById('adminOverlay');
+  if (adminOverlay) adminOverlay.addEventListener('click', closeAdminPanel);
+  const adminClose = document.querySelector('.admin-close');
+  if (adminClose) adminClose.addEventListener('click', closeAdminPanel);
+  const adminCancel = document.querySelector('.admin-btn-cancel');
+  if (adminCancel) adminCancel.addEventListener('click', resetAdminForm);
+
+  // ── Admin form ───────────────────────────────────────────────
+  const adminForm = document.getElementById('adminForm');
+  if (adminForm) adminForm.addEventListener('submit', handleFormSubmit);
+
   restoreNouveautesView(); // restaure la vue choisie par l'utilisateur
   await initAuth();        // charge session + favoris en premier
   loadWatches();           // puis le catalogue (buildCard utilisera favoriteIds)

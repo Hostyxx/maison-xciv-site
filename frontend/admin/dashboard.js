@@ -33,6 +33,42 @@ let deleteTarget  = null;  // id de la montre à supprimer
 // ═══════════════════════════════════════════════════════════
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Sidebar toggle
+  const sidebarToggle = document.querySelector('.sidebar-toggle-btn');
+  if (sidebarToggle) sidebarToggle.addEventListener('click', toggleMobileSidebar);
+  const sidebarOverlay = document.getElementById('sidebarOverlay');
+  if (sidebarOverlay) sidebarOverlay.addEventListener('click', toggleMobileSidebar);
+  // Sidebar nav links
+  document.querySelector('[data-section="catalogue"]')?.addEventListener('click', e => { e.preventDefault(); cancelForm(); });
+  document.querySelector('[data-section="add"]')?.addEventListener('click', e => { e.preventDefault(); showAddForm(); });
+  document.querySelector('[data-section="clients"]')?.addEventListener('click', e => { e.preventDefault(); showClients(); });
+  // Logout
+  document.querySelector('.sidebar-logout')?.addEventListener('click', logout);
+  // Image upload zone
+  document.getElementById('imgUploadZone')?.addEventListener('click', () => document.getElementById('fImageFile').click());
+  document.getElementById('fImageFile')?.addEventListener('change', handleImageUpload);
+  // Image clear
+  document.querySelector('.img-clear-btn')?.addEventListener('click', clearImage);
+  // Add/cancel form buttons
+  document.querySelector('.dash-add-btn')?.addEventListener('click', showAddForm);
+  document.querySelector('.form-cancel')?.addEventListener('click', cancelForm);
+  document.querySelector('.btn-secondary[data-action="cancel"]')?.addEventListener('click', cancelForm);
+  // Filter tabs
+  document.querySelectorAll('.filter-tab').forEach(btn => {
+    btn.addEventListener('click', function () { setFilter(this.dataset.filter, this); });
+  });
+  // Search
+  document.getElementById('searchInput')?.addEventListener('input', filterList);
+  // Watch form
+  document.getElementById('watchForm')?.addEventListener('submit', submitWatch);
+  // Back to clients
+  document.querySelector('.btn-back')?.addEventListener('click', showClients);
+  // Delete modal buttons (use event delegation for dynamically inserted content)
+  document.addEventListener('click', e => {
+    if (e.target.matches('[data-action="close-delete"]') || e.target.closest('[data-action="close-delete"]')) closeDeleteModal();
+    if (e.target.matches('[data-action="confirm-delete"]') || e.target.closest('[data-action="confirm-delete"]')) confirmDelete();
+  });
+
   await checkSession();
   await loadWatches();
 });

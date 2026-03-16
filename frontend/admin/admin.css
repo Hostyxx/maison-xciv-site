@@ -31,7 +31,7 @@
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { font-size: 16px; }
+html { font-size: 16px; overflow-x: hidden; }
 body { font-family: var(--f-sans); -webkit-font-smoothing: antialiased; }
 a    { text-decoration: none; color: inherit; }
 ul   { list-style: none; }
@@ -1263,7 +1263,7 @@ input, textarea, select, button { font-family: inherit; }
   .sidebar-logout span, .sidebar-logo-eyebrow, .sidebar-logo-main { display: none; }
   .sidebar-admin-badge { padding: 8px; justify-content: center; background: none; border-color: transparent; }
   .sidebar-admin-info  { display: none; }
-  .dash-main { margin-left: 60px; padding: 20px; }
+  .dash-main { margin-left: 60px; padding: 20px; overflow-x: hidden; }
   .form-grid { grid-template-columns: 1fr; }
   .dash-header { flex-direction: column; }
   .dash-header-right { width: 100%; justify-content: space-between; }

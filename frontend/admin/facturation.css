@@ -124,6 +124,9 @@
   margin: -24px -24px 20px;
 }
 
+@media (max-width: 900px) {
+  .fact-filters { margin: -20px -20px 20px; }
+}
 @media (max-width: 768px) {
   .fact-filters { padding: 14px 16px; margin: -16px -16px 16px; }
 }

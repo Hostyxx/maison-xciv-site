@@ -853,6 +853,21 @@
   .fact-table .td-actions::before { display: none; }
 }
 
+@media (max-width: 480px) {
+  /* Boutons header : pleine largeur pour éviter débordement */
+  .dash-header-right {
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+  .dash-header-right .btn-secondary,
+  .dash-header-right .dash-add-btn {
+    flex: 1;
+    min-width: 130px;
+    justify-content: center;
+  }
+}
+
 @media (max-width: 374px) {
   .fact-stat-card { padding: 10px 12px; }
   .stat-value     { font-size: 18px; }

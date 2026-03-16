@@ -309,6 +309,29 @@
   }
 }
 
+/* ─── Header responsive ─── */
+@media (max-width: 600px) {
+  /* Sur mobile, le dash-header-right doit wrapper pour éviter le débordement */
+  .dash-header-right {
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+  }
+  .format-toggle {
+    order: 1;
+    width: 100%;
+  }
+  .format-btn {
+    flex: 1;
+    justify-content: center;
+  }
+  .dash-header-right .dash-add-btn {
+    order: 2;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* Touch targets */
 @media (pointer: coarse) {
   .tone-btn  { min-height: 44px; }

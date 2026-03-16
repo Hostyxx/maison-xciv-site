@@ -55,6 +55,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('nav-clients')?.addEventListener('click', e => { e.preventDefault(); showView('clients'); });
   document.querySelector('.sidebar-logout')?.addEventListener('click', logout);
 
+  // ── Mobile sidebar ─────────────────────────────────────────
+  document.querySelector('.sidebar-toggle-btn')?.addEventListener('click', toggleMobileSidebar);
+  document.getElementById('sidebarOverlay')?.addEventListener('click', closeMobileSidebar);
+  // Fermeture automatique sur clic d'un lien sidebar (navigation externe)
+  document.querySelectorAll('.sidebar-link[href]:not([href="#"])').forEach(link => {
+    link.addEventListener('click', () => { if (window.innerWidth <= 600) closeMobileSidebar(); });
+  });
+
   // ── Filtres ────────────────────────────────────────────────
   document.getElementById('filterSearch')?.addEventListener('input', debounceFilters);
   document.getElementById('filterStatus')?.addEventListener('change', applyFilters);
@@ -125,12 +133,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 /* ─── Session admin ───────────────────────────────────────────── */
 async function verifyAdminSession() {
-  try {
+  const check = async () => {
     const res = await fetch('/api/auth/verify', { credentials: 'include' });
-    if (!res.ok) window.location.href = '/admin/login';
+    if (!res.ok) { window.location.href = '/admin/login'; return false; }
+    return true;
+  };
+  try {
+    await check();
   } catch {
-    window.location.href = '/admin/login';
+    // Erreur réseau transitoire (iOS Safari, connexion instable) — réessai unique
+    await new Promise(r => setTimeout(r, 800));
+    try { await check(); } catch { window.location.href = '/admin/login'; }
   }
+}
+
+/* ─── Mobile sidebar ──────────────────────────────────────────── */
+function toggleMobileSidebar() {
+  const sidebar  = document.querySelector('.sidebar');
+  const overlay  = document.getElementById('sidebarOverlay');
+  const isOpen   = sidebar?.classList.toggle('mobile-open');
+  overlay?.classList.toggle('show', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+function closeMobileSidebar() {
+  document.querySelector('.sidebar')?.classList.remove('mobile-open');
+  document.getElementById('sidebarOverlay')?.classList.remove('show');
+  document.body.style.overflow = '';
 }
 
 /* ═══════════════════════════════════════════════════════════════

@@ -357,13 +357,13 @@ function renderClientsView(clients) {
 
   tbody.innerHTML = clients.map((c, i) => `
     <tr class="invoice-row" data-action="open-client-modal" data-idx="${i}" data-client-idx="${i}" style="cursor:pointer">
-      <td><strong>${esc(c.name)}</strong></td>
-      <td class="td-muted">${esc(c.email || '—')}</td>
-      <td class="td-center"><span class="count-badge">${c.invoiceCount}</span></td>
-      <td class="td-amount">${formatCurrency(c.totalTTC)}</td>
-      <td class="td-amount td-green">${formatCurrency(c.totalPaid)}</td>
-      <td class="td-amount ${c.totalRemaining > 0 ? 'td-orange' : ''}">${formatCurrency(c.totalRemaining)}</td>
-      <td class="td-date">${formatDate(c.lastDate)}</td>
+      <td data-label="Client"><strong>${esc(c.name)}</strong></td>
+      <td class="td-muted" data-label="Email">${esc(c.email || '—')}</td>
+      <td class="td-center" data-label="Factures"><span class="count-badge">${c.invoiceCount}</span></td>
+      <td class="td-amount" data-label="Volume TTC">${formatCurrency(c.totalTTC)}</td>
+      <td class="td-amount td-green" data-label="Encaissé">${formatCurrency(c.totalPaid)}</td>
+      <td class="td-amount ${c.totalRemaining > 0 ? 'td-orange' : ''}" data-label="Reste">${formatCurrency(c.totalRemaining)}</td>
+      <td class="td-date" data-label="Dernier achat">${formatDate(c.lastDate)}</td>
       <td class="td-actions">
         <button class="btn-icon" title="Nouvelle facture pour ce client" data-action="prefill-client" data-idx="${i}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -394,12 +394,12 @@ function openClientModal(idx) {
   const tbody = document.getElementById('clientModalInvoices');
   tbody.innerHTML = c.invoices.map(inv => `
     <tr>
-      <td><strong>${esc(inv.number)}</strong></td>
-      <td class="td-date">${formatDate(inv.date)}</td>
-      <td>${esc(inv.product || '—')}</td>
-      <td class="td-amount">${formatCurrency(inv.totalTTC)}</td>
-      <td>${statusBadge(inv.status)}</td>
-      <td>${payBadge(inv.paymentStatus)}</td>
+      <td data-label="N° Facture"><strong>${esc(inv.number)}</strong></td>
+      <td class="td-date" data-label="Date">${formatDate(inv.date)}</td>
+      <td data-label="Produit">${esc(inv.product || '—')}</td>
+      <td class="td-amount" data-label="TTC">${formatCurrency(inv.totalTTC)}</td>
+      <td data-label="Statut">${statusBadge(inv.status)}</td>
+      <td data-label="Paiement">${payBadge(inv.paymentStatus)}</td>
       <td class="td-actions">
         <button class="btn-icon" data-action="close-edit-invoice" data-id="${inv.id}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>

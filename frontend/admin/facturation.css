@@ -780,6 +780,33 @@
   .fact-preview-section { position: static; }
 }
 
+/* ── Aperçu PDF : compact et scrollable sur mobile ────────── */
+@media (max-width: 768px) {
+  .fact-preview-scale-wrap {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* Invoice template live preview uniquement (pas le modal PDF) */
+  #invoiceTemplate.invoice-template {
+    padding: 20px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Header facture en colonne sur très petit écran */
+  #invoiceTemplate .inv-header {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  #invoiceTemplate .inv-meta-block { text-align: left; }
+  #invoiceTemplate .inv-meta-row   { justify-content: flex-start; }
+  #invoiceTemplate .inv-logo-svg   { width: 110px; height: 44px; }
+  #invoiceTemplate .inv-ttc-val    { font-size: 20px !important; }
+}
+
 @media (max-width: 768px) {
   /* Filtres en pleine largeur */
   .filter-search { min-width: 100%; }

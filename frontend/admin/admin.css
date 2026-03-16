@@ -884,6 +884,22 @@ input, textarea, select, button { font-family: inherit; }
 .toast-error    { border-left-color: #ef4444; background: #2d1515; }
 .toast-success  { border-left-color: #5a8a6a; }
 
+/* ─── Toasts sous la topbar mobile ──────────────────────────── */
+@media (max-width: 600px) {
+  .dash-toast-wrap {
+    /* 64px = hauteur de la topbar mobile (12px×2 padding + 40px bouton) */
+    top: 72px;
+    right: 16px;
+    left: 16px;
+    max-width: none;
+  }
+  .toast {
+    max-width: 100%;
+    transform: translateY(-8px);
+  }
+  .toast.show { transform: translateY(0); }
+}
+
 /* ─── Animations ──────────────────────────────────────────── */
 @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }

@@ -263,11 +263,13 @@
 
 @media (max-width: 1200px) {
   .merci-layout { grid-template-columns: 1fr; }
+  /* Empêche la carte (500px) de déborder de la section en 1-colonne */
+  .merci-preview-section { overflow: hidden; }
 }
 
 @media (max-width: 768px) {
   .merci-layout { grid-template-columns: 1fr; }
-  .merci-preview-section { position: static; }
+  .merci-preview-section { position: static; overflow: hidden; }
 }
 
 @media (max-width: 600px) {

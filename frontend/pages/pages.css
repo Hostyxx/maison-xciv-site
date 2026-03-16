@@ -51,81 +51,7 @@ img {
   display: block;
 }
 
-/* ─── Nav ────────────────────────────────────────────────────── */
-.pg-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 48px;
-  background: rgba(8, 7, 6, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(196, 170, 140, 0.12);
-}
-.pg-nav-logo {
-  font-family: var(--f-caps);
-  font-size: 1.05rem;
-  letter-spacing: 0.06em;
-  color: var(--c-beige);
-  display: flex;
-  align-items: center;
-  gap: 0.18em;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.pg-nav-logo span {
-  color: rgba(196, 170, 140, 0.65);
-  font-weight: 400;
-}
-.pg-nav-logo:hover {
-  opacity: 0.8;
-}
-.pg-nav-links {
-  display: flex;
-  align-items: center;
-  gap: 36px;
-}
-.pg-nav-links a {
-  font-family: var(--f-sans);
-  font-size: 0.78rem;
-  font-weight: 300;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(250, 248, 244, 0.65);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.pg-nav-links a:hover {
-  color: var(--c-beige);
-}
-.pg-nav-back {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--f-sans);
-  font-size: 0.75rem;
-  font-weight: 300;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(250, 248, 244, 0.5);
-  text-decoration: none;
-  transition: color 0.25s;
-}
-.pg-nav-back svg {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.25s var(--ease-luxury);
-}
-.pg-nav-back:hover {
-  color: var(--c-beige);
-}
-.pg-nav-back:hover svg {
-  transform: translateX(-3px);
-}
+/* ─── Nav → voir /shared/nav.css ─────────────────────────────── */
 
 /* ─── Hero ───────────────────────────────────────────────────── */
 .pg-hero {
@@ -838,12 +764,6 @@ img {
 
 /* ─── Responsive — 768px ─────────────────────────────────────── */
 @media (max-width: 768px) {
-  .pg-nav {
-    padding: 0 20px;
-  }
-  .pg-nav-links {
-    display: none;
-  }
   .pg-hero {
     padding: 48px 20px 44px;
   }
@@ -885,9 +805,6 @@ img {
 
 /* ─── Responsive — 480px ─────────────────────────────────────── */
 @media (max-width: 480px) {
-  .pg-nav-back span {
-    display: none;
-  }
   .pg-hero {
     padding: 40px 16px 36px;
   }
@@ -917,7 +834,6 @@ img {
 
 /* ─── Responsive — 374px ─────────────────────────────────────── */
 @media (max-width: 374px) {
-  .pg-nav    { padding: 0 12px; height: 56px; }
   .pg-hero   { padding: 32px 12px 28px; }
   .pg-hero h1 { font-size: 1.6rem; }
   .pg-body   { padding: 32px 12px 52px; }
@@ -937,7 +853,6 @@ a, button, [onclick], label, select { touch-action: manipulation; }
 @media (pointer: coarse) {
   .pg-btn        { min-height: 52px; }
   .pg-faq-q      { min-height: 52px; }
-  .pg-nav-back   { min-height: 44px; }
 }
 
 /* ── Empêche zoom iOS sur les inputs ─────────────────────────── */

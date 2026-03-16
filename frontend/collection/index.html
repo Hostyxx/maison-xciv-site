@@ -54,11 +54,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@200;300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
 
+  <link rel="stylesheet" href="/shared/nav.css">
   <link rel="stylesheet" href="collection.css">
 </head>
 <body>
 
-<!-- ─── CURSOR (desktop) ─── -->
+<!-- ─── CURSOR ─── -->
 <div id="cur-dot"></div>
 <div id="cur-ring"></div>
 
@@ -66,7 +67,7 @@
 <div class="mobile-nav" id="mobileNav">
   <a href="/">Accueil</a>
   <a href="/#services">Services</a>
-  <a href="/collection" class="active">Collection</a>
+  <a href="/collection">Collection</a>
   <a href="/#about">Maison</a>
   <a href="/#contact">Contact</a>
   <div class="mobile-nav-divider"></div>
@@ -77,16 +78,16 @@
 </div>
 
 <!-- ─── NAVBAR ─── -->
-<nav id="nav" class="solid">
+<nav id="nav">
   <a href="/" class="nav-logo" aria-label="Maison XCIV — Accueil">
-    <span class="nav-logo-text">XCIV</span>
     <span class="nav-logo-eyebrow">Maison</span>
+    <span class="nav-logo-text">XCIV</span>
   </a>
 
   <ul class="nav-center">
     <li><a href="/#services">Services</a></li>
     <li><a href="/#watches">Horlogerie</a></li>
-    <li><a href="/collection" class="active">Collection</a></li>
+    <li><a href="/collection">Collection</a></li>
     <li><a href="/#about">Maison</a></li>
     <li><a href="/#contact">Contact</a></li>
   </ul>
@@ -106,7 +107,7 @@
       <a href="/admin/dashboard" class="nav-admin-badge" id="navAdminBadge" style="display:none">Admin</a>
     </div>
     <a href="/#contact" class="nav-btn">Nous contacter</a>
-    <button class="hamburger" type="button" id="hamburger">
+    <button class="hamburger" type="button" id="hamburger" aria-expanded="false">
       <span></span><span></span>
     </button>
   </div>
@@ -144,6 +145,25 @@
         <button class="filter-tab"        data-brand="ap">Audemars Piguet</button>
         <button class="filter-tab"        data-brand="autres">Autres</button>
       </div>
+    </div>
+
+    <!-- Switch Vue -->
+    <div class="filter-group filter-group-view" role="group" aria-label="Vue">
+      <button class="view-btn active" id="viewGrid" data-view="grid" aria-label="Vue grille" title="Grille">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+          <rect x="0" y="0" width="6" height="6" rx="1" fill="currentColor"/>
+          <rect x="9" y="0" width="6" height="6" rx="1" fill="currentColor"/>
+          <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+          <rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+        </svg>
+      </button>
+      <button class="view-btn" id="viewList" data-view="list" aria-label="Vue liste" title="Liste">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+          <rect x="0" y="0" width="15" height="3" rx="1" fill="currentColor"/>
+          <rect x="0" y="6" width="15" height="3" rx="1" fill="currentColor"/>
+          <rect x="0" y="12" width="15" height="3" rx="1" fill="currentColor"/>
+        </svg>
+      </button>
     </div>
 
     <!-- Tri Prix + Année -->
@@ -235,6 +255,7 @@
   </div>
 </footer>
 
+<script src="/shared/nav.js"></script>
 <script src="collection.js"></script>
 </body>
 </html>

@@ -3,67 +3,20 @@
  * ─────────────────────────────────────────────────────────────
  * Page Collection — Maison XCIV
  *
- *  1. Cursor custom
- *  2. Mobile nav
- *  3. Fetch montres + rendu grid
- *  4. Filtres (marque) + tri (prix, année)
+ *  1. Données & état
+ *  2. Filtres + tri
+ *  3. Switch vue grille / liste
+ *  4. Fetch montres + rendu grid
  *  5. Authentification + favoris
  *  6. Modal auth + toast
+ *
+ *  Cursor, mobile nav, auth nav → shared/nav.js
  */
 
 'use strict';
 
 // ═══════════════════════════════════════════
-//  1. CURSOR CUSTOM (desktop uniquement)
-// ═══════════════════════════════════════════
-const dot  = document.getElementById('cur-dot');
-const ring = document.getElementById('cur-ring');
-const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-
-if (!isTouch) {
-  let mx = -100, my = -100, rx = -100, ry = -100;
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
-  });
-  (function moveRing() {
-    rx += (mx - rx) * 0.09; ry += (my - ry) * 0.09;
-    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-    requestAnimationFrame(moveRing);
-  })();
-  document.addEventListener('mouseover', e => {
-    if (e.target.closest('a, button, .wc-item, select')) {
-      document.body.classList.add('hovering');
-    } else {
-      document.body.classList.remove('hovering');
-    }
-  });
-}
-
-// ═══════════════════════════════════════════
-//  2. MOBILE NAV
-// ═══════════════════════════════════════════
-let mobileOpen = false;
-
-function toggleMobile() {
-  mobileOpen = !mobileOpen;
-  document.getElementById('mobileNav').classList.toggle('open', mobileOpen);
-  document.getElementById('hamburger').classList.toggle('open', mobileOpen);
-  document.body.style.overflow = mobileOpen ? 'hidden' : '';
-}
-
-function closeMobile() {
-  mobileOpen = false;
-  document.getElementById('mobileNav').classList.remove('open');
-  document.getElementById('hamburger').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-window.closeMobile  = closeMobile; // used in dynamically generated HTML (updateNavAuth)
-
-
-// ═══════════════════════════════════════════
-//  3. DONNÉES & ÉTAT
+//  1. DONNÉES & ÉTAT
 // ═══════════════════════════════════════════
 
 let allWatches   = [];   // cache complet
@@ -332,61 +285,16 @@ function renderGrid(watches) {
 
 
 // ═══════════════════════════════════════════
-//  6. AUTH & FAVORIS
+//  5b. INIT AUTH (délègue à shared/nav.js)
 // ═══════════════════════════════════════════
 
+/**
+ * Attend que shared/nav.js ait vérifié la session,
+ * puis synchronise currentUser et charge les favoris.
+ */
 async function initAuth() {
-  try {
-    const res  = await fetch('/api/user/session', { credentials: 'same-origin' });
-    const json = await res.json();
-    currentUser = json.user || null;
-  } catch {
-    currentUser = null;
-  }
-  updateNavAuth();
+  currentUser = await (window.xcivAuthReady || Promise.resolve(null));
   if (currentUser) await loadFavoriteIds();
-}
-
-function updateNavAuth() {
-  const navLogin      = document.getElementById('navLogin');
-  const navUserMenu   = document.getElementById('navUserMenu');
-  const navUserName   = document.getElementById('navUserName');
-  const navAdminBadge = document.getElementById('navAdminBadge');
-  const mobileAuth    = document.getElementById('mobileNavAuth');
-
-  if (!currentUser) {
-    if (navLogin)      navLogin.style.display     = '';
-    if (navUserMenu)   navUserMenu.style.display   = 'none';
-    if (navAdminBadge) navAdminBadge.style.display = 'none';
-    if (mobileAuth) {
-      mobileAuth.innerHTML = `<a href="/connexion">Mon compte</a>`;
-    }
-    return;
-  }
-
-  if (currentUser.role === 'admin') {
-    if (navLogin)      navLogin.style.display     = 'none';
-    if (navUserMenu)   navUserMenu.style.display   = 'none';
-    if (navAdminBadge) navAdminBadge.style.display = '';
-    if (mobileAuth) {
-      mobileAuth.innerHTML = `<a href="/admin/dashboard">Dashboard</a>`;
-    }
-  } else {
-    const prenom = currentUser.name.split(' ')[0];
-    if (navLogin)      navLogin.style.display     = 'none';
-    if (navAdminBadge) navAdminBadge.style.display = 'none';
-    if (navUserMenu)   navUserMenu.style.display   = 'flex';
-    if (navUserName)   navUserName.textContent     = prenom;
-    if (mobileAuth) {
-      mobileAuth.innerHTML =
-        `<a href="/mon-espace">Mon espace</a>
-         <button class="mobile-nav-logout">Déconnexion</button>`;
-      mobileAuth.querySelector('.mobile-nav-logout').addEventListener('click', () => {
-        logoutUser();
-        closeMobile();
-      });
-    }
-  }
 }
 
 async function loadFavoriteIds() {
@@ -436,18 +344,6 @@ async function toggleFavorite(watchId, btn) {
   } finally {
     btn.disabled = false;
     setTimeout(() => btn.classList.remove('pulse'), 500);
-  }
-}
-
-async function logoutUser() {
-  try {
-    await fetch('/api/user/logout', { method: 'POST', credentials: 'same-origin' });
-  } finally {
-    currentUser = null;
-    favoriteIds.clear();
-    updateNavAuth();
-    applyFilters();
-    showToast('Vous êtes déconnecté(e)');
   }
 }
 
@@ -504,19 +400,38 @@ function buildWAUrl(watch) {
 
 
 // ═══════════════════════════════════════════
+//  3. SWITCH VUE GRILLE / LISTE
+// ═══════════════════════════════════════════
+
+function setView(view) {
+  const grid = document.getElementById('collGrid');
+  if (!grid) return;
+  grid.classList.toggle('view-list', view === 'list');
+
+  document.querySelectorAll('.view-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.view === view);
+  });
+  try { localStorage.setItem('xciv_coll_view', view); } catch {}
+}
+
+function restoreView() {
+  try {
+    const saved = localStorage.getItem('xciv_coll_view') || 'grid';
+    setView(saved);
+  } catch { setView('grid'); }
+}
+
+
+// ═══════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
-  // Mobile nav
-  document.getElementById('mobileNav').addEventListener('click', e => {
-    if (e.target.tagName === 'A') closeMobile();
+  // Vue grille / liste
+  restoreView();
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', () => setView(btn.dataset.view));
   });
-  // Nav logout
-  const navLogoutBtn = document.querySelector('.nav-logout-btn');
-  if (navLogoutBtn) navLogoutBtn.addEventListener('click', logoutUser);
-  // Hamburger
-  const hamburger = document.getElementById('hamburger');
-  if (hamburger) hamburger.addEventListener('click', toggleMobile);
+
   // Filter tabs
   document.querySelectorAll('.filter-tab').forEach(btn => {
     btn.addEventListener('click', function () { setBrand(this.dataset.brand, this); });
@@ -533,7 +448,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const authClose = document.querySelector('.auth-modal-close');
   if (authClose) authClose.addEventListener('click', () => closeAuthModal({ target: authModal, currentTarget: authModal }));
 
-  // ── Délégation : boutons favoris + reset-filters dans la grille ─
+  // Délégation : boutons favoris + reset-filters dans la grille
   const collGrid = document.getElementById('collGrid');
   if (collGrid) {
     collGrid.addEventListener('click', e => {
@@ -544,6 +459,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  await initAuth();   // session + favoris
+  await initAuth();    // attend shared/nav.js → session + favoris
   await loadWatches(); // catalogue
 });

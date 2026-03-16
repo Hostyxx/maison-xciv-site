@@ -17,23 +17,63 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Jost:wght@200;300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/shared/nav.css">
   <link rel="stylesheet" href="/pages/pages.css">
 </head>
 <body>
 
-<nav class="pg-nav">
-  <a href="/" class="pg-nav-logo"><span>Maison</span>XCIV</a>
-  <div class="pg-nav-links">
-    <a href="/collection">Collection</a>
-    <a href="/contact">Contact</a>
-    <a href="/a-propos">À propos</a>
-    <a href="/faq">FAQ</a>
+<!-- ─── CURSOR ─── -->
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- ─── MOBILE NAV ─── -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="/">Accueil</a>
+  <a href="/#services">Services</a>
+  <a href="/collection">Collection</a>
+  <a href="/#about">Maison</a>
+  <a href="/#contact">Contact</a>
+  <div class="mobile-nav-divider"></div>
+  <div class="mobile-nav-auth-links" id="mobileNavAuth">
+    <a href="/connexion">Mon compte</a>
   </div>
-  <a href="/" class="pg-nav-back">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
-    Retour au site
+  <div class="mobile-nav-sub">@maisonxciv</div>
+</div>
+
+<!-- ─── NAVBAR ─── -->
+<nav id="nav">
+  <a href="/" class="nav-logo" aria-label="Maison XCIV — Accueil">
+    <span class="nav-logo-eyebrow">Maison</span>
+    <span class="nav-logo-text">XCIV</span>
   </a>
+  <ul class="nav-center">
+    <li><a href="/#services">Services</a></li>
+    <li><a href="/#watches">Horlogerie</a></li>
+    <li><a href="/collection">Collection</a></li>
+    <li><a href="/#about">Maison</a></li>
+    <li><a href="/#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-auth" id="navAuth">
+      <a href="/connexion" class="nav-auth-link" id="navLogin" aria-label="Mon compte">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </a>
+      <div class="nav-user-menu" id="navUserMenu" style="display:none">
+        <a href="/mon-espace" class="nav-user-name" id="navUserName"></a>
+        <button class="nav-logout-btn">Déconnexion</button>
+      </div>
+      <a href="/admin/dashboard" class="nav-admin-badge" id="navAdminBadge" style="display:none">Admin</a>
+    </div>
+    <a href="/#contact" class="nav-btn">Nous contacter</a>
+    <button class="hamburger" type="button" id="hamburger" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </div>
 </nav>
+<div class="nav-offset"></div>
 
 <section class="pg-hero">
   <div class="pg-hero-tag">Expédition & retours</div>
@@ -198,5 +238,6 @@
   </div>
 </footer>
 
+<script src="/shared/nav.js"></script>
 </body>
 </html>

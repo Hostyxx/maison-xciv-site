@@ -179,8 +179,27 @@ window.resetFilters  = resetFilters; // used in dynamically generated HTML (rend
 //  5. CHARGEMENT API & RENDU
 // ═══════════════════════════════════════════
 
+function buildSkeleton() {
+  return `<div class="wc-skeleton">
+    <div class="wc-skeleton-img"></div>
+    <div class="wc-skeleton-body">
+      <div class="wc-skeleton-line wc-skeleton-line-sm"></div>
+      <div class="wc-skeleton-line wc-skeleton-line-xl"></div>
+      <div class="wc-skeleton-line wc-skeleton-line-md" style="margin-top:2px"></div>
+      <div class="wc-skeleton-line wc-skeleton-line-lg" style="margin-top:10px"></div>
+      <div class="wc-skeleton-line wc-skeleton-line-md"></div>
+      <div class="wc-skeleton-line wc-skeleton-line-price" style="margin-top:16px"></div>
+    </div>
+  </div>`;
+}
+
 async function loadWatches() {
   const grid = document.getElementById('collGrid');
+
+  // Skeletons pendant le chargement
+  if (grid) {
+    grid.innerHTML = Array.from({ length: 8 }, buildSkeleton).join('');
+  }
 
   try {
     const res  = await fetch('/api/watches');
@@ -229,7 +248,7 @@ function buildCard(watch, index) {
   const statusMap = { 'Disponible': 'disponible', 'Réservé': 'reserve', 'Vendu': 'vendu' };
   const statusClass = statusMap[watch.status] || 'disponible';
   const isVendu     = watch.status === 'Vendu';
-  const delay       = (index % 4) * 70;
+
 
   const img = watch.image
     ? `<img src="${escHtml(watch.image)}" alt="${escHtml(watch.brand)} ${escHtml(watch.name)}" loading="lazy" decoding="async">`
@@ -250,11 +269,11 @@ function buildCard(watch, index) {
 
   return `
   <article class="wc-item ${isVendu ? 'is-vendu' : ''}"
-           style="transition-delay:${delay}ms"
            data-id="${watch.id}"
            aria-label="${escHtml(watch.brand)} ${escHtml(watch.name)} — ${escHtml(watch.status)}">
     <div class="wc-img">
       ${img}
+      <div class="wc-img-overlay" aria-hidden="true"></div>
       <span class="wc-badge ${statusClass}">${escHtml(watch.status)}</span>
       <button class="wc-fav-btn ${isFav ? 'is-fav' : ''}"
               data-watch-id="${watch.id}"
@@ -274,7 +293,10 @@ function buildCard(watch, index) {
       <div class="wc-sep"></div>
       <p class="wc-desc">${escHtml(watch.description || '')}</p>
       <div class="wc-footer">
-        <span class="wc-price">${escHtml(watch.price)}</span>
+        <div>
+          <span class="wc-price-label">Prix</span>
+          <span class="wc-price">${escHtml(watch.price)}</span>
+        </div>
         ${btn}
       </div>
     </div>
@@ -289,7 +311,16 @@ function renderGrid(watches) {
   if (watches.length === 0) {
     grid.innerHTML = `
       <div class="coll-empty">
+        <svg class="coll-empty-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+          <circle cx="24" cy="24" r="20"/>
+          <circle cx="24" cy="24" r="13"/>
+          <line x1="24" y1="4"  x2="24" y2="11"/>
+          <line x1="24" y1="24" x2="24" y2="15"/>
+          <line x1="24" y1="24" x2="31" y2="26"/>
+          <circle cx="24" cy="24" r="2" fill="currentColor" stroke="none"/>
+        </svg>
         <p>Aucune montre pour cette sélection.</p>
+        <p class="coll-empty-hint">Essayez un autre filtre</p>
         <button class="coll-empty-reset" data-action="reset-filters">Voir toute la collection</button>
       </div>`;
     return;

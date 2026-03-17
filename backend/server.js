@@ -8,10 +8,11 @@ const express      = require('express');
 const cors         = require('cors');
 const cookieParser = require('cookie-parser');
 const path         = require('path');
+const fs           = require('fs');
 const helmet       = require('helmet');
 
 // Init bases de données au démarrage
-require('../database/database');
+const { readDB } = require('../database/database');
 require('../database/usersDB');
 require('../database/favoritesDB');
 require('../database/invoicesDB');
@@ -138,9 +139,81 @@ app.get('/admin/merci',      requireAuthPage, (req, res) =>
 app.get('/admin/login',      (req, res) =>
   res.sendFile(path.join(__dirname, '../frontend/admin/login.html')));
 
-// ─── Page Collection ─────────────────────────────────────────
-app.get('/collection', (req, res) =>
-  res.sendFile(path.join(__dirname, '../frontend/collection/index.html')));
+// ─── Page Collection (SSR — contenu visible par Googlebot) ──
+app.get('/collection', (req, res) => {
+  try {
+    const { watches } = readDB();
+    const collFile = path.join(__dirname, '../frontend/collection/index.html');
+    let html = fs.readFileSync(collFile, 'utf8');
+
+    /* ── Cartes pré-rendues pour le SEO ── */
+    const ssrCards = watches.map(w => {
+      const priceDisplay = typeof w.price === 'number'
+        ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(w.price)
+        : w.price;
+      const brandKey = w.brand.toLowerCase().replace(/[^a-z0-9]/g, '-');
+      const imgHtml  = w.image
+        ? `<img src="${w.image}" alt="${w.brand} ${w.name} — Maison XCIV" class="wc-img" loading="lazy" width="400" height="300">`
+        : '<div class="wc-img-placeholder"></div>';
+      return `<article class="coll-card" data-id="${w.id}" data-brand="${brandKey}" data-status="${w.status}" itemscope itemtype="https://schema.org/Product">
+  <div class="wc-img-wrap">${imgHtml}</div>
+  <div class="wc-body">
+    <div class="wc-brand" itemprop="brand" itemscope itemtype="https://schema.org/Brand"><span itemprop="name">${w.brand.toUpperCase()}</span></div>
+    <h2 class="wc-name" itemprop="name">${w.brand} ${w.name}</h2>
+    <p class="wc-desc" itemprop="description">${w.description}</p>
+    <div class="wc-year">Millésime ${w.year}</div>
+    <div class="wc-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+      <span>${priceDisplay}</span>
+      <meta itemprop="priceCurrency" content="EUR">
+      <link itemprop="availability" href="https://schema.org/${w.status === 'Disponible' ? 'InStock' : 'OutOfStock'}">
+    </div>
+  </div>
+</article>`;
+    }).join('\n');
+
+    html = html.replace(
+      '<div class="coll-grid" id="collGrid"></div>',
+      `<div class="coll-grid" id="collGrid">\n${ssrCards}\n</div>`
+    );
+
+    /* ── ItemList JSON-LD injecté dynamiquement ── */
+    const itemListSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Collection Montres — Maison XCIV',
+      url: 'https://maisonxciv.com/collection',
+      numberOfItems: watches.length,
+      itemListElement: watches.map((w, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Product',
+          name: `${w.brand} ${w.name}`,
+          description: w.description,
+          brand: { '@type': 'Brand', name: w.brand },
+          url: 'https://maisonxciv.com/collection',
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'EUR',
+            availability: `https://schema.org/${w.status === 'Disponible' ? 'InStock' : 'OutOfStock'}`,
+            seller: { '@type': 'Organization', name: 'Maison XCIV' }
+          }
+        }
+      }))
+    };
+
+    const schemaTag = `<script type="application/ld+json">\n${JSON.stringify(itemListSchema, null, 2)}\n</script>`;
+    html = html.replace('</head>', `${schemaTag}\n</head>`);
+
+    res.set('Content-Type', 'text/html; charset=utf-8');
+    res.set('Cache-Control', 'no-cache, must-revalidate');
+    res.send(html);
+
+  } catch (err) {
+    console.error('[Collection SSR] Erreur :', err.message);
+    res.sendFile(path.join(__dirname, '../frontend/collection/index.html'));
+  }
+});
 
 // ─── Pages utilisateur ────────────────────────────────────────
 app.get('/connexion',   (req, res) =>

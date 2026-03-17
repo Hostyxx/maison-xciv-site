@@ -71,25 +71,27 @@ router.get('/', (req, res) => {
       return urlBlock({ ...page, lastmod });
     }).join('\n\n');
 
-    /* ── Montres individuelles (future évolution) ──────────────
-     * Décommenter quand les routes /collection/:id existeront :
-     *
-     * const watchBlocks = watches
-     *   .filter(w => w.status !== 'Vendu')
-     *   .map(w => urlBlock({
-     *     loc:        `/collection/${w.id}`,
-     *     lastmod:    toISODate(w.updated_at),
-     *     changefreq: 'weekly',
-     *     priority:   '0.8',
-     *   })).join('\n\n');
-     *
-     * Ajouter `\n\n${watchBlocks}` dans le template ci-dessous.
+    /* ── Montres individuelles — URLs de catalogue ────────────
+     * Chaque montre non vendue est référencée avec un anchor
+     * /collection#watch-{id} pour maximiser l'indexation Google.
+     * Quand des pages /collection/:slug existeront, remplacer
+     * la loc par /collection/${slug}.
      * ──────────────────────────────────────────────────────── */
+    const watchBlocks = watches
+      .filter(w => w.status !== 'Vendu')
+      .map(w => urlBlock({
+        loc:        `/collection#watch-${w.id}`,
+        lastmod:    toISODate(w.updated_at),
+        changefreq: 'weekly',
+        priority:   '0.8',
+      })).join('\n\n');
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 ${staticBlocks}
+
+${watchBlocks}
 
 </urlset>`;
 

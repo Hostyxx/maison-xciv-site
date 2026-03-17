@@ -266,6 +266,7 @@ body.hovering #cur-ring { width: 56px; height: 56px; border-color: var(--c-beige
 }
 
 /* ── Offset de page pour la navbar fixe ── */
+/* Inclut env(safe-area-inset-top) pour compenser le Dynamic Island / notch iPhone */
 .nav-offset {
-  height: var(--nav-h);
+  height: calc(var(--nav-h) + env(safe-area-inset-top, 0px));
 }

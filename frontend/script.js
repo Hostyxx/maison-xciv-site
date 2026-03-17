@@ -116,7 +116,10 @@ function closeMobile() {
   document.body.classList.remove('menu-open');
 }
 
-// Expose aux onclick inline du HTML
+// Fermer le menu mobile avec Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && mobileOpen) closeMobile();
+});
 
 
 // ═══════════════════════════════════════════

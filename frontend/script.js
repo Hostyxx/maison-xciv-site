@@ -671,6 +671,16 @@ function updateNavAuth() {
       });
     }
   }
+
+  // ── Mobile (≤ 900px) : icône compte toujours visible, destination correcte ──
+  // Le CSS force display:flex sur #navLogin via !important — ici on met à jour
+  // le href pour qu'il pointe vers la bonne page selon le rôle.
+  if (currentUser && window.matchMedia('(max-width: 900px)').matches && navLogin) {
+    const dest  = currentUser.role === 'admin' ? '/admin/dashboard' : '/mon-espace';
+    const label = currentUser.role === 'admin' ? 'Dashboard admin'  : 'Mon espace';
+    navLogin.setAttribute('href', dest);
+    navLogin.setAttribute('aria-label', label);
+  }
 }
 
 /** Charge les IDs des favoris (léger). */

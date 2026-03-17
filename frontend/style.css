@@ -226,9 +226,12 @@ nav.solid .hamburger span { background: var(--c-ink); }
   background: var(--c-black);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 40px;
-  /* Safe area + minimum 80px pour dégager le Dynamic Island / notch */
-  padding-top:    max(env(safe-area-inset-top, 0px), 80px);
+  /* Dégager le header fixe (68px nav + safe-area) + 16px marge de confort */
+  padding-top:    max(calc(68px + env(safe-area-inset-top, 0px) + 16px), 96px);
   padding-bottom: max(env(safe-area-inset-bottom, 0px), 32px);
+  /* Scroll si les items dépassent (iPhone SE, petits écrans) */
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
   transform: translateY(-100%);
   transition: transform 0.55s var(--ease-luxury);
   pointer-events: none;
@@ -247,6 +250,12 @@ body.menu-open nav .nav-logo-svg svg {
 }
 body.menu-open nav .hamburger span {
   background: rgba(255,255,255,0.8) !important;
+}
+/* Icône compte effacée quand le menu mobile est ouvert */
+body.menu-open .nav-auth {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease-luxury);
 }
 .mobile-nav a {
   font-family: var(--f-serif);
@@ -1762,6 +1771,36 @@ footer {
   .nouv-header-right { gap: 0; }
 }
 
+/* ── Vue 2 colonnes sur mobile : carte compacte ─────────────── */
+@media (max-width: 600px) {
+  .nouv-grid.view-2 .wc-desc,
+  .nouv-grid.view-2 .wc-sep   { display: none; }
+  .nouv-grid.view-2 .wc-body  { padding: 10px 10px 14px; }
+  .nouv-grid.view-2 .wc-brand {
+    font-size: 6.5px;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .nouv-grid.view-2 .wc-name  {
+    font-size: clamp(13px, 3.5vw, 16px);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .nouv-grid.view-2 .wc-price  { font-size: 13px; }
+  .nouv-grid.view-2 .wc-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .nouv-grid.view-2 .wc-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 7.5px;
+    letter-spacing: 2px;
+    min-height: 36px;
+  }
+}
+
 /* ─── Anti-overflow global dans la section ─── */
 #nouveautes * {
   max-width: 100%;
@@ -1771,9 +1810,14 @@ footer {
    RESPONSIVE
 ═══════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .nav-center { display: none; }
-  .hamburger  { display: flex; }
-  .nav-btn    { display: none; }
+  .nav-center  { display: none; }
+  .hamburger   { display: flex; }
+  .nav-btn     { display: none; }
+  /* Auth inline : masqués sur mobile — le menu overlay gère l'état connecté */
+  #navUserMenu,
+  #navAdminBadge { display: none !important; }
+  /* Icône compte toujours visible (override inline style JS), href mis à jour par JS */
+  #navLogin      { display: flex !important; }
 }
 
 @media (max-width: 1100px) {
@@ -1962,7 +2006,9 @@ nav.solid .nav-logo-svg svg {
   width: min(420px, 100vw);
   background: var(--c-bone);
   transform: translateX(100%);
-  transition: transform 0.5s var(--ease-luxury);
+  /* visibility:hidden quand fermé → élimine le bleeding de box-shadow à droite */
+  visibility: hidden;
+  transition: transform 0.5s var(--ease-luxury), visibility 0s linear 0.5s;
   overflow-y: auto;
   overscroll-behavior: contain;
   display: flex;
@@ -1971,6 +2017,8 @@ nav.solid .nav-logo-svg svg {
 }
 .admin-panel.open {
   transform: translateX(0);
+  visibility: visible;
+  transition: transform 0.5s var(--ease-luxury), visibility 0s linear 0s;
 }
 
 /* Header du panneau */
@@ -2286,6 +2334,7 @@ nav.solid .nav-user-name { color: var(--c-beige-mid); }
   border: none;
   cursor: none;
   padding: 0;
+  white-space: nowrap;
   transition: color 0.3s;
 }
 .nav-logout-btn:hover { color: rgba(255,255,255,0.7); }
@@ -2498,6 +2547,7 @@ a, button, [onclick], label, select {
   .nav-logo-svg     { height: 68px; }
   .nav-logo-svg svg { height: 68px; max-width: 210px; }
   .nav-right        { gap: 12px; }
+  .mobile-nav       { gap: 28px; }
 }
 
 @media (max-width: 480px) {
@@ -2878,6 +2928,7 @@ section, #watches, #services, #nouveautes, #about, #process, #projects, #contact
   nav { padding: 0 12px; }
   .nav-logo-svg     { height: 48px; }
   .nav-logo-svg svg { height: 48px; max-width: 145px; }
+  .mobile-nav       { gap: 20px; }
 
   .hero-content { padding: 0 12px 80px; }
   .hero-h1      { font-size: clamp(34px, 10vw, 46px); letter-spacing: -0.5px; }

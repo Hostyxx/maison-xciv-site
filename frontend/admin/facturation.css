@@ -2,6 +2,28 @@
    facturation.css — Maison XCIV Admin — Module de facturation
    ═══════════════════════════════════════════════════════════════ */
 
+/* ─── Containment global anti-overflow ───────────────────────────
+   Sur Safari iOS, overflow-x:hidden sur <html> seul est ignoré
+   en présence d'éléments position:fixed ou sticky.
+   On renforce le containment sur les couches critiques.
+──────────────────────────────────────────────────────────────── */
+.dashboard-body,
+.dash-main,
+.view {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.dash-card,
+.fact-stat-card,
+.fact-form-section,
+.fact-preview-scale-wrap,
+.modal-card,
+.modal-card-wide {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 /* ─── Utilitaires de vue ─── */
 .view.hidden { display: none !important; }
 .hidden { display: none !important; }
@@ -129,6 +151,16 @@
 }
 @media (max-width: 768px) {
   .fact-filters { padding: 14px 16px; margin: -16px -16px 16px; }
+}
+/* ── CORRECTIF PRINCIPAL : suppression des marges négatives ≤ 600px ──
+   CAUSE DU DÉBORDEMENT IDENTIFIÉE :
+   À ≤ 400px, dash-main.padding passe à 12px.
+   Avec margin: -16px, les filtres dépassent de 6px chaque côté
+   sur tous les iPhones (375px, 390px, 393px, etc.).
+   Fix : margin: 0 garde les filtres dans les limites de la carte.
+─────────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .fact-filters { margin: 0; }
 }
 
 .filter-search {
@@ -756,49 +788,104 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE — MOBILE FIRST
+   Corrigé entièrement pour Safari iOS / iPhone
 ═══════════════════════════════════════════════════════════════ */
+
+/* ── Sticky preview désactivée ≤ 1200px ────────────────────── */
+@media (max-width: 1200px) {
+  .fact-preview-section { position: static; }
+}
+
+/* ── Tablette ≤ 768px ───────────────────────────────────────── */
 @media (max-width: 768px) {
-  .invoice-template {
-    padding: 28px 20px;
-  }
-  .inv-logo-svg { width: 140px; height: 56px; }
-  .inv-parties  { grid-template-columns: 1fr; gap: 16px; }
+
+  /* Template facture PDF */
+  .invoice-template { padding: 28px 20px; }
+  .inv-logo-svg     { width: 140px; height: 56px; }
+  .inv-parties      { grid-template-columns: 1fr; gap: 16px; }
   .inv-table th.inv-th-ref,
   .inv-table td.inv-td-ref,
   .inv-table th.inv-th-unit,
   .inv-table td.inv-td-unit { display: none; }
 
-  .fact-filters {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .filter-search { min-width: unset; }
+  /* Filtres : colonne verticale pleine largeur */
+  .fact-filters     { flex-direction: column; align-items: stretch; }
+  .filter-search    { min-width: 0; width: 100%; }
   .fact-filters select,
-  .fact-filters input[type="date"] { width: 100%; }
-}
+  .fact-filters input[type="date"] { width: 100%; box-sizing: border-box; }
 
-/* ─── Sticky preview : désactiver sur mobile (1 colonne) ─── */
-@media (max-width: 1200px) {
-  .fact-preview-section { position: static; }
-}
+  /* Header : empilé */
+  .dash-header { flex-direction: column; align-items: flex-start; gap: 12px; }
 
-/* ── Aperçu PDF : compact et scrollable sur mobile ────────── */
-@media (max-width: 768px) {
+  /* Tableau : padding réduit, colonnes secondaires masquées */
+  .fact-table th,
+  .fact-table td { padding: 10px; font-size: 12px; }
+  .fact-table .th-hide-mobile,
+  .fact-table .td-hide-mobile { display: none; }
+
+  /* Aperçu PDF : compact et scrollable */
   .fact-preview-scale-wrap {
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }
-  /* Invoice template live preview uniquement (pas le modal PDF) */
-  #invoiceTemplate.invoice-template {
-    padding: 20px 14px;
-  }
+  #invoiceTemplate.invoice-template { padding: 20px 14px; }
+
+  /* Empêche zoom iOS (font-size min 16px) */
+  .filter-search input,
+  .fact-filters select,
+  .fact-filters input[type="date"],
+  .form-field input,
+  .form-field select,
+  .form-field textarea { font-size: 16px; }
 }
 
+/* ── Mobile ≤ 480px ─────────────────────────────────────────── */
 @media (max-width: 480px) {
-  /* Header facture en colonne sur très petit écran */
+
+  /* ─ Stat cards : 2 colonnes ─ */
+  .fact-stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .fact-stat-card { padding: 14px 16px; }
+  .stat-value {
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ─ Boutons header : wrap propre, pas d'overflow ─ */
+  .dash-header-right {
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+  .dash-header-right .btn-secondary,
+  .dash-header-right .dash-add-btn {
+    flex: 1 1 140px;
+    min-width: 0;
+    max-width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* ─ Formulaire ─ */
+  .fact-form-section { padding: 20px 16px; }
+  .fact-actions { flex-direction: column; gap: 8px; }
+  .fact-actions .btn-primary,
+  .fact-actions .btn-secondary,
+  .fact-actions .btn-danger { width: 100%; justify-content: center; }
+
+  /* ─ PDF modal ─ */
+  .pdf-modal-body { padding: 16px; }
+  .pdf-modal-footer { padding: 12px 16px; flex-direction: column; gap: 8px; }
+  .pdf-modal-footer .btn-primary,
+  .pdf-modal-footer .btn-secondary,
+  .pdf-modal-footer .btn-ghost,
+  .pdf-modal-footer .btn-danger { width: 100%; justify-content: center; }
+
+  /* ─ Aperçu PDF inline ─ */
   #invoiceTemplate .inv-header {
     flex-direction: column;
     gap: 10px;
@@ -808,47 +895,13 @@
   #invoiceTemplate .inv-meta-row   { justify-content: flex-start; }
   #invoiceTemplate .inv-logo-svg   { width: 110px; height: 44px; }
   #invoiceTemplate .inv-ttc-val    { font-size: 20px !important; }
-}
 
-@media (max-width: 768px) {
-  /* Filtres en pleine largeur */
-  .filter-search { min-width: 100%; }
-
-  /* Header du tableau avec titre + bouton en colonne sur petit écran */
-  .dash-header { flex-direction: column; align-items: flex-start; gap: 12px; }
-
-  /* Tableau : padding réduit */
-  .fact-table th,
-  .fact-table td { padding: 10px 10px; font-size: 12px; }
-
-  /* Masquer colonnes secondaires sur mobile */
-  .fact-table .th-hide-mobile,
-  .fact-table .td-hide-mobile { display: none; }
-}
-
-@media (max-width: 480px) {
-  .fact-stat-card { padding: 14px 16px; }
-  .stat-value { font-size: 20px; }
-  .fact-form-section { padding: 20px 16px; }
-  .pdf-modal-body { padding: 16px; }
-  .pdf-modal-footer { padding: 12px 16px; flex-direction: column; gap: 8px; }
-  .pdf-modal-footer .btn-primary,
-  .pdf-modal-footer .btn-ghost,
-  .pdf-modal-footer .btn-danger { width: 100%; justify-content: center; }
-  .fact-actions { flex-direction: column; }
-  .fact-actions .btn-primary,
-  .fact-actions .btn-ghost,
-  .fact-actions .btn-danger { width: 100%; justify-content: center; }
-
-  /* Stat cards : 2 colonnes au lieu de 1 */
-  .fact-stats-row { grid-template-columns: repeat(2, 1fr); }
-
-  /* Table : transformer en cartes empilées sur très petit écran */
+  /* ─ Table → cartes empilées (version mobile premium) ─ */
   .fact-table thead { display: none; }
   .fact-table,
   .fact-table tbody,
   .fact-table tr,
-  .fact-table td { display: block; width: 100%; }
+  .fact-table td { display: block; width: 100%; box-sizing: border-box; }
   .fact-table tr {
     background: #FAF8F4;
     border: 1px solid #E8E2D9;
@@ -856,14 +909,18 @@
     padding: 12px 14px;
     margin-bottom: 10px;
     position: relative;
+    overflow: hidden;
   }
   .fact-table tr:last-child { margin-bottom: 0; }
   .fact-table td {
     padding: 3px 0;
     border-bottom: none;
     font-size: 13px;
+    white-space: normal;       /* Annule les nowrap de date/montant */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
-  /* Libellé data-label affiché avant la valeur */
   .fact-table td::before {
     content: attr(data-label);
     font-size: 9px;
@@ -881,53 +938,35 @@
     border-top: 1px solid #F0EBE3;
   }
   .fact-table .td-actions::before { display: none; }
+
+  /* ─ État vide : recentré et proportionné ─ */
+  .fact-empty { padding: 40px 16px; }
+  .fact-empty svg { width: 36px; height: 36px; margin-bottom: 12px; }
+  .fact-empty p   { font-size: 13px; margin-bottom: 16px; }
+  .fact-empty .btn-primary { max-width: 100%; justify-content: center; }
 }
 
-@media (max-width: 480px) {
-  /* Boutons header : pleine largeur pour éviter débordement */
-  .dash-header-right {
-    flex-wrap: wrap;
-    gap: 8px;
-    width: 100%;
-  }
-  .dash-header-right .btn-secondary,
-  .dash-header-right .dash-add-btn {
-    flex: 1;
-    min-width: 130px;
-    justify-content: center;
-  }
-}
-
+/* ── Mobile small ≤ 374px ───────────────────────────────────── */
 @media (max-width: 374px) {
-  .fact-stat-card { padding: 10px 12px; }
-  .stat-value     { font-size: 18px; }
-  .stat-icon      { width: 32px; height: 32px; }
-  .stat-icon svg  { width: 14px; height: 14px; }
+  .fact-stats-row    { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .fact-stat-card    { padding: 10px 12px; }
+  .stat-value        { font-size: 18px; }
+  .stat-icon         { width: 32px; height: 32px; }
+  .stat-icon svg     { width: 14px; height: 14px; }
   .fact-form-section { padding: 16px 12px; }
-  .fact-stats-row { grid-template-columns: 1fr 1fr; gap: 8px; }
 }
 
 /* ── Touch targets minimum 44×44 ────────────────────────────── */
 @media (pointer: coarse) {
-  .btn-icon            { width: 44px; height: 44px; }
-  .btn-ghost           { min-height: 44px; padding: 10px 14px; }
-  .btn-danger          { min-height: 52px; }
-  .filter-search input { min-height: 48px; font-size: 16px; }
+  .btn-icon                        { width: 44px; height: 44px; }
+  .btn-ghost                       { min-height: 44px; padding: 10px 14px; }
+  .btn-danger                      { min-height: 52px; }
+  .filter-search input             { min-height: 48px; font-size: 16px; }
   .fact-filters select,
   .fact-filters input[type="date"] { min-height: 48px; font-size: 16px; }
-  .pdf-modal-close     { width: 44px; height: 44px; }
+  .pdf-modal-close                 { width: 44px; height: 44px; }
 }
 
-/* ── Empêche zoom iOS ──────────────────────────────────────── */
-@media (max-width: 768px) {
-  .filter-search input,
-  .fact-filters select,
-  .fact-filters input[type="date"],
-  .form-field input,
-  .form-field select,
-  .form-field textarea { font-size: 16px; }
-}
-
-/* ── Anti tap-highlight ────────────────────────────────────── */
+/* ── Anti tap-highlight & touch UX ──────────────────────────── */
 *, *::before, *::after { -webkit-tap-highlight-color: transparent; }
 a, button, [onclick], label, select { touch-action: manipulation; }

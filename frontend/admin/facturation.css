@@ -969,4 +969,115 @@
 
 /* ── Anti tap-highlight & touch UX ──────────────────────────── */
 *, *::before, *::after { -webkit-tap-highlight-color: transparent; }
+
+/* ═══════════════════════════════════════════════════════════════
+   POLISH & UX AMÉLIORATIONS
+═══════════════════════════════════════════════════════════════ */
+
+/* ─── Indicateur de scroll horizontal sur la table ─── */
+.fact-table-wrap {
+  position: relative;
+}
+.fact-table-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 32px;
+  background: linear-gradient(to right, transparent, rgba(250,248,244,0.9));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.fact-table-wrap.has-overflow::after { opacity: 1; }
+
+/* ─── Empty state amélioré (plus visible, CTA proéminent) ─── */
+.fact-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 72px 32px;
+  text-align: center;
+}
+.fact-empty svg {
+  width: 56px; height: 56px;
+  margin-bottom: 20px;
+  opacity: 0.3;
+  color: var(--grey, #7A7570);
+}
+.fact-empty p {
+  font-family: 'EB Garamond', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--grey, #7A7570);
+  margin-bottom: 8px;
+}
+.fact-empty-hint {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #B0AA9F;
+  margin-bottom: 28px;
+}
+.fact-empty-hint {
+  font-size: 12px;
+  font-weight: 300;
+  color: #B0AA9F;
+  letter-spacing: 0.02em;
+  max-width: 320px;
+  line-height: 1.65;
+  margin-bottom: 28px;
+}
+.fact-empty .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ─── Hover sur les lignes de facture ─── */
+.invoice-row { transition: background 0.15s; }
+.invoice-row:hover td { background: #FAF8F4; cursor: pointer; }
+
+/* ─── Stat cards — hover effect ─── */
+.fact-stat-card {
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+@media (hover: hover) {
+  .fact-stat-card:hover {
+    box-shadow: 0 4px 20px rgba(13,12,11,0.08);
+    transform: translateY(-2px);
+  }
+}
+
+/* ─── Formulaire — focus ring amélioré ─── */
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: #C4AA8C;
+  box-shadow: 0 0 0 3px rgba(196,170,140,0.12);
+  outline: none;
+}
+
+/* ─── Dividers de section avec numérotation ─── */
+.fact-divider:first-of-type { margin-top: 4px; }
+
+/* ─── Dash-header layout sur tablette ─── */
+@media (max-width: 900px) {
+  .dash-header-right {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+}
+
+/* ─── Scroll indicator JS hook ─── */
+.fact-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ─── Transition sur les vues ─── */
+.view {
+  animation: viewFadeIn 0.25s ease;
+}
+@keyframes viewFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 a, button, [onclick], label, select { touch-action: manipulation; }

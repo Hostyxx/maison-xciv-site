@@ -131,6 +131,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   showView('list');
 });
 
+/* ─── Indicateur de scroll horizontal sur les tables ─────────── */
+function updateTableScrollIndicators() {
+  document.querySelectorAll('.fact-table-wrap').forEach(wrap => {
+    wrap.classList.toggle('has-overflow', wrap.scrollWidth > wrap.clientWidth + 2);
+  });
+}
+window.addEventListener('resize', updateTableScrollIndicators);
+
 /* ─── Session admin ───────────────────────────────────────────── */
 async function verifyAdminSession() {
   const check = async () => {
@@ -306,7 +314,7 @@ function renderInvoiceTable(invoices) {
     const product = inv.product.brand
       ? `${inv.product.brand} ${inv.product.model}`.trim()
       : inv.product.description || '—';
-    return `<tr class="invoice-row">
+    return `<tr class="invoice-row" data-id="${inv.id}">
       <td class="td-number" data-label="N°"><strong>${esc(inv.number)}</strong></td>
       <td class="td-date" data-label="Date">${formatDate(inv.created_at)}</td>
       <td class="td-client" data-label="Client">${esc(client)}</td>
@@ -330,6 +338,8 @@ function renderInvoiceTable(invoices) {
       </td>
     </tr>`;
   }).join('');
+  // Activer l'indicateur de scroll horizontal si besoin
+  requestAnimationFrame(updateTableScrollIndicators);
 }
 
 /* ═══════════════════════════════════════════════════════════════

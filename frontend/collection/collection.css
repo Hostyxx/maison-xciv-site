@@ -122,24 +122,28 @@ input, select, button { font-family: inherit; }
    SWITCH VUE GRILLE / LISTE
 ═══════════════════════════════════════════════════════════ */
 .filter-group-view {
-  display: flex; align-items: center; gap: 4px;
+  display: flex; align-items: center; gap: 2px;
+  background: rgba(13,12,11,0.05);
+  border: 1px solid rgba(13,12,11,0.09);
+  border-radius: 5px;
+  padding: 3px;
+  flex-shrink: 0;
 }
 .view-btn {
   -webkit-appearance: none; appearance: none;
-  background: none; border: 1px solid transparent;
-  padding: 7px 10px; cursor: pointer;
-  color: var(--c-grey-lt);
-  transition: color 0.25s, border-color 0.25s, background 0.25s;
+  background: none; border: none;
+  padding: 6px 9px; cursor: pointer;
+  color: var(--c-grey);
+  transition: color 0.2s, background 0.2s;
   display: flex; align-items: center; justify-content: center;
-  border-radius: 2px;
+  border-radius: 3px;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
-.view-btn:hover  { color: var(--c-ink); }
+.view-btn:hover { color: var(--c-ink); background: rgba(13,12,11,0.06); }
 .view-btn.active {
-  color: var(--c-ink);
-  border-color: rgba(13,12,11,0.15);
-  background: rgba(13,12,11,0.04);
+  background: var(--c-ink);
+  color: var(--c-bone);
 }
 
 /* ── Vue liste ── */
@@ -809,10 +813,23 @@ footer {
   .wc-btn { width: 100%; justify-content: center; }
 
   .filter-group-label { display: none; }
-  .coll-filters-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .filter-group-right { margin-left: 0; }
-  .filter-tabs { gap: 6px; }
-  .filter-tab { font-size: 7.5px; padding: 6px 10px; }
+  /* Row 1 : tabs marque (pleine largeur) — Row 2 : switch + tri (côte à côte) */
+  .coll-filters-inner {
+    flex-direction: row; flex-wrap: wrap;
+    align-items: center; gap: 10px 0;
+    padding: 12px 0;
+  }
+  .filter-group:first-child { flex: 0 0 100%; }
+  .filter-group-right { margin-left: auto; }
+  /* Tabs scrollables horizontalement sans scrollbar visible */
+  .filter-tabs {
+    gap: 4px; flex-wrap: nowrap;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+  .filter-tab { font-size: 7.5px; padding: 6px 10px; flex-shrink: 0; }
 }
 
 @media (max-width: 374px) {

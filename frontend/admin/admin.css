@@ -627,6 +627,12 @@ input, textarea, select, button { font-family: inherit; }
 }
 .btn-secondary:hover { border-color: var(--ink); color: var(--ink); }
 
+.btn-sm {
+  padding: 8px 14px !important;
+  font-size: 9px !important;
+  letter-spacing: 1.5px;
+}
+
 .btn-danger {
   background: #ef4444;
   border: none;

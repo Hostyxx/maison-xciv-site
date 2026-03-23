@@ -195,6 +195,35 @@ input, select, button { font-family: inherit; }
 }
 .coll-grid.view-list .wc-skeleton-img { aspect-ratio: 3/4; }
 
+/* ── Vue liste MOBILE < 480px : stack vertical ───────────
+   Sur mobile, 160px d'image + 183px de contenu = trop serré.
+   On repasse les items en colonne (image en haut, infos en bas).
+──────────────────────────────────────────────────────────── */
+@media (max-width: 479px) {
+  .coll-grid.view-list .wc-item {
+    display: flex !important;
+    flex-direction: column;
+    grid-template-columns: unset;
+  }
+  .coll-grid.view-list .wc-img {
+    aspect-ratio: 16 / 9;
+    height: auto !important;
+    width: 100%;
+  }
+  .coll-grid.view-list .wc-body {
+    padding: 16px;
+  }
+  /* Skeleton adapté */
+  .coll-grid.view-list .wc-skeleton {
+    display: flex !important;
+    flex-direction: column;
+    grid-template-columns: unset;
+  }
+  .coll-grid.view-list .wc-skeleton-img {
+    aspect-ratio: 16 / 9;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════
    FILTRES
 ═══════════════════════════════════════════════════════════ */
@@ -292,13 +321,20 @@ input, select, button { font-family: inherit; }
 .coll-main {
   padding: 52px clamp(16px, 5vw, 56px) 96px;
   min-height: 60vh;
+  /* Prévention overflow horizontal */
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 .coll-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: clamp(14px, 2.5vw, 20px);
+  /* Prévention overflow */
+  min-width: 0;
+  width: 100%;
 }
+
 
 @media (min-width: 480px) {
   .coll-grid { grid-template-columns: repeat(2, 1fr); }
@@ -810,7 +846,14 @@ footer {
   .coll-grid { grid-template-columns: 1fr; }
 
   .wc-footer { flex-direction: column; align-items: flex-start; }
-  .wc-btn { width: 100%; justify-content: center; }
+  /* Bouton CTA : toujours visible, solide et cliquable sur mobile */
+  .wc-btn {
+    width: 100%; justify-content: center;
+    background: var(--c-ink);
+    color: var(--c-bone);
+    border-color: var(--c-ink);
+  }
+  .wc-btn::before { display: none; } /* pas de hover fill sur mobile */
 
   .filter-group-label { display: none; }
   /* Row 1 : tabs marque (pleine largeur) — Row 2 : switch + tri (côte à côte) */

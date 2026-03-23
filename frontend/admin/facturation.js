@@ -203,14 +203,14 @@ function updateHeader(view, extra) {
     h.innerHTML = `
       <div class="dash-header-left">
         <h1 class="dash-title">Facturation</h1>
-        <p class="dash-subtitle">Gérez vos factures Maison XCIV</p>
+        <p class="dash-subtitle">Créez, suivez et exportez vos factures de vente</p>
       </div>
       <div class="dash-header-right">
-        <button class="btn-secondary btn-sm" data-action="export-csv">
+        <button class="btn-secondary btn-sm" data-action="export-csv" title="Exporter toutes les factures filtrées en CSV">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;margin-right:6px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Exporter CSV
         </button>
-        <button class="dash-add-btn" data-action="create-invoice">
+        <button class="dash-add-btn" data-action="create-invoice" title="Créer une nouvelle facture">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Nouvelle facture
         </button>

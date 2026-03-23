@@ -91,12 +91,20 @@
 .fact-stat-card {
   background: #FAF8F4;
   border: 1px solid #E8E2D9;
+  border-left: 3px solid #E8E2D9; /* overridé par les classes couleur */
   border-radius: 10px;
   padding: 20px 22px;
   display: flex;
   align-items: center;
   gap: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+/* Accent couleur par type de stat */
+.fact-stat-card:has(.stat-icon-total)   { border-left-color: #C4AA8C; }
+.fact-stat-card:has(.stat-icon-volume)  { border-left-color: #3498DB; }
+.fact-stat-card:has(.stat-icon-paid)    { border-left-color: #27AE60; }
+.fact-stat-card:has(.stat-icon-pending) { border-left-color: #E67E22; }
 
 .stat-icon {
   width: 40px;
@@ -144,6 +152,7 @@
   padding: 16px 20px;
   border-bottom: 1px solid #F0EBE3;
   margin: -24px -24px 20px;
+  background: linear-gradient(to bottom, rgba(250,248,244,0), rgba(244,239,232,0.4));
 }
 
 @media (max-width: 900px) {
@@ -222,15 +231,16 @@
 }
 
 .fact-table th {
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--grey, #7A7570);
   font-weight: 400;
-  padding: 0 16px 12px;
+  padding: 0 16px 14px;
   text-align: left;
-  border-bottom: 1px solid #E8E2D9;
+  border-bottom: 2px solid #E8E2D9;
   white-space: nowrap;
+  background: #FAF8F4;
 }
 .fact-table th.th-right,
 .fact-table .td-amount { text-align: right; }
@@ -1031,6 +1041,24 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+}
+
+/* ─── "Nouvelle facture" — plus proéminent ─────────────────── */
+#pageHeader .dash-add-btn {
+  padding: 12px 28px;
+  font-size: 11px;
+  letter-spacing: 3px;
+  transition: background 0.25s, transform 0.2s ease, box-shadow 0.25s ease;
+  box-shadow: 0 2px 16px rgba(13,12,11,0.18);
+}
+#pageHeader .dash-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(13,12,11,0.22);
+  background: var(--ink-soft, #2A2826);
+}
+#pageHeader .dash-add-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 8px rgba(13,12,11,0.15);
 }
 
 /* ─── Hover sur les lignes de facture ─── */

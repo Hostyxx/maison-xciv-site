@@ -406,11 +406,24 @@ function buildWAUrl(watch) {
 function setView(view) {
   const grid = document.getElementById('collGrid');
   if (!grid) return;
+
   grid.classList.toggle('view-list', view === 'list');
 
   document.querySelectorAll('.view-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.view === view);
   });
+
+  // Re-déclenche l'animation d'entrée sur les cartes visibles
+  grid.querySelectorAll('.wc-item.in').forEach((el, i) => {
+    el.classList.remove('in');
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        el.style.transitionDelay = `${Math.min(i * 0.04, 0.4)}s`;
+        el.classList.add('in');
+      }, 10);
+    });
+  });
+
   try { localStorage.setItem('xciv_coll_view', view); } catch {}
 }
 

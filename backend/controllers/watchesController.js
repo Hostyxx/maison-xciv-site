@@ -106,6 +106,25 @@ const WatchesController = {
       console.error('[Controller] delete :', err.message);
       res.status(500).json({ success: false, error: 'Erreur serveur.' });
     }
+  },
+
+  /**
+   * PUT /api/watches/reorder
+   * Réorganise les montres selon un ordre donné.
+   * Body attendu : { orderedIds: number[] }
+   */
+  reorder(req, res) {
+    try {
+      const { orderedIds } = req.body;
+      if (!Array.isArray(orderedIds) || orderedIds.some(id => typeof id !== 'number')) {
+        return res.status(400).json({ success: false, error: '"orderedIds" doit être un tableau de nombres.' });
+      }
+      WatchModel.reorder(orderedIds);
+      res.json({ success: true, message: 'Ordre sauvegardé.' });
+    } catch (err) {
+      console.error('[Controller] reorder :', err.message);
+      res.status(500).json({ success: false, error: 'Erreur serveur.' });
+    }
   }
 
 };

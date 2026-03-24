@@ -282,6 +282,14 @@
           <button class="filter-tab"        data-filter="Réservé">Réservées</button>
           <button class="filter-tab"        data-filter="Vendu">Vendues</button>
         </div>
+        <button id="saveOrderBtn" class="btn-primary btn-sm" style="display:none" onclick="saveOrder()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px">
+            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          Enregistrer l'ordre
+        </button>
       </div>
 
       <!-- Table -->
@@ -290,16 +298,17 @@
           <table class="watches-table" id="watchesTable">
             <thead>
               <tr>
+                <th class="td-drag" title="Glisser pour réorganiser">⠿</th>
                 <th style="width:72px">Image</th>
                 <th>Marque / Modèle</th>
                 <th>Année</th>
                 <th>Prix</th>
                 <th>Statut</th>
-                <th style="width:120px; text-align:right">Actions</th>
+                <th style="width:160px; text-align:right">Actions</th>
               </tr>
             </thead>
             <tbody id="watchesTbody">
-              <tr><td colspan="6" class="table-loading">Chargement…</td></tr>
+              <tr><td colspan="7" class="table-loading">Chargement…</td></tr>
             </tbody>
           </table>
         </div>

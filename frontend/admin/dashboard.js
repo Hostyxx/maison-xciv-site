@@ -27,6 +27,8 @@ let allWatches    = [];    // cache complet
 let currentFilter = 'all';
 let searchQuery   = '';
 let deleteTarget  = null;  // id de la montre à supprimer
+let dragSrc       = null;  // ligne en cours de drag
+let orderDirty    = false; // ordre modifié non sauvegardé
 
 // ═══════════════════════════════════════════════════════════
 //  1. INIT — Vérification de session
@@ -89,8 +91,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (row) openWatchFromClient(Number(row.dataset.id));
   });
 
+  // Watches table — délégation pour boutons Déplacer
+  document.getElementById('watchesTbody').addEventListener('click', e => {
+    const upBtn   = e.target.closest('[data-action="move-up"]');
+    const downBtn = e.target.closest('[data-action="move-down"]');
+    if (upBtn)   moveRow(Number(upBtn.dataset.id),   'up');
+    if (downBtn) moveRow(Number(downBtn.dataset.id), 'down');
+  });
+
   await checkSession();
   await loadWatches();
+  initDragSort();
 });
 
 /**
@@ -122,7 +133,7 @@ async function checkSession() {
 
 async function loadWatches() {
   const tbody = document.getElementById('watchesTbody');
-  tbody.innerHTML = `<tr><td colspan="6" class="table-loading">Chargement du catalogue…</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="7" class="table-loading">Chargement du catalogue…</td></tr>`;
 
   try {
     const res  = await fetch(API, { credentials: 'same-origin' });
@@ -131,11 +142,13 @@ async function loadWatches() {
     if (!json.success) throw new Error(json.error);
 
     allWatches = json.data;
+    orderDirty = false;
+    setOrderDirty(false);
     updateStats();
     renderTable();
 
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="6" class="table-loading" style="color:#ef4444">
+    tbody.innerHTML = `<tr><td colspan="7" class="table-loading" style="color:#ef4444">
       Erreur : ${err.message}
     </td></tr>`;
   }
@@ -161,11 +174,12 @@ function renderTable() {
   }
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" class="table-loading">Aucune montre trouvée.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" class="table-loading">Aucune montre trouvée.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = filtered.map(w => buildRow(w)).join('');
+  initDragSort();
 }
 
 function buildRow(watch) {
@@ -180,7 +194,19 @@ function buildRow(watch) {
     : `<div class="table-img-placeholder">⌚</div>`;
 
   return `
-  <tr data-id="${watch.id}">
+  <tr data-id="${watch.id}" draggable="true">
+    <td class="td-drag">
+      <span class="drag-handle" title="Glisser pour réorganiser">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px">
+          <circle cx="9" cy="5" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="15" cy="5" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="9" cy="19" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="15" cy="19" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </span>
+    </td>
     <td>${imgCell}</td>
     <td>
       <div class="table-brand">${escHtml(watch.brand)}</div>
@@ -191,6 +217,16 @@ function buildRow(watch) {
     <td><span class="status-badge ${statusClass}">${escHtml(watch.status)}</span></td>
     <td>
       <div class="table-actions">
+        <button class="tbl-btn" data-action="move-up" data-id="${watch.id}" title="Monter">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px">
+            <polyline points="18 15 12 9 6 15"/>
+          </svg>
+        </button>
+        <button class="tbl-btn" data-action="move-down" data-id="${watch.id}" title="Descendre">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
         <button class="tbl-btn tbl-btn-edit" data-action="edit" data-id="${watch.id}" title="Modifier">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
@@ -497,6 +533,113 @@ function filterList() {
   renderTable();
 }
 window.filterList = filterList;
+
+
+// ═══════════════════════════════════════════════════════════
+//  6b. RÉORGANISATION DRAG & DROP
+// ═══════════════════════════════════════════════════════════
+
+function initDragSort() {
+  const tbody = document.getElementById('watchesTbody');
+  if (!tbody) return;
+
+  tbody.querySelectorAll('tr[data-id]').forEach(row => {
+    row.addEventListener('dragstart', e => {
+      dragSrc = row;
+      e.dataTransfer.effectAllowed = 'move';
+      requestAnimationFrame(() => row.classList.add('row-dragging'));
+    });
+
+    row.addEventListener('dragend', () => {
+      row.classList.remove('row-dragging');
+      tbody.querySelectorAll('tr').forEach(r => r.classList.remove('row-drag-over'));
+      dragSrc = null;
+    });
+
+    row.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (dragSrc && row !== dragSrc) {
+        tbody.querySelectorAll('tr').forEach(r => r.classList.remove('row-drag-over'));
+        row.classList.add('row-drag-over');
+      }
+    });
+
+    row.addEventListener('dragleave', () => {
+      row.classList.remove('row-drag-over');
+    });
+
+    row.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!dragSrc || dragSrc === row) return;
+      row.classList.remove('row-drag-over');
+
+      // Réinsère la ligne source avant la cible
+      const parent = tbody;
+      const allRows = [...parent.querySelectorAll('tr[data-id]')];
+      const srcIdx  = allRows.indexOf(dragSrc);
+      const tgtIdx  = allRows.indexOf(row);
+
+      if (srcIdx < tgtIdx) {
+        parent.insertBefore(dragSrc, row.nextSibling);
+      } else {
+        parent.insertBefore(dragSrc, row);
+      }
+
+      setOrderDirty(true);
+    });
+  });
+}
+window.initDragSort = initDragSort;
+
+function setOrderDirty(dirty) {
+  orderDirty = dirty;
+  const btn = document.getElementById('saveOrderBtn');
+  if (btn) btn.style.display = dirty ? 'inline-flex' : 'none';
+}
+
+async function saveOrder() {
+  const tbody = document.getElementById('watchesTbody');
+  if (!tbody) return;
+
+  const orderedIds = [...tbody.querySelectorAll('tr[data-id]')]
+    .map(r => Number(r.dataset.id));
+
+  try {
+    const res  = await fetch(`${API}/reorder`, {
+      method:      'PUT',
+      credentials: 'same-origin',
+      headers:     { 'Content-Type': 'application/json' },
+      body:        JSON.stringify({ orderedIds })
+    });
+    const json = await res.json();
+    if (!json.success) throw new Error(json.error);
+
+    showToast('Ordre enregistré.', 'success');
+    setOrderDirty(false);
+    await loadWatches();
+  } catch (err) {
+    showToast('Erreur : ' + err.message, 'error');
+  }
+}
+window.saveOrder = saveOrder;
+
+function moveRow(id, direction) {
+  const tbody = document.getElementById('watchesTbody');
+  const rows  = [...tbody.querySelectorAll('tr[data-id]')];
+  const row   = rows.find(r => Number(r.dataset.id) === id);
+  if (!row) return;
+
+  const idx = rows.indexOf(row);
+  if (direction === 'up' && idx > 0) {
+    tbody.insertBefore(row, rows[idx - 1]);
+    setOrderDirty(true);
+  } else if (direction === 'down' && idx < rows.length - 1) {
+    tbody.insertBefore(rows[idx + 1], row);
+    setOrderDirty(true);
+  }
+}
+window.moveRow = moveRow;
 
 
 // ═══════════════════════════════════════════════════════════

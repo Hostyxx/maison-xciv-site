@@ -198,50 +198,58 @@ async function showView(view) {
 }
 
 function updateHeader(view, extra) {
-  const h = document.getElementById('pageHeader');
+  const titleEl    = document.getElementById('pageHeaderTitle');
+  const subtitleEl = document.getElementById('pageHeaderSubtitle');
+  const actionsEl  = document.getElementById('pageHeaderActions');
+  const backEl     = document.getElementById('pageHeaderBack');
+  if (!actionsEl) return;
+
+  // Réinitialise le bouton retour
+  if (backEl) { backEl.style.display = 'none'; backEl.innerHTML = ''; }
+
   if (view === 'list') {
-    h.innerHTML = `
-      <div class="dash-header-left">
-        <h1 class="dash-title">Facturation</h1>
-        <p class="dash-subtitle">Créez, suivez et exportez vos factures de vente</p>
-      </div>
-      <div class="dash-header-right">
-        <button class="btn-secondary btn-sm" data-action="export-csv" title="Exporter toutes les factures filtrées en CSV">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;margin-right:6px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Exporter CSV
-        </button>
-        <button class="dash-add-btn" data-action="create-invoice" title="Créer une nouvelle facture">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Nouvelle facture
-        </button>
-      </div>`;
+    if (titleEl)    titleEl.textContent    = 'Facturation';
+    if (subtitleEl) { subtitleEl.textContent = 'Créez, suivez et exportez vos factures de vente'; subtitleEl.style.display = ''; }
+    actionsEl.innerHTML = `
+      <button class="btn-secondary btn-sm" data-action="export-csv" title="Exporter toutes les factures filtrées en CSV">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exporter CSV
+      </button>
+      <button class="dash-add-btn" data-action="create-invoice" title="Créer une nouvelle facture">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouvelle facture
+      </button>`;
+
   } else if (view === 'form') {
-    const title = editingInvoiceId ? `Modifier la facture` : 'Nouvelle facture';
-    h.innerHTML = `
-      <div class="dash-header-left">
-        <button class="btn-back" data-action="back-to-list">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
-          Retour
-        </button>
-        <h1 class="dash-title" id="formTitle">${title}</h1>
-      </div>
-      <div class="dash-header-right">
-        <button class="btn-secondary" data-action="cancel-form">Annuler</button>
-        <button class="dash-add-btn" data-action="save-form">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-          Enregistrer
-        </button>
-      </div>`;
+    const title = editingInvoiceId ? 'Modifier la facture' : 'Nouvelle facture';
+    const subtitle = editingInvoiceId ? 'Mettez à jour les informations' : 'Complétez les informations de la vente';
+    if (titleEl)    titleEl.textContent    = title;
+    if (subtitleEl) { subtitleEl.textContent = subtitle; subtitleEl.style.display = ''; }
+    if (backEl) {
+      backEl.style.display = '';
+      backEl.innerHTML = `<button class="btn-back" data-action="back-to-list">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
+        Retour
+      </button>`;
+    }
+    actionsEl.innerHTML = `
+      <button class="btn-secondary" data-action="cancel-form">Annuler</button>
+      <button class="dash-add-btn" data-action="save-form">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+        Enregistrer
+      </button>`;
+
   } else if (view === 'clients') {
-    h.innerHTML = `
-      <div class="dash-header-left">
-        <button class="btn-back" data-action="back-to-list">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
-          Factures
-        </button>
-        <h1 class="dash-title">Clients</h1>
-        <p class="dash-subtitle">Synthèse financière par client</p>
-      </div>`;
+    if (titleEl)    titleEl.textContent    = 'Clients';
+    if (subtitleEl) { subtitleEl.textContent = 'Synthèse financière par client'; subtitleEl.style.display = ''; }
+    if (backEl) {
+      backEl.style.display = '';
+      backEl.innerHTML = `<button class="btn-back" data-action="back-to-list">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
+        Factures
+      </button>`;
+    }
+    actionsEl.innerHTML = '';
   }
 }
 

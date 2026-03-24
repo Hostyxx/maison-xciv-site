@@ -631,7 +631,44 @@ input, textarea, select, button { font-family: inherit; }
   padding: 8px 14px !important;
   font-size: 9px !important;
   letter-spacing: 1.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
+
+/* ─── Drag & Drop ──────────────────────────────────────────── */
+.td-drag {
+  width: 36px;
+  text-align: center;
+  color: var(--grey-lt);
+  font-size: 13px;
+  user-select: none;
+}
+
+.drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  color: var(--grey-lt);
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+.drag-handle:hover { color: var(--ink); }
+.drag-handle:active { cursor: grabbing; }
+
+.row-dragging {
+  opacity: 0.45;
+  background: rgba(196,170,140,0.06) !important;
+}
+.row-dragging td { background: transparent !important; }
+
+.row-drag-over {
+  border-top: 2px solid var(--beige) !important;
+}
+.row-drag-over td:first-child { border-top-left-radius: 4px; }
+.row-drag-over td:last-child  { border-top-right-radius: 4px; }
 
 .btn-danger {
   background: #ef4444;

@@ -23,8 +23,9 @@ router.get('/',    controller.getAll);
 router.get('/:id', controller.getOne);
 
 // ── Routes protégées (token JWT requis) ──────────────────────
-router.post('/',      requireAuth, controller.create);
-router.put('/:id',    requireAuth, controller.update);
-router.delete('/:id', requireAuth, controller.delete);
+router.post('/',         requireAuth, controller.create);
+router.put('/reorder',   requireAuth, controller.reorder); // Doit être avant /:id
+router.put('/:id',       requireAuth, controller.update);
+router.delete('/:id',    requireAuth, controller.delete);
 
 module.exports = router;

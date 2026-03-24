@@ -92,8 +92,17 @@
   <!-- ─── Contenu principal ─── -->
   <main class="dash-main">
 
-    <!-- Header dynamique -->
-    <header class="dash-header" id="pageHeader"></header>
+    <!-- Header : titre statique + actions dynamiques -->
+    <header class="dash-header" id="pageHeader">
+      <div class="dash-header-left">
+        <div id="pageHeaderBack" style="display:none"></div>
+        <h1 class="dash-title" id="pageHeaderTitle">Facturation</h1>
+        <p class="dash-subtitle" id="pageHeaderSubtitle">Créez, suivez et exportez vos factures de vente</p>
+      </div>
+      <div class="dash-header-right" id="pageHeaderActions">
+        <!-- Actions injectées par JS selon la vue courante -->
+      </div>
+    </header>
 
     <!-- Toast notifications -->
     <div class="dash-toast-wrap" id="toastWrap"></div>

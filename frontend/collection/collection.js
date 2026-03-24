@@ -75,7 +75,11 @@ function applyFilters() {
     case 'price-desc': result.sort((a, b) => parsePrice(b.price) - parsePrice(a.price)); break;
     case 'year-asc':   result.sort((a, b) => (a.year  || 0) - (b.year  || 0)); break;
     case 'year-desc':  result.sort((a, b) => (b.year  || 0) - (a.year  || 0)); break;
-    default:           result.sort((a, b) => b.id - a.id); // plus récent en premier
+    default:           result.sort((a, b) => {
+      const aO = a.displayOrder ?? Infinity;
+      const bO = b.displayOrder ?? Infinity;
+      return aO !== bO ? aO - bO : b.id - a.id;
+    }); // ordre manuel (displayOrder), puis plus récent
   }
 
   renderGrid(result);

@@ -16,9 +16,12 @@ const WatchModel = {
    */
   getAll() {
     const { watches } = readDB();
-    return [...watches].sort((a, b) =>
-      new Date(b.created_at) - new Date(a.created_at)
-    );
+    return [...watches].sort((a, b) => {
+      const aO = a.displayOrder ?? Infinity;
+      const bO = b.displayOrder ?? Infinity;
+      if (aO !== bO) return aO - bO;
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
   },
 
   /**
@@ -40,11 +43,14 @@ const WatchModel = {
     const db    = readDB();
     const newId = db.nextId;
 
+    const maxOrder = db.watches.reduce((m, w) => Math.max(m, w.displayOrder ?? -1), -1);
+
     const watch = {
-      id:         newId,
+      id:           newId,
+      displayOrder: maxOrder + 1,
       ...sanitize(data),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      created_at:   new Date().toISOString(),
+      updated_at:   new Date().toISOString()
     };
 
     db.watches.push(watch);
@@ -90,6 +96,20 @@ const WatchModel = {
 
     if (db.watches.length === initialLen) return false;
 
+    writeDB(db);
+    return true;
+  },
+
+  /**
+   * Réorganise les montres en mettant à jour leur displayOrder.
+   * @param {number[]} orderedIds  IDs dans le nouvel ordre souhaité
+   */
+  reorder(orderedIds) {
+    const db = readDB();
+    orderedIds.forEach((id, index) => {
+      const watch = db.watches.find(w => w.id === id);
+      if (watch) watch.displayOrder = index;
+    });
     writeDB(db);
     return true;
   }

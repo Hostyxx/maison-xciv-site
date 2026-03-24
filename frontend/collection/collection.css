@@ -875,6 +875,22 @@ footer {
   .filter-tab { font-size: 7.5px; padding: 6px 10px; flex-shrink: 0; }
 }
 
+/* 2 colonnes (480-720px) : le bouton CTA peut être coupé si nowrap + overflow hidden */
+@media (min-width: 480px) and (max-width: 720px) {
+  .wc-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .wc-btn {
+    width: 100%; justify-content: center;
+    background: var(--c-ink);
+    color: var(--c-bone);
+    border-color: var(--c-ink);
+  }
+  .wc-btn::before { display: none; }
+}
+
 @media (max-width: 374px) {
   .coll-main    { padding: 32px 12px 60px; }
   .coll-filters { padding: 0 12px; }

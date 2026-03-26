@@ -924,10 +924,10 @@ body.menu-open .nav-auth {
 
 .proj-bg {
   position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: #0d0b09;
 }
-.proj:nth-child(1) .proj-bg { background: linear-gradient(135deg, #0d0b09, #1f1a13); }
-.proj:nth-child(2) .proj-bg { background: linear-gradient(135deg, #0b0d10, #141822); }
-.proj:nth-child(3) .proj-bg { background: linear-gradient(135deg, #0d100b, #141b12); }
 
 .proj-symbol {
   font-family: var(--f-serif);

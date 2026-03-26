@@ -592,10 +592,18 @@ function initDragSort() {
 }
 window.initDragSort = initDragSort;
 
+// Délai avant auto-sauvegarde (ms)
+let _orderSaveTimer = null;
+
 function setOrderDirty(dirty) {
   orderDirty = dirty;
+  // Le bouton "Enregistrer l'ordre" n'est plus affiché : auto-sauvegarde
   const btn = document.getElementById('saveOrderBtn');
-  if (btn) btn.style.display = dirty ? 'inline-flex' : 'none';
+  if (btn) btn.style.display = 'none';
+  if (dirty) {
+    clearTimeout(_orderSaveTimer);
+    _orderSaveTimer = setTimeout(saveOrder, 500);
+  }
 }
 
 async function saveOrder() {
@@ -615,11 +623,10 @@ async function saveOrder() {
     const json = await res.json();
     if (!json.success) throw new Error(json.error);
 
-    showToast('Ordre enregistré.', 'success');
-    setOrderDirty(false);
-    await loadWatches();
+    orderDirty = false;
+    showToast('Ordre mis à jour.', 'success');
   } catch (err) {
-    showToast('Erreur : ' + err.message, 'error');
+    showToast('Erreur sauvegarde : ' + err.message, 'error');
   }
 }
 window.saveOrder = saveOrder;

@@ -3,6 +3,7 @@
   "watches": [
     {
       "id": 1,
+      "displayOrder": 0,
       "name": "Daytona",
       "brand": "Rolex",
       "price": "Sur demande",
@@ -17,6 +18,7 @@
     },
     {
       "id": 2,
+      "displayOrder": 1,
       "name": "Datejust 36",
       "brand": "Rolex",
       "price": "Sur demande",
@@ -31,6 +33,7 @@
     },
     {
       "id": 3,
+      "displayOrder": 2,
       "name": "GMT-Master II Pepsi",
       "brand": "Rolex",
       "price": "Sur demande",
@@ -45,6 +48,7 @@
     },
     {
       "id": 4,
+      "displayOrder": 3,
       "name": "Submariner Date",
       "brand": "Rolex",
       "price": "Sur demande",
@@ -59,6 +63,7 @@
     },
     {
       "id": 5,
+      "displayOrder": 4,
       "name": "Royal Oak 37mm",
       "brand": "Audemars Piguet",
       "price": "Sur demande",
@@ -73,6 +78,7 @@
     },
     {
       "id": 6,
+      "displayOrder": 5,
       "name": "Nautilus 5711",
       "brand": "Patek Philippe",
       "price": "Sur demande",

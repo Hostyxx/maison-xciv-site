@@ -920,14 +920,17 @@ body.menu-open .nav-auth {
   position: relative;
 }
 .proj:nth-child(1) .proj-inner { min-height: 760px; }
-.proj:hover .proj-inner { transform: scale(1.03); }
+.proj:hover .proj-inner { transform: scale(1.0); }
 
 .proj-bg {
   position: absolute; inset: 0;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   background-color: #0d0b09;
+  transition: transform 0.9s var(--ease-luxury);
 }
+.proj:hover .proj-bg { transform: scale(1.03); }
 
 .proj-symbol {
   font-family: var(--f-serif);
@@ -1496,10 +1499,9 @@ footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center top;
   display: block;
   transition: transform 0.9s var(--ease-luxury);
-  /* Prevent layout shift */
   will-change: transform;
 }
 

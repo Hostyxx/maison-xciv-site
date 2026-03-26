@@ -272,6 +272,7 @@ function buildCard(watch, index) {
     <div class="wc-img-wrap">
       ${imgContent}
       <span class="wc-badge ${statusClass}" aria-label="Statut: ${safeStatus}">${safeStatus}</span>
+      ${watch.promo ? `<span class="wc-promo-badge">${escapeHtml(watch.promo)}</span>` : ''}
       <!-- Bouton favori : visible pour tous, action réservée aux connectés -->
       <button class="wc-fav-btn ${isFav ? 'is-fav' : ''}"
               data-watch-id="${safeId}"

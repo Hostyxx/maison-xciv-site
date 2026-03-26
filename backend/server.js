@@ -159,7 +159,7 @@ app.get('/collection', (req, res) => {
         ? `<img src="${w.image}" alt="${w.brand} ${w.name} — Maison XCIV" class="wc-img" loading="lazy" width="400" height="300">`
         : '<div class="wc-img-placeholder"></div>';
       return `<article class="coll-card" data-id="${w.id}" data-brand="${brandKey}" data-status="${w.status}" itemscope itemtype="https://schema.org/Product">
-  <div class="wc-img-wrap">${imgHtml}</div>
+  <div class="wc-img-wrap">${imgHtml}${w.promo ? `<span class="wc-promo-badge">${w.promo}</span>` : ''}</div>
   <div class="wc-body">
     <div class="wc-brand" itemprop="brand" itemscope itemtype="https://schema.org/Brand"><span itemprop="name">${w.brand.toUpperCase()}</span></div>
     <h2 class="wc-name" itemprop="name">${w.brand} ${w.name}</h2>

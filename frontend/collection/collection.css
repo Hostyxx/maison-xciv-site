@@ -562,6 +562,25 @@ input, select, button { font-family: inherit; }
   border: 1px solid rgba(254,253,251,0.08);
 }
 
+/* Badge promo */
+.wc-promo-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 3;
+  font-family: var(--f-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  background: #b8922a;
+  color: #faf8f4;
+  border: 1px solid rgba(255,220,120,0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
 /* Bouton favori */
 .wc-fav-btn {
   position: absolute; top: 10px; right: 10px; z-index: 3;

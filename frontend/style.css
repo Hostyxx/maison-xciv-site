@@ -1557,6 +1557,25 @@ footer {
   border: 1px solid rgba(255,255,255,0.08);
 }
 
+/* ── BADGE PROMO ── */
+.wc-promo-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 3;
+  font-family: var(--f-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  background: #b8922a;
+  color: #faf8f4;
+  border: 1px solid rgba(255,220,120,0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
 /* ── CARD BODY ── */
 .wc-body {
   padding: clamp(20px, 4vw, 32px) clamp(20px, 4vw, 28px) clamp(24px, 4vw, 36px);

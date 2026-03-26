@@ -232,6 +232,7 @@ function buildCard(watch, index) {
       ${img}
       <div class="wc-img-overlay" aria-hidden="true"></div>
       <span class="wc-badge ${statusClass}">${escHtml(watch.status)}</span>
+      ${watch.promo ? `<span class="wc-promo-badge">${escHtml(watch.promo)}</span>` : ''}
       <button class="wc-fav-btn ${isFav ? 'is-fav' : ''}"
               data-watch-id="${watch.id}"
               aria-label="${isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'}">

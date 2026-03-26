@@ -288,6 +288,7 @@ function editWatch(id) {
   document.getElementById('fPrice').value       = watch.price;
   document.getElementById('fYear').value        = watch.year || '';
   document.getElementById('fStatus').value      = watch.status;
+  document.getElementById('fPromo').value       = watch.promo || '';
   document.getElementById('fDescription').value = watch.description;
   document.getElementById('fImage').value       = watch.image || '';
   document.getElementById('fWhatsapp').value    = watch.whatsapp || '';
@@ -330,6 +331,7 @@ async function submitWatch(event) {
     price:       document.getElementById('fPrice').value.trim()       || 'Sur demande',
     year:        document.getElementById('fYear').value               || null,
     status:      document.getElementById('fStatus').value,
+    promo:       document.getElementById('fPromo').value.trim()       || null,
     description: document.getElementById('fDescription').value.trim(),
     image:       document.getElementById('fImage').value.trim(),
     whatsapp:    document.getElementById('fWhatsapp').value.trim()    || '33601918798',
@@ -387,6 +389,7 @@ function resetForm() {
   document.getElementById('fPrice').value       = '';
   document.getElementById('fYear').value        = '';
   document.getElementById('fStatus').value      = 'Disponible';
+  document.getElementById('fPromo').value       = '';
   document.getElementById('fDescription').value = '';
   document.getElementById('fImage').value       = '';
   document.getElementById('fWhatsapp').value    = '';

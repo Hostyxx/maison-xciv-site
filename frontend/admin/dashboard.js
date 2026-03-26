@@ -603,6 +603,9 @@ function setOrderDirty(dirty) {
   if (dirty) {
     clearTimeout(_orderSaveTimer);
     _orderSaveTimer = setTimeout(saveOrder, 500);
+  } else {
+    clearTimeout(_orderSaveTimer);
+    _orderSaveTimer = null;
   }
 }
 
@@ -610,13 +613,19 @@ async function saveOrder() {
   const tbody = document.getElementById('watchesTbody');
   if (!tbody) return;
 
-  const orderedIds = [...tbody.querySelectorAll('tr[data-id]')]
+  // IDs visibles dans le nouvel ordre DOM
+  const visibleIds = [...tbody.querySelectorAll('tr[data-id]')]
     .map(r => Number(r.dataset.id));
+  if (visibleIds.length === 0) return;
+
+  // Montres filtrées/cachées : conservées à la fin dans leur ordre actuel
+  const hiddenIds  = allWatches.map(w => w.id).filter(id => !visibleIds.includes(id));
+  const orderedIds = [...visibleIds, ...hiddenIds];
 
   try {
     const res  = await fetch(`${API}/reorder`, {
       method:      'PUT',
-      credentials: 'same-origin',
+      credentials: 'include',
       headers:     { 'Content-Type': 'application/json' },
       body:        JSON.stringify({ orderedIds })
     });

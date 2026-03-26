@@ -4,6 +4,9 @@
  * Point d'entrée du serveur Express.
  */
 
+// Charge le .env avant tout autre require (local dev + VPS sans vars système)
+require('dotenv').config();
+
 const express      = require('express');
 const cors         = require('cors');
 const cookieParser = require('cookie-parser');

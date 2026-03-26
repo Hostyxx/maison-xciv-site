@@ -321,8 +321,13 @@ function renderWatches(filter) {
     ? watchesCache
     : watchesCache.filter(w => w.status === filter);
 
-  // Tri par ID décroissant → les montres les plus récentes en premier
-  filtered = [...filtered].sort((a, b) => b.id - a.id);
+  // Tri par displayOrder (ordre défini dans l'admin)
+  filtered = [...filtered].sort((a, b) => {
+    const aO = a.displayOrder ?? Infinity;
+    const bO = b.displayOrder ?? Infinity;
+    if (aO !== bO) return aO - bO;
+    return new Date(b.created_at) - new Date(a.created_at);
+  });
 
   // Page d'accueil : affichage limité à 6 montres
   filtered = filtered.slice(0, 6);

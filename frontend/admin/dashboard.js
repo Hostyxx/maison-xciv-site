@@ -190,7 +190,7 @@ function buildRow(watch) {
   }[watch.status] || 'status-disponible';
 
   const imgCell = watch.image
-    ? `<img src="${watch.image}" alt="${watch.brand}" class="table-img">`
+    ? `<img src="${escHtml(watch.image)}" alt="${escHtml(watch.brand)}" class="table-img">`
     : `<div class="table-img-placeholder">⌚</div>`;
 
   return `

@@ -37,13 +37,17 @@ const registerLimiter = rateLimit({
 });
 
 // ── Limiteur API général — protection brute force globale ──────
-// 200 requêtes max par IP toutes les 15 minutes
+// 100 requêtes max par IP toutes les 15 minutes
 const apiLimiter = rateLimit({
   windowMs:        15 * 60 * 1000,
-  max:             200,
+  max:             100,
   message:         { success: false, error: 'Trop de requêtes. Réessayez dans quelques minutes.' },
   standardHeaders: true,
   legacyHeaders:   false,
+  handler(req, res, next, options) {
+    console.warn(`[Security] Rate limit API atteint — IP: ${req.ip} — ${req.method} ${req.path}`);
+    res.status(429).json(options.message);
+  }
 });
 
 // ── Limiteur Upload ───────────────────────────────────────────

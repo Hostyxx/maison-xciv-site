@@ -129,10 +129,10 @@ function sanitize(data) {
   const description = String(data.description || '').trim().slice(0, 2000);
   const message     = String(data.message     || '').trim().slice(0, 500);
 
-  // Validation URL image : doit être une URL relative /assets/... ou vide
+  // Validation URL image : uniquement les chemins /assets/ internes
   let image = String(data.image || '').trim().slice(0, 500);
-  if (image && !image.startsWith('/assets/') && !image.startsWith('http')) {
-    image = '';  // Rejette les valeurs non attendues
+  if (image && !image.startsWith('/assets/')) {
+    image = '';  // Rejette toute URL externe ou protocole non attendu
   }
 
   // WhatsApp : chiffres uniquement (format E.164 sans le +)

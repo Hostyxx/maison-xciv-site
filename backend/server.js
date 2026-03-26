@@ -71,6 +71,8 @@ app.use(helmet({
   noSniff: true,
   // Active le filtre XSS du navigateur
   xssFilter: true,
+  // Ne pas envoyer le referrer cross-origin
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
 }));
 
 // ─── CORS ─────────────────────────────────────────────────────
@@ -87,8 +89,8 @@ app.use(cors({
 }));
 
 // ─── Body parsers ─────────────────────────────────────────────
-app.use(express.json({ limit: '1mb' }));      // réduit de 10mb → 1mb
-app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use(express.json({ limit: '1mb', type: 'application/json' }));
+app.use(express.urlencoded({ extended: false, limit: '1mb' }));
 app.use(cookieParser());
 
 // ─── Rate limiting global sur l'API ──────────────────────────
@@ -243,9 +245,15 @@ const annexePages = [
   { url: '/livraison-retours',         file: 'livraison-retours.html' },
   { url: '/authenticite-garantie',     file: 'authenticite-garantie.html' },
 ];
+const PAGES_DIR = path.resolve(__dirname, '../frontend/pages');
 annexePages.forEach(({ url, file }) => {
-  app.get(url, (req, res) =>
-    res.sendFile(path.join(__dirname, '../frontend/pages', file)));
+  app.get(url, (req, res) => {
+    const filePath = path.resolve(PAGES_DIR, file);
+    if (!filePath.startsWith(PAGES_DIR + path.sep)) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    res.sendFile(filePath);
+  });
 });
 
 // ─── Fallback SPA ────────────────────────────────────────────

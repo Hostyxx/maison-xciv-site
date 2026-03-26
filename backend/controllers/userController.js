@@ -55,7 +55,7 @@ const UserController = {
       const token = generateToken(user);
       setUserCookie(res, token);
 
-      console.log(`[User] Inscription : ${user.email} (id: ${user.id})`);
+      console.log(`[User] Inscription : user_${user.id}`);
 
       res.status(201).json({ success: true, user });
 
@@ -88,7 +88,7 @@ const UserController = {
       const token = generateToken(user);
       setUserCookie(res, token);
 
-      console.log(`[User] Connexion : ${user.email}`);
+      console.log(`[User] Connexion : user_${user.id}`);
 
       res.json({ success: true, user });
 

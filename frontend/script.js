@@ -167,6 +167,20 @@ document.querySelectorAll('.service-row[role="link"]').forEach(row => {
   });
 });
 
+// ── Process timeline: draw line on scroll ──
+const processTimeline = document.getElementById('processTimeline');
+if (processTimeline) {
+  const ptObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        processTimeline.classList.add('pt-animated');
+        ptObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  ptObserver.observe(processTimeline);
+}
+
 // ═══════════════════════════════════════════
 //  5. WATCHES HERO SLIDER
 // ═══════════════════════════════════════════

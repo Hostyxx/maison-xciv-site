@@ -336,51 +336,80 @@ c160 0 200 9 252 56 45 41 63 88 63 164 0 96 -45 165 -128 195 -37 13 -273 26
       <h2 class="h2">L'excellence<br>au service<br>du <em>digital</em></h2>
     </div>
     <div class="sr sr-d2">
-      <p class="services-intro-right">Chaque projet est traité avec la rigueur d'une maison de couture — du brief initial à la mise en ligne, nous ne compromis jamais sur la qualité.</p>
+      <p class="services-intro-right">Chaque projet est traité avec la rigueur d'une maison de couture — du brief initial à la mise en ligne, nous ne transigeons jamais sur la qualité.</p>
+    </div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="services-stats sr">
+    <div class="stat-item">
+      <div class="stat-figure"><span class="stat-num" data-target="80">0</span><span class="stat-plus">+</span></div>
+      <span class="stat-label">Projets livrés</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item">
+      <div class="stat-figure"><span class="stat-num" data-target="5">0</span><span class="stat-plus"> ans</span></div>
+      <span class="stat-label">d'expertise</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat-item">
+      <div class="stat-figure"><span class="stat-num" data-target="100">0</span><span class="stat-plus">%</span></div>
+      <span class="stat-label">Clients satisfaits</span>
     </div>
   </div>
 
   <div class="services-list">
-    <div class="service-row sr sr-d1">
+    <div class="service-row sr sr-d1" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" role="link" tabindex="0">
       <span class="s-num">I</span>
-      <div>
-        <div class="s-name">Création de sites web premium</div>
+      <div class="s-content">
+        <div class="s-name">Création de sites web premium <span class="s-badge">Le + demandé</span></div>
         <div class="s-desc">Sites vitrines, e-commerce et plateformes sur mesure conçus avec une exigence absolue de performance et d'esthétique.</div>
+        <div class="s-tags"><span>React</span><span>Node.js</span><span>UI Premium</span><span>Performance</span></div>
       </div>
       <span class="s-arrow">→</span>
     </div>
-    <div class="service-row sr sr-d2">
+    <div class="service-row sr sr-d2" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" role="link" tabindex="0">
       <span class="s-num">II</span>
-      <div>
+      <div class="s-content">
         <div class="s-name">Design UI / UX</div>
         <div class="s-desc">Interfaces intuitives et esthétiques qui subliment l'expérience utilisateur tout en renforçant l'identité de marque.</div>
+        <div class="s-tags"><span>Figma</span><span>Prototypage</span><span>Tests utilisateurs</span></div>
       </div>
       <span class="s-arrow">→</span>
     </div>
-    <div class="service-row sr sr-d3">
+    <div class="service-row sr sr-d3" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" role="link" tabindex="0">
       <span class="s-num">III</span>
-      <div>
+      <div class="s-content">
         <div class="s-name">Branding digital</div>
         <div class="s-desc">Identités visuelles singulières et cohérentes qui imposent une présence incontestable sur tous les supports.</div>
+        <div class="s-tags"><span>Identité visuelle</span><span>Charte graphique</span><span>Motion</span></div>
       </div>
       <span class="s-arrow">→</span>
     </div>
-    <div class="service-row sr sr-d4">
+    <div class="service-row sr sr-d4" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" role="link" tabindex="0">
       <span class="s-num">IV</span>
-      <div>
+      <div class="s-content">
         <div class="s-name">Stratégie e-commerce</div>
         <div class="s-desc">Architecture commerciale pensée pour convertir et fidéliser une clientèle haut de gamme sur le long terme.</div>
+        <div class="s-tags"><span>Shopify</span><span>Conversion</span><span>Analytics</span><span>SEO</span></div>
       </div>
       <span class="s-arrow">→</span>
     </div>
-    <div class="service-row sr sr-d1">
+    <div class="service-row sr sr-d1" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" role="link" tabindex="0">
       <span class="s-num">V</span>
-      <div>
+      <div class="s-content">
         <div class="s-name">Optimisation de conversion</div>
         <div class="s-desc">Analyse data-driven et itérations continues pour transformer vos visiteurs en clients fidèles et ambassadeurs.</div>
+        <div class="s-tags"><span>A/B Testing</span><span>Heatmaps</span><span>Funnel</span></div>
       </div>
       <span class="s-arrow">→</span>
     </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="services-cta sr">
+    <p class="services-cta-text">Votre prochain projet<br>mérite <em>l'excellence.</em></p>
+    <a href="#contact" class="services-cta-btn" onclick="event.stopPropagation()">Démarrer un projet →</a>
   </div>
 </section>
 

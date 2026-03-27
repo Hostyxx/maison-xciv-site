@@ -134,6 +134,38 @@ const srObserver = new IntersectionObserver(entries => {
 document.querySelectorAll('.sr, .sr-d1, .sr-d2, .sr-d3, .sr-d4, .sr-fade, .sr-left, .sr-right')
   .forEach(el => srObserver.observe(el));
 
+// ── Stats counter animation ──
+function animateCounter(el) {
+  const target = +el.dataset.target;
+  const duration = 1600;
+  const start = performance.now();
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  (function tick(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    el.textContent = Math.round(ease(progress) * target);
+    if (progress < 1) requestAnimationFrame(tick);
+    else el.textContent = target;
+  })(start);
+}
+const statsObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.querySelectorAll('.stat-num').forEach(animateCounter);
+    statsObserver.unobserve(e.target);
+  });
+}, { threshold: 0.3 });
+const statsBar = document.querySelector('.services-stats');
+if (statsBar) statsObserver.observe(statsBar);
+
+// ── Service row keyboard nav ──
+document.querySelectorAll('.service-row[role="link"]').forEach(row => {
+  row.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
 
 // ═══════════════════════════════════════════
 //  5. WATCHES HERO SLIDER

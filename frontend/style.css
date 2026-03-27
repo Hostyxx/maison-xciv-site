@@ -592,6 +592,100 @@ body.menu-open .nav-auth {
 }
 .service-row:hover .s-desc { max-height: 60px; margin-top: 10px; }
 
+/* ── Services Stats Bar ── */
+.services-stats {
+  display: flex; align-items: center;
+  margin-bottom: 80px;
+  padding: 52px 0;
+  border-top: 1px solid rgba(196,170,140,0.18);
+  border-bottom: 1px solid rgba(196,170,140,0.18);
+}
+.stat-item { flex: 1; text-align: center; }
+.stat-figure {
+  display: flex; align-items: baseline;
+  justify-content: center; gap: 2px;
+  margin-bottom: 14px;
+}
+.stat-num {
+  font-family: var(--f-serif);
+  font-size: clamp(48px, 6vw, 82px);
+  font-weight: 400; font-style: italic;
+  color: var(--c-ink); line-height: 1;
+}
+.stat-plus {
+  font-family: var(--f-serif);
+  font-size: clamp(22px, 3vw, 36px);
+  font-style: italic; color: var(--c-beige);
+}
+.stat-label {
+  display: block; font-size: 9px;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--c-grey); font-weight: 300;
+}
+.stat-sep {
+  width: 1px; height: 64px;
+  background: rgba(196,170,140,0.2);
+  flex-shrink: 0;
+}
+
+/* ── Service badge ── */
+.s-badge {
+  display: inline-flex; align-items: center;
+  font-family: var(--f-sans); font-size: 8px;
+  letter-spacing: 3.5px; text-transform: uppercase;
+  color: var(--c-beige); border: 1px solid rgba(196,170,140,0.45);
+  padding: 4px 12px; margin-left: 14px;
+  vertical-align: middle; font-weight: 300;
+  transition: background 0.3s, color 0.3s;
+}
+.service-row:hover .s-badge {
+  background: var(--c-beige); color: var(--c-black);
+}
+
+/* ── Service tags (techno keywords) ── */
+.s-tags {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-top: 14px;
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.5s var(--ease-out), margin 0.4s;
+}
+.service-row:hover .s-tags { max-height: 40px; }
+.s-tags span {
+  font-size: 8px; letter-spacing: 2.5px;
+  text-transform: uppercase; font-weight: 300;
+  color: var(--c-beige-mid);
+  border: 1px solid rgba(196,170,140,0.25);
+  padding: 4px 12px;
+}
+
+/* ── Services CTA ── */
+.services-cta {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 48px;
+  margin-top: 80px;
+  padding: 56px 72px;
+  background: var(--c-ink);
+}
+.services-cta-text {
+  font-family: var(--f-serif);
+  font-size: clamp(26px, 3.2vw, 42px);
+  font-weight: 400; font-style: italic;
+  color: var(--c-bone); line-height: 1.15;
+}
+.services-cta-text em { color: var(--c-beige); font-style: italic; }
+.services-cta-btn {
+  display: inline-flex; align-items: center; gap: 16px;
+  font-family: var(--f-sans); font-size: 10px;
+  letter-spacing: 4.5px; text-transform: uppercase;
+  color: var(--c-black); background: var(--c-beige);
+  padding: 20px 44px; text-decoration: none;
+  white-space: nowrap; flex-shrink: 0;
+  transition: background 0.35s, letter-spacing 0.4s var(--ease-out), color 0.3s;
+}
+.services-cta-btn:hover {
+  background: var(--c-bone); letter-spacing: 7px;
+}
+
 /* ═══════════════════════════════════════════
    WATCHES — Dark immersive
 ═══════════════════════════════════════════ */
@@ -2680,6 +2774,13 @@ a, button, [onclick], label, select {
 @media (max-width: 768px) {
   #services        { padding: 80px 20px; }
   .services-intro  { margin-bottom: 56px; }
+  .services-stats  { margin-bottom: 56px; padding: 36px 0; }
+  .stat-num        { font-size: clamp(40px, 10vw, 60px); }
+  .stat-label      { font-size: 8px; letter-spacing: 3px; }
+  .services-cta    { flex-direction: column; padding: 40px 24px; gap: 28px; text-align: center; }
+  .services-cta-text { font-size: clamp(22px, 6vw, 32px); }
+  .s-badge         { display: none; }
+  .s-tags          { max-height: none; margin-top: 10px; }
   .service-row {
     grid-template-columns: 36px 1fr;
     gap: 16px;

@@ -1569,7 +1569,7 @@ footer {
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: clamp(48px, 7vw, 96px);
+  margin-bottom: clamp(24px, 3vw, 40px);
 }
 .nouv-header-left {}
 .nouv-header-right {
@@ -1599,12 +1599,37 @@ footer {
   background: transparent;
   font-family: var(--f-sans);
   font-weight: 400;
+  flex-shrink: 0;
 }
 .nouv-filter-btn:hover,
 .nouv-filter-btn.active {
   border-color: var(--c-beige);
   color: var(--c-ink);
   background: var(--c-beige-pale);
+}
+
+/* ── Barre de filtres dédiée ── */
+.nouv-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 clamp(16px, 5vw, 56px);
+  margin-bottom: clamp(40px, 6vw, 72px);
+  flex-wrap: wrap;
+}
+/* Toujours visibles dans la filter-bar, quelle que soit la résolution */
+.nouv-filter-bar .nouv-filter-btn { display: flex !important; }
+
+@media (max-width: 600px) {
+  .nouv-filter-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 16px;
+    gap: 6px;
+  }
+  .nouv-filter-bar::-webkit-scrollbar { display: none; }
 }
 
 /* ── GRID ── */
@@ -1685,9 +1710,10 @@ footer {
   gap: 4px;
 }
 
-/* Description et séparateur masqués sur mobile liste */
+/* Description, séparateur et year-tag masqués sur mobile liste */
 .nouv-grid.view-1 .wc-desc,
-.nouv-grid.view-1 .wc-sep { display: none; }
+.nouv-grid.view-1 .wc-sep,
+.nouv-grid.view-1 .wc-year-tag { display: none; }
 
 /* Bouton toujours visible — c'est le seul CTA de conversion */
 .nouv-grid.view-1 .wc-btn {
@@ -1731,7 +1757,8 @@ footer {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .nouv-grid.view-1 .wc-sep  { display: block; }
+  .nouv-grid.view-1 .wc-sep      { display: block; }
+  .nouv-grid.view-1 .wc-year-tag { display: flex; }
   .nouv-grid.view-1 .wc-btn  { display: inline-flex; }
   .nouv-grid.view-1 .wc-name { font-size: clamp(18px, 2.5vw, 24px); margin-bottom: 8px; }
   .nouv-grid.view-1 .wc-footer { margin-top: auto; }
@@ -1856,6 +1883,75 @@ footer {
   -webkit-backdrop-filter: blur(6px);
 }
 
+/* ── OVERLAY INFO (hover desktop) ── */
+/* Glisse depuis le bas de l'image au survol */
+.wc-info-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    to top,
+    rgba(13,12,11,0.94) 0%,
+    rgba(13,12,11,0.72) 55%,
+    transparent 100%
+  );
+  padding: clamp(20px, 3vw, 28px);
+  display: flex;
+  align-items: flex-end;
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 3;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .watch-card-item:hover .wc-info-overlay {
+    transform: translateY(0);
+  }
+}
+
+/* Masqué en vue liste (image trop étroite) */
+.nouv-grid.view-1 .wc-info-overlay { display: none; }
+
+.wc-overlay-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.wc-overlay-year {
+  font-family: var(--f-sans);
+  font-size: 7px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--c-beige);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.wc-overlay-year::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  background: var(--c-beige);
+  opacity: 0.6;
+}
+
+.wc-overlay-desc {
+  font-family: var(--f-sans);
+  font-size: clamp(11px, 1.4vw, 12px);
+  line-height: 1.75;
+  font-weight: 300;
+  color: rgba(254,253,251,0.78);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 /* ── CARD BODY ── */
 .wc-body {
   padding: clamp(20px, 4vw, 32px) clamp(20px, 4vw, 28px) clamp(24px, 4vw, 36px);
@@ -1911,6 +2007,82 @@ footer {
   margin-bottom: clamp(20px, 4vw, 28px);
   /* Multi-line OK, no clip */
   overflow-wrap: break-word;
+}
+
+/* ── ANNÉE TAG ── */
+.wc-year-tag {
+  font-family: var(--f-sans);
+  font-size: 7px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--c-beige);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.85;
+}
+.wc-year-tag::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 1px;
+  background: var(--c-beige);
+  opacity: 0.5;
+}
+
+/* ── BOUTON EXPAND (mobile) ── */
+.wc-more-btn {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(196,170,140,0.15);
+  padding: 10px 0 0;
+  margin-top: 4px;
+  cursor: none;
+  font-family: var(--f-sans);
+  font-size: 7px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--c-beige);
+  transition: color 0.25s var(--ease-luxury);
+}
+.wc-more-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: transform 0.35s var(--ease-luxury);
+}
+.wc-more-btn.open { color: var(--c-ink); }
+.wc-more-btn.open svg { transform: rotate(180deg); }
+
+/* ── DRAWER DÉROULANT ── */
+.wc-more-drawer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wc-more-drawer.open { max-height: 320px; }
+
+.wc-drawer-desc {
+  font-size: 11px;
+  line-height: 1.75;
+  font-weight: 300;
+  color: var(--c-grey);
+  padding: 12px 0 8px;
+  border-bottom: 1px solid rgba(196,170,140,0.12);
+  margin-bottom: 4px;
+}
+
+/* Afficher le bouton expand quand la desc est masquée */
+@media (max-width: 600px) {
+  .nouv-grid.view-2 .wc-more-btn { display: flex; }
+}
+@media (max-width: 719px) {
+  .nouv-grid.view-1 .wc-more-btn { display: flex; }
 }
 
 /* Price + button row */
@@ -2075,6 +2247,11 @@ footer {
   .nouv-grid.view-2 .wc-desc,
   .nouv-grid.view-2 .wc-sep   { display: none; }
   .nouv-grid.view-2 .wc-body  { padding: 10px 10px 14px; }
+  .nouv-grid.view-2 .wc-year-tag {
+    font-size: 6px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
   .nouv-grid.view-2 .wc-brand {
     font-size: 6.5px;
     letter-spacing: 2px;

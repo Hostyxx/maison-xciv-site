@@ -307,6 +307,7 @@ function buildCard(watch, index) {
   const safeName   = escapeHtml(watch.name);
   const safeDesc   = escapeHtml(watch.description);
   const safePrice  = escapeHtml(watch.price);
+  const safeYear   = watch.year ? escapeHtml(String(watch.year)) : '';
   const favLabel   = isFav ? 'Retirer des favoris' : 'Ajouter aux favoris';
 
   return `
@@ -326,12 +327,29 @@ function buildCard(watch, index) {
         <svg class="heart-empty"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
         <svg class="heart-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
       </button>
+      <!-- Overlay info : glisse depuis le bas au survol (desktop) -->
+      <div class="wc-info-overlay" aria-hidden="true">
+        <div class="wc-overlay-inner">
+          ${safeYear ? `<div class="wc-overlay-year">Millésime ${safeYear}</div>` : ''}
+          <p class="wc-overlay-desc">${safeDesc}</p>
+        </div>
+      </div>
     </div>
     <div class="wc-body">
       <div class="wc-brand">${safeBrand}</div>
       <h3 class="wc-name">${safeName}</h3>
+      ${safeYear ? `<div class="wc-year-tag">${safeYear}</div>` : ''}
       <div class="wc-sep" aria-hidden="true"></div>
       <p class="wc-desc">${safeDesc}</p>
+      <button class="wc-more-btn" aria-expanded="false" aria-label="Voir la description complète">
+        <span>Description</span>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <polyline points="4,6 8,10 12,6"/>
+        </svg>
+      </button>
+      <div class="wc-more-drawer" aria-hidden="true">
+        <p class="wc-drawer-desc">${safeDesc}</p>
+      </div>
       <div class="wc-footer">
         <span class="wc-price">${safePrice}</span>
         ${isVendu
@@ -886,10 +904,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (e.target.tagName === 'A') closeMobile();
   });
 
-  // ── Délégation : boutons favoris dans la grille Nouveautés ───
+  // ── Délégation : boutons favoris + expand dans la grille Nouveautés ──
   document.getElementById('nouv-grid').addEventListener('click', e => {
-    const btn = e.target.closest('.wc-fav-btn');
-    if (btn) toggleFavorite(parseInt(btn.dataset.watchId, 10), btn);
+    const favBtn  = e.target.closest('.wc-fav-btn');
+    const moreBtn = e.target.closest('.wc-more-btn');
+    if (favBtn) toggleFavorite(parseInt(favBtn.dataset.watchId, 10), favBtn);
+    if (moreBtn) {
+      const isOpen = moreBtn.classList.toggle('open');
+      moreBtn.setAttribute('aria-expanded', String(isOpen));
+      const drawer = moreBtn.nextElementSibling;
+      if (drawer && drawer.classList.contains('wc-more-drawer')) {
+        drawer.classList.toggle('open', isOpen);
+        drawer.setAttribute('aria-hidden', String(!isOpen));
+      }
+    }
   });
 
   // ── Délégation : boutons Modifier / Supprimer dans l'admin panel ─

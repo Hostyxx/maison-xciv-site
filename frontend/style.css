@@ -2037,10 +2037,12 @@ footer {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  /* Tap target WCAG 44px minimum */
+  min-height: 44px;
   background: transparent;
   border: none;
   border-top: 1px solid rgba(196,170,140,0.15);
-  padding: 10px 0 0;
+  padding: 10px 0;
   margin-top: 4px;
   cursor: none;
   font-family: var(--f-sans);
@@ -2077,12 +2079,11 @@ footer {
   margin-bottom: 4px;
 }
 
-/* Afficher le bouton expand quand la desc est masquée */
+/* Afficher le bouton expand uniquement en vue grille mobile (< 600px)
+   où wc-desc est masquée. En vue liste (view-1), la desc est visible
+   à ≥ 720px et le layout row compact (< 720px) n'a pas de place. */
 @media (max-width: 600px) {
   .nouv-grid.view-2 .wc-more-btn { display: flex; }
-}
-@media (max-width: 719px) {
-  .nouv-grid.view-1 .wc-more-btn { display: flex; }
 }
 
 /* Price + button row */
@@ -3019,7 +3020,7 @@ a, button, [onclick], label, select {
   .admin-close, .admin-btn-cancel, .admin-btn-save,
   .wc-fav-btn, .nav-logout-btn, .nouv-filter-btn,
   .nouv-more-btn, .fav-remove-btn, .admin-edit-btn,
-  .admin-delete-btn, .watch-slide, .nouv-filter-btn {
+  .admin-delete-btn, .watch-slide, .wc-more-btn {
     cursor: pointer !important;
   }
 }
@@ -3517,6 +3518,12 @@ section, #watches, #services, #nouveautes, #about, #process, #projects, #contact
 
   /* Bouton favori — zone de tap suffisante */
   .wc-fav-btn { width: 44px; height: 44px; }
+
+  /* Bouton expand description — zone de tap suffisante */
+  .wc-more-btn { min-height: 44px; padding: 10px 0; }
+
+  /* Filter buttons — zone de tap suffisante */
+  .nouv-filter-btn { min-height: 44px; padding: 0 18px; }
 
   /* Dots du slider — zone de tap suffisante */
   .watch-dot {

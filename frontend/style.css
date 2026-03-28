@@ -3355,3 +3355,260 @@ section, #watches, #services, #nouveautes, #about, #process, #projects, #contact
     font-size: 16px !important;
   }
 }
+
+/* ═══════════════════════════════════════════
+   TRUST STRIP
+═══════════════════════════════════════════ */
+.trust-strip {
+  background: var(--c-ink);
+  padding: 18px clamp(16px, 5vw, 56px);
+  overflow: hidden;
+}
+.trust-strip-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 48px);
+  flex-wrap: wrap;
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--c-beige-pale);
+  font-family: var(--f-sans);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.trust-item svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--c-beige);
+  flex-shrink: 0;
+}
+.trust-sep {
+  width: 1px;
+  height: 20px;
+  background: rgba(196,170,140,0.25);
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .trust-strip-inner { gap: 12px; }
+  .trust-sep { display: none; }
+  .trust-item { font-size: 10px; letter-spacing: 1px; }
+}
+
+/* ═══════════════════════════════════════════
+   TÉMOIGNAGES
+═══════════════════════════════════════════ */
+.testi-section {
+  padding: clamp(64px, 10vw, 120px) clamp(16px, 5vw, 56px);
+  background: var(--c-bone);
+}
+.testi-header {
+  text-align: center;
+  margin-bottom: clamp(40px, 6vw, 72px);
+}
+.testi-header .tag {
+  margin-bottom: 16px;
+}
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 3vw, 28px);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.testi-card {
+  background: var(--c-white);
+  border: 1px solid var(--c-beige-pale);
+  border-radius: 2px;
+  padding: clamp(24px, 4vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: box-shadow 0.4s var(--ease-luxury), transform 0.4s var(--ease-luxury), border-color 0.3s;
+}
+.testi-card:hover {
+  box-shadow: 0 12px 48px rgba(13,12,11,0.08);
+  transform: translateY(-4px);
+  border-color: var(--c-beige);
+}
+.testi-stars {
+  color: var(--c-beige);
+  font-size: 13px;
+  letter-spacing: 3px;
+}
+.testi-quote {
+  font-family: var(--f-serif);
+  font-size: clamp(15px, 1.8vw, 17px);
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--c-ink-soft);
+  flex: 1;
+}
+.testi-author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid var(--c-beige-pale);
+}
+.testi-initials {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--c-ink);
+  color: var(--c-beige);
+  font-family: var(--f-caps);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 1px;
+}
+.testi-name {
+  font-family: var(--f-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-ink);
+  letter-spacing: 0.5px;
+}
+.testi-loc {
+  font-family: var(--f-sans);
+  font-size: 11px;
+  color: var(--c-grey);
+  letter-spacing: 0.5px;
+  margin-top: 3px;
+}
+@media (max-width: 860px) {
+  .testi-grid { grid-template-columns: 1fr; max-width: 520px; }
+}
+@media (max-width: 540px) {
+  .testi-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════
+   CONTACT — GARANTIES
+═══════════════════════════════════════════ */
+.contact-guarantees {
+  display: flex;
+  gap: clamp(16px, 4vw, 40px);
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(196,170,140,0.15);
+  border-bottom: 1px solid rgba(196,170,140,0.15);
+}
+.contact-guarantee-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--f-sans);
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--c-beige);
+}
+.contact-guarantee-item svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--c-beige);
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .contact-guarantees { flex-direction: column; gap: 14px; }
+}
+
+/* ═══════════════════════════════════════════
+   WHATSAPP FAB
+═══════════════════════════════════════════ */
+.wa-fab {
+  position: fixed;
+  bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+  right: calc(32px + env(safe-area-inset-right, 0px));
+  z-index: 700;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(37,211,102,0.35), 0 2px 8px rgba(0,0,0,0.15);
+  transition: transform 0.35s var(--ease-out), box-shadow 0.35s, opacity 0.4s var(--ease-luxury);
+  cursor: none;
+  opacity: 0;
+  pointer-events: none;
+}
+.wa-fab.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.wa-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 14px 40px rgba(37,211,102,0.45), 0 4px 12px rgba(0,0,0,0.2);
+}
+.wa-fab svg {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+.wa-fab-ping {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 13px;
+  height: 13px;
+  background: #ff4d4d;
+  border-radius: 50%;
+  border: 2px solid #25D366;
+  animation: waPing 2.5s ease-in-out infinite;
+}
+@keyframes waPing {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.7; }
+}
+.wa-fab-tooltip {
+  position: absolute;
+  right: 68px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--c-ink);
+  color: var(--c-bone);
+  font-family: var(--f-sans);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 7px 14px;
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-luxury), transform 0.3s var(--ease-luxury);
+  transform: translateY(-50%) translateX(6px);
+}
+.wa-fab:hover .wa-fab-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+/* When admin FAB is also visible, shift WhatsApp up */
+body.has-admin-fab .wa-fab {
+  bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+}
+@media (max-width: 600px) {
+  .wa-fab { width: 50px; height: 50px; }
+  .wa-fab svg { width: 24px; height: 24px; }
+  .wa-fab-tooltip { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wa-fab-ping { animation: none; }
+  .trust-strip, .testi-card { transition: none; }
+}

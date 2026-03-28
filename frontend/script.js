@@ -702,6 +702,7 @@ function updateNavAuth() {
     if (navUserMenu)   navUserMenu.style.display    = 'none';
     if (navAdminBadge) navAdminBadge.style.display  = '';
     if (adminFab)      adminFab.style.display       = '';
+    document.body.classList.add('has-admin-fab');
     if (mobileAuth) {
       mobileAuth.innerHTML = `<a href="/admin/dashboard">Dashboard</a>`;
     }
@@ -962,4 +963,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   restoreNouveautesView(); // restaure la vue choisie par l'utilisateur
   await initAuth();        // charge session + favoris en premier
   loadWatches();           // puis le catalogue (buildCard utilisera favoriteIds)
+
+  // ── WhatsApp FAB — apparaît après le hero ─────────────────────
+  const waFab = document.getElementById('waFab');
+  if (waFab) {
+    const heroH = document.getElementById('hero')?.offsetHeight || 400;
+    const onScroll = () => {
+      waFab.classList.toggle('visible', window.scrollY > heroH * 0.6);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
 });

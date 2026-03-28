@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maison XCIV — Guide de Révision Oral</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --backend:   #1e40af;
+      --frontend:  #059669;
+      --auth:      #7c3aed;
+      --db:        #b45309;
+      --pub:       #16a34a;
+      --adm:       #dc2626;
+      --usr:       #2563eb;
+      --qa:        #0f172a;
+      --gray-50:   #f8fafc;
+      --gray-100:  #f1f5f9;
+      --gray-200:  #e2e8f0;
+      --gray-700:  #334155;
+      --gray-900:  #0f172a;
+      --radius:    12px;
+      --shadow:    0 4px 24px rgba(0,0,0,.10);
+    }
+
+    html { font-size: 15px; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f0f4f8;
+      color: var(--gray-900);
+      line-height: 1.65;
+    }
+
+    /* ===== LAYOUT ===== */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+    }
+
+    /* ===== COVER ===== */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #1e40af 100%);
+      color: white;
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.03);
+      top: -200px; right: -200px;
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.04);
+      bottom: -150px; left: -100px;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 999px;
+      padding: 6px 20px;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .cover h1 {
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: -.02em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .cover h1 span {
+      color: #93c5fd;
+    }
+
+    .cover-subtitle {
+      font-size: 1.25rem;
+      color: rgba(255,255,255,.75);
+      font-weight: 400;
+      margin-bottom: 48px;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cover-meta-item {
+      text-align: center;
+    }
+
+    .cover-meta-label {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: rgba(255,255,255,.5);
+      margin-bottom: 6px;
+    }
+
+    .cover-meta-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(255,255,255,.9);
+    }
+
+    .cover-meta-value.blank {
+      display: inline-block;
+      min-width: 200px;
+      border-bottom: 2px solid rgba(255,255,255,.4);
+      height: 24px;
+    }
+
+    .cover-tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .cover-tag {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: .8rem;
+      font-weight: 500;
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      margin: 40px 0;
+      break-inside: avoid;
+    }
+
+    .section-header {
+      border-radius: var(--radius) var(--radius) 0 0;
+      padding: 18px 28px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 0;
+    }
+
+    .section-header .section-num {
+      font-size: 2rem;
+      font-weight: 900;
+      opacity: .4;
+      line-height: 1;
+    }
+
+    .section-header h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .section-body {
+      background: white;
+      border-radius: 0 0 var(--radius) var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .bg-backend  { background: linear-gradient(135deg, var(--backend), #3b5fc0); }
+    .bg-frontend { background: linear-gradient(135deg, var(--frontend), #10b981); }
+    .bg-auth     { background: linear-gradient(135deg, var(--auth), #9f67f0); }
+    .bg-db       { background: linear-gradient(135deg, var(--db), #d97706); }
+    .bg-api      { background: linear-gradient(135deg, #0f766e, #0e7490); }
+    .bg-invoice  { background: linear-gradient(135deg, #be185d, #9f1239); }
+    .bg-qa       { background: linear-gradient(135deg, var(--qa), #1e293b); }
+    .bg-mindmap  { background: linear-gradient(135deg, #4338ca, #6d28d9); }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin: 16px 0;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .card p, .card li {
+      font-size: .9rem;
+      color: var(--gray-700);
+    }
+
+    .card ul { padding-left: 18px; }
+    .card li { margin-bottom: 4px; }
+
+    /* ===== COLORED CARDS ===== */
+    .card-backend  { border-left: 4px solid var(--backend);  }
+    .card-frontend { border-left: 4px solid var(--frontend); }
+    .card-auth     { border-left: 4px solid var(--auth);     }
+    .card-db       { border-left: 4px solid var(--db);       }
+    .card-pub      { border-left: 4px solid var(--pub);      }
+    .card-adm      { border-left: 4px solid var(--adm);      }
+    .card-usr      { border-left: 4px solid var(--usr);      }
+
+    /* ===== TREE ===== */
+    .tree {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .82rem;
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      line-height: 1.9;
+      overflow-x: auto;
+    }
+
+    .tree .dir   { color: #93c5fd; font-weight: 600; }
+    .tree .file  { color: #d1fae5; }
+    .tree .arrow { color: #6b7280; }
+    .tree .comment { color: #fde68a; font-style: italic; }
+
+    /* ===== TABLES ===== */
+    .table-wrap { overflow-x: auto; margin: 16px 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+
+    th {
+      background: var(--gray-900);
+      color: white;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    tr:nth-child(even) td { background: var(--gray-50); }
+    tr:hover td { background: #eff6ff; }
+
+    /* ===== BADGES ===== */
+    .badge {
+      display: inline-block;
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .badge-get    { background: #dcfce7; color: #15803d; }
+    .badge-post   { background: #dbeafe; color: #1d4ed8; }
+    .badge-put    { background: #fff7ed; color: #c2410c; }
+    .badge-delete { background: #fee2e2; color: #b91c1c; }
+    .badge-pub    { background: #dcfce7; color: #15803d; }
+    .badge-adm    { background: #fee2e2; color: #b91c1c; }
+    .badge-usr    { background: #dbeafe; color: #1d4ed8; }
+    .badge-lock   { background: #f3e8ff; color: #7c3aed; }
+
+    /* ===== CODE BLOCKS ===== */
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 10px;
+      padding: 18px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .8rem;
+      line-height: 1.75;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    .kw  { color: #c084fc; }
+    .str { color: #86efac; }
+    .fn  { color: #60a5fa; }
+    .cm  { color: #6b7280; font-style: italic; }
+    .num { color: #fb923c; }
+    .var { color: #fde68a; }
+
+    /* ===== FLOW DIAGRAM (CSS) ===== */
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 20px 0;
+      justify-content: center;
+    }
+
+    .flow-box {
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: .85rem;
+      font-weight: 600;
+      color: white;
+      text-align: center;
+      min-width: 120px;
+      position: relative;
+    }
+
+    .flow-arrow {
+      font-size: 1.4rem;
+      color: #94a3b8;
+      padding: 0 4px;
+      flex-shrink: 0;
+    }
+
+    .flow-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .flow-col .flow-arrow {
+      transform: rotate(90deg);
+      display: block;
+      margin: 2px 0;
+    }
+
+    /* ===== MIND MAP ===== */
+    .mindmap {
+      position: relative;
+      background: var(--gray-50);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+
+    .mindmap-center {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .mindmap-root {
+      background: var(--gray-900);
+      color: white;
+      border-radius: 12px;
+      padding: 14px 28px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .mindmap-branches {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .mindmap-branch {
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: white;
+      font-size: .82rem;
+      font-weight: 600;
+    }
+
+    .mindmap-branch ul {
+      padding-left: 14px;
+      margin-top: 6px;
+    }
+
+    .mindmap-branch li {
+      font-weight: 400;
+      color: rgba(255,255,255,.85);
+      margin-bottom: 3px;
+      font-size: .78rem;
+    }
+
+    /* ===== FLASHCARDS ===== */
+    .flashcard {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      margin: 16px 0;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      break-inside: avoid;
+    }
+
+    .flashcard-q {
+      background: var(--qa);
+      color: white;
+      padding: 14px 20px;
+      font-weight: 700;
+      font-size: .95rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .flashcard-num {
+      background: rgba(255,255,255,.2);
+      border-radius: 6px;
+      padding: 2px 9px;
+      font-size: .8rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .flashcard-a {
+      padding: 16px 20px;
+      font-size: .9rem;
+      color: var(--gray-700);
+      line-height: 1.7;
+    }
+
+    .flashcard-a strong { color: var(--gray-900); }
+
+    .flashcard-a .analogy {
+      background: #fef3c7;
+      border-left: 3px solid #f59e0b;
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      margin-top: 10px;
+      font-size: .87rem;
+    }
+
+    .flashcard-a code {
+      background: var(--gray-100);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .82rem;
+      color: var(--adm);
+    }
+
+    /* ===== HIGHLIGHT BOX ===== */
+    .highlight {
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 12px 0;
+      font-size: .9rem;
+    }
+
+    .highlight-blue  { background: #eff6ff; border-left: 4px solid var(--usr); color: #1e40af; }
+    .highlight-green { background: #f0fdf4; border-left: 4px solid var(--pub); color: #14532d; }
+    .highlight-red   { background: #fef2f2; border-left: 4px solid var(--adm); color: #7f1d1d; }
+    .highlight-purple{ background: #faf5ff; border-left: 4px solid var(--auth); color: #581c87; }
+    .highlight-amber { background: #fffbeb; border-left: 4px solid #f59e0b; color: #78350f; }
+
+    /* ===== MIDDLEWARE CARDS ===== */
+    .middleware-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .mw-card {
+      border-radius: 10px;
+      padding: 16px;
+      color: white;
+    }
+
+    .mw-card h4 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .85rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .mw-card p {
+      font-size: .8rem;
+      opacity: .9;
+      line-height: 1.5;
+    }
+
+    /* ===== TECH TABLE ===== */
+    .tech-table td:first-child {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: .82rem;
+    }
+
+    /* ===== FOOTER / PAGE NUM ===== */
+    .page-footer {
+      text-align: center;
+      color: #94a3b8;
+      font-size: .78rem;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      height: 1px;
+      background: var(--gray-200);
+      margin: 24px 0;
+    }
+
+    /* ===== TOC ===== */
+    .toc {
+      background: white;
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow);
+      margin: 32px 0;
+    }
+
+    .toc h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--gray-900);
+    }
+
+    .toc ol {
+      padding-left: 20px;
+    }
+
+    .toc li {
+      margin-bottom: 8px;
+      font-size: .92rem;
+    }
+
+    .toc a {
+      color: var(--backend);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .toc a:hover { text-decoration: underline; }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body { background: white; font-size: 13px; }
+
+      .cover {
+        min-height: auto;
+        padding: 60px 40px;
+        page-break-after: always;
+      }
+
+      .section { page-break-inside: avoid; }
+      .flashcard { page-break-inside: avoid; }
+      .card { page-break-inside: avoid; box-shadow: none; }
+      .section-body { box-shadow: none; }
+
+      pre { font-size: .75rem; }
+
+      .page { padding: 0 16px 32px; }
+
+      .toc { page-break-after: always; }
+
+      @page {
+        margin: 20mm 15mm;
+        size: A4;
+      }
+
+      .page-footer::after {
+        content: ' — Page ' counter(page);
+      }
+    }
+
+    /* ===== UTIL ===== */
+    .mb-0 { margin-bottom: 0; }
+    .mb-8 { margin-bottom: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .text-sm { font-size: .85rem; }
+    .text-xs { font-size: .78rem; }
+    .text-muted { color: #64748b; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .font-bold { font-weight: 700; }
+    .flex { display: flex; }
+    .gap-8 { gap: 8px; }
+    .flex-wrap { flex-wrap: wrap; }
+    .items-center { align-items: center; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================ COVER -->
+<div class="cover">
+  <div class="cover-badge">Guide de Révision — Oral Technique</div>
+  <h1>MAISON <span>XCIV</span></h1>
+  <div class="cover-subtitle">Application e-commerce de montres de luxe<br>Node.js · Express · JWT · JSON Database</div>
+
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Étudiant</div>
+      <div class="cover-meta-value"><span class="blank"></span></div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Date</div>
+      <div class="cover-meta-value">2026</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Stack</div>
+      <div class="cover-meta-value">Node.js v24 · Express · JWT</div>
+    </div>
+  </div>
+
+  <div class="cover-tags">
+    <span class="cover-tag">Architecture REST</span>
+    <span class="cover-tag">Authentification JWT</span>
+    <span class="cover-tag">Middleware Express</span>
+    <span class="cover-tag">CRUD complet</span>
+    <span class="cover-tag">Cookies HttpOnly</span>
+    <span class="cover-tag">Upload d'images</span>
+    <span class="cover-tag">Module Facturation</span>
+    <span class="cover-tag">Favoris temps réel</span>
+  </div>
+</div>
+
+<!-- ============================================================ PAGE MAIN -->
+<div class="page">
+
+  <!-- TABLE DES MATIERES -->
+  <div class="toc">
+    <h2>Table des matières</h2>
+    <ol>
+      <li><a href="#s1">Architecture globale du projet</a></li>
+      <li><a href="#s2">Stack Technique</a></li>
+      <li><a href="#s3">Système d'authentification</a></li>
+      <li><a href="#s4">API REST complète</a></li>
+      <li><a href="#s5">Base de données JSON</a></li>
+      <li><a href="#s6">Frontend — Pages & Fonctions JS</a></li>
+      <li><a href="#s7">Module Facturation</a></li>
+      <li><a href="#s8">Questions d'oral &amp; Réponses</a></li>
+      <li><a href="#s9">Cartes mentales des flux</a></li>
+    </ol>
+  </div>
+
+  <!-- ============================================================ SECTION 1 -->
+  <div class="section" id="s1">
+    <div class="section-header bg-backend">
+      <div class="section-num">01</div>
+      <h2>Architecture globale du projet</h2>
+    </div>
+    <div class="section-body">
+
+      <p style="margin-bottom:16px;">Maison XCIV est une application web <strong>fullstack</strong> organisée en deux grandes parties : un <strong>frontend</strong> statique servi par Express, et un <strong>backend</strong> Node.js/Express exposant une API REST. Les données sont persistées dans des <strong>fichiers JSON</strong>.</p>
+
+      <div class="tree">
+<span class="dir">/maison-xciv-site</span>
+├── <span class="dir">/frontend</span>             <span class="comment">→ Tout ce que voit l'utilisateur</span>
+│   ├── <span class="file">index.html</span>       <span class="comment">→ Site public (catalogue montres)</span>
+│   ├── <span class="file">style.css</span>        <span class="comment">→ Styles globaux</span>
+│   ├── <span class="file">script.js</span>        <span class="comment">→ JS : auth, favoris, modal, nav</span>
+│   ├── <span class="dir">/admin</span>           <span class="comment">→ Interface administrateur</span>
+│   │   ├── <span class="file">login.html</span>
+│   │   ├── <span class="file">dashboard.html</span>
+│   │   ├── <span class="file">admin.css</span>
+│   │   └── <span class="file">facturation.html</span>
+│   ├── <span class="dir">/connexion</span>       <span class="comment">→ Login + Inscription</span>
+│   │   ├── <span class="file">index.html</span>   <span class="comment">→ Login user</span>
+│   │   ├── <span class="file">inscription.html</span>
+│   │   └── <span class="file">auth.css</span>
+│   ├── <span class="dir">/mon-espace</span>      <span class="comment">→ Espace client connecté</span>
+│   │   ├── <span class="file">index.html</span>
+│   │   └── <span class="file">profil.js</span>
+│   └── <span class="dir">/assets/images/uploads</span>
+│
+├── <span class="dir">/backend</span>              <span class="comment">→ Serveur Node.js / Express</span>
+│   ├── <span class="file">server.js</span>        <span class="comment">→ Point d'entrée, config Express</span>
+│   ├── <span class="dir">/config</span>
+│   │   ├── <span class="file">admin.js</span>     <span class="comment">→ Credentials admin + JWT secret admin</span>
+│   │   └── <span class="file">userConfig.js</span> <span class="comment">→ JWT secret user + règles cookies</span>
+│   ├── <span class="dir">/middleware</span>
+│   │   └── <span class="file">auth.js</span>      <span class="comment">→ 4 middleware d'authentification</span>
+│   ├── <span class="dir">/controllers</span>     <span class="comment">→ Logique métier</span>
+│   │   ├── <span class="file">watchesController.js</span>
+│   │   ├── <span class="file">authController.js</span>
+│   │   ├── <span class="file">userController.js</span>
+│   │   ├── <span class="file">favoritesController.js</span>
+│   │   └── <span class="file">invoicesController.js</span>
+│   ├── <span class="dir">/models</span>          <span class="comment">→ Accès aux données</span>
+│   │   ├── <span class="file">watchModel.js</span>
+│   │   ├── <span class="file">userModel.js</span>
+│   │   ├── <span class="file">favoriteModel.js</span>
+│   │   └── <span class="file">invoiceModel.js</span>
+│   └── <span class="dir">/routes</span>          <span class="comment">→ Définition des endpoints</span>
+│       ├── <span class="file">watches.js</span>   <span class="comment">→ /api/watches/*</span>
+│       ├── <span class="file">auth.js</span>      <span class="comment">→ /api/auth/*</span>
+│       ├── <span class="file">users.js</span>     <span class="comment">→ /api/user/*</span>
+│       ├── <span class="file">favorites.js</span> <span class="comment">→ /api/favorites/*</span>
+│       ├── <span class="file">upload.js</span>    <span class="comment">→ /api/upload</span>
+│       └── <span class="file">invoices.js</span>  <span class="comment">→ /api/admin/invoices/*</span>
+│
+├── <span class="dir">/database</span>             <span class="comment">→ Persistance JSON</span>
+│   ├── <span class="file">database.js</span>  + <span class="file">watches.json</span>
+│   ├── <span class="file">usersDB.js</span>   + <span class="file">users.json</span>
+│   ├── <span class="file">favoritesDB.js</span>+ <span class="file">favorites.json</span>
+│   └── <span class="file">invoicesDB.js</span>+ <span class="file">invoices.json</span>
+│
+└── <span class="file">package.json</span>          <span class="comment">→ express, cors, jsonwebtoken, bcryptjs, multer...</span>
+      </div>
+
+      <h3 style="margin: 24px 0 12px; font-size: 1.05rem;">Responsabilités de chaque couche</h3>
+      <div class="card-grid">
+        <div class="card card-backend">
+          <h3 style="color: var(--backend);">Routes (/routes)</h3>
+          <p>Définissent <strong>quelles URL existent</strong> et quel middleware s'applique. Elles transmettent la requête aux controllers. Ne contiennent pas de logique métier.</p>
+        </div>
+        <div class="card card-backend">
+          <h3 style="color: var(--backend);">Controllers (/controllers)</h3>
+          <p>Contiennent la <strong>logique métier</strong> : valider les données, appeler les models, construire la réponse JSON. Le cerveau de l'API.</p>
+        </div>
+        <div class="card card-db">
+          <h3 style="color: var(--db);">Models (/models)</h3>
+          <p>Fonctions d'<strong>accès aux données</strong> : lire, écrire, modifier les fichiers JSON. Les models ne savent rien d'Express.</p>
+        </div>
+        <div class="card card-auth">
+          <h3 style="color: var(--auth);">Middleware (/middleware)</h3>
+          <p>Code qui s'exécute <strong>entre la requête et le controller</strong>. Vérifie l'authentification, peut bloquer ou laisser passer.</p>
+        </div>
+        <div class="card card-frontend">
+          <h3 style="color: var(--frontend);">Frontend (/frontend)</h3>
+          <p>Pages HTML + CSS + JS servis <strong>statiquement</strong> par Express. Communique avec l'API via <code>fetch()</code>.</p>
+        </div>
+        <div class="card card-db">
+          <h3 style="color: var(--db);">Database (/database)</h3>
+          <p>Modules Node.js qui <strong>lisent/écrivent les fichiers JSON</strong> avec <code>fs.readFileSync</code> / <code>fs.writeFileSync</code>. Simule une vraie DB.</p>
+        </div>
+      </div>
+
+      <h3 style="margin: 24px 0 12px; font-size: 1.05rem;">Flux d'une requête HTTP</h3>
+      <div class="flow" style="flex-direction: column; gap: 4px; align-items: stretch; max-width: 500px; margin: 0 auto;">
+        <div class="flow-box" style="background: #0f172a;">Client (navigateur)<br><span style="font-size:.75rem;opacity:.6;">fetch('/api/watches')</span></div>
+        <div class="flow-arrow" style="text-align:center;">&#8595;</div>
+        <div class="flow-box" style="background: #1e40af;">Express Router<br><span style="font-size:.75rem;opacity:.8;">watches.js — route matching</span></div>
+        <div class="flow-arrow" style="text-align:center;">&#8595;</div>
+        <div class="flow-box" style="background: #7c3aed;">Middleware Auth<br><span style="font-size:.75rem;opacity:.8;">optionalUserAuth / requireAuth</span></div>
+        <div class="flow-arrow" style="text-align:center;">&#8595;</div>
+        <div class="flow-box" style="background: #059669;">Controller<br><span style="font-size:.75rem;opacity:.8;">watchesController.js — logique</span></div>
+        <div class="flow-arrow" style="text-align:center;">&#8595;</div>
+        <div class="flow-box" style="background: #b45309;">Model + JSON DB<br><span style="font-size:.75rem;opacity:.8;">watchModel.js → watches.json</span></div>
+        <div class="flow-arrow" style="text-align:center;">&#8595;</div>
+        <div class="flow-box" style="background: #0f172a;">Réponse JSON<br><span style="font-size:.75rem;opacity:.6;">res.json({data})</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ SECTION 2 -->
+  <div class="section" id="s2">
+    <div class="section-header bg-frontend">
+      <div class="section-num">02</div>
+      <h2>Stack Technique</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="table-wrap">
+        <table class="tech-table">
+          <thead>
+            <tr>
+              <th>Package</th>
+              <th>Rôle</th>
+              <th>Exemple d'utilisation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>express</td>
+              <td>Framework web Node.js — gère routes, middleware, requêtes HTTP</td>
+              <td><code>app.get('/api/watches', handler)</code></td>
+            </tr>
+            <tr>
+              <td>jsonwebtoken</td>
+              <td>Créer et vérifier des tokens JWT signés</td>
+              <td><code>jwt.sign(payload, secret, {expiresIn})</code></td>
+            </tr>
+            <tr>
+              <td>bcryptjs</td>
+              <td>Hacher les mots de passe de façon sécurisée (jamais stocker en clair)</td>
+              <td><code>bcrypt.hash(password, 10)</code></td>
+            </tr>
+            <tr>
+              <td>cookie-parser</td>
+              <td>Lire et écrire des cookies HTTP (dont HttpOnly)</td>
+              <td><code>res.cookie('xciv_user_token', jwt, opts)</code></td>
+            </tr>
+            <tr>
+              <td>multer</td>
+              <td>Gérer l'upload de fichiers (images des montres)</td>
+              <td><code>multer.diskStorage({destination, filename})</code></td>
+            </tr>
+            <tr>
+              <td>cors</td>
+              <td>Autoriser les requêtes cross-origin (navigateur → API)</td>
+              <td><code>app.use(cors({origin, credentials: true}))</code></td>
+            </tr>
+            <tr>
+              <td>nodemon</td>
+              <td>Redémarre auto le serveur à chaque modification de fichier (dev only)</td>
+              <td><code>npm run dev</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card-grid" style="margin-top:20px;">
+
+        <div class="card card-auth">
+          <h3 style="color:var(--auth);">JWT — JSON Web Token</h3>
+          <p>Un token JWT est composé de <strong>3 parties séparées par des points</strong> :</p>
+          <ul style="margin-top:8px;">
+            <li><strong>Header</strong> : algorithme (HS256)</li>
+            <li><strong>Payload</strong> : données (id, email, rôle)</li>
+            <li><strong>Signature</strong> : HMAC signé avec le secret</li>
+          </ul>
+          <div class="analogy" style="background:#f3e8ff;border-left:3px solid var(--auth);border-radius:0 8px 8px 0;padding:8px 12px;margin-top:10px;font-size:.82rem;">
+            <strong>Analogie :</strong> comme un badge d'accès tamponné par l'entreprise. N'importe qui peut lire le nom dessus, mais seule l'entreprise (qui a le tampon secret) peut en créer un valide.
+          </div>
+        </div>
+
+        <div class="card card-auth">
+          <h3 style="color:var(--auth);">bcrypt — Hachage de mots de passe</h3>
+          <p>bcrypt ne <strong>chiffre pas</strong> (réversible), il <strong>hache</strong> (irréversible). Il ajoute un <em>salt</em> aléatoire pour que deux mots de passe identiques donnent des hashes différents.</p>
+          <ul style="margin-top:8px;">
+            <li>Le coût (10 rounds) rend le brute-force lent</li>
+            <li><code>bcrypt.compare(plaintext, hash)</code> → vrai/faux</li>
+            <li>On ne peut jamais "récupérer" le mot de passe</li>
+          </ul>
+        </div>
+
+        <div class="card card-backend">
+          <h3 style="color:var(--backend);">Cookies HttpOnly</h3>
+          <p>Un cookie <code>HttpOnly</code> est <strong>inaccessible depuis JavaScript</strong> (protection contre XSS). Il est envoyé automatiquement par le navigateur sur chaque requête.</p>
+          <ul style="margin-top:8px;">
+            <li><code>Secure</code> : uniquement en HTTPS</li>
+            <li><code>SameSite: Strict</code> : protection CSRF</li>
+            <li>Le JS ne peut pas faire <code>document.cookie</code> pour le lire</li>
+          </ul>
+        </div>
+
+        <div class="card card-backend">
+          <h3 style="color:var(--backend);">CORS — Cross-Origin Resource Sharing</h3>
+          <p>Par défaut, un navigateur bloque les requêtes vers un <strong>domaine différent</strong>. CORS permet d'autoriser explicitement certaines origines.</p>
+          <ul style="margin-top:8px;">
+            <li><code>credentials: true</code> → autorise les cookies cross-origin</li>
+            <li>L'origine doit être déclarée explicitement (pas <code>*</code>)</li>
+            <li>Le serveur ajoute des headers <code>Access-Control-Allow-*</code></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <h3 style="margin: 20px 0 12px; font-size: 1rem;">Configuration server.js — Points clés</h3>
+      <pre><span class="kw">const</span> <span class="var">express</span> = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> <span class="var">app</span> = <span class="fn">express</span>();
+
+<span class="cm">// Middleware globaux</span>
+<span class="var">app</span>.<span class="fn">use</span>(<span class="fn">express</span>.<span class="fn">json</span>());                   <span class="cm">// Lire req.body JSON</span>
+<span class="var">app</span>.<span class="fn">use</span>(<span class="fn">cookieParser</span>());                  <span class="cm">// Lire req.cookies</span>
+<span class="var">app</span>.<span class="fn">use</span>(<span class="fn">cors</span>({ origin: <span class="str">'http://localhost:3000'</span>, credentials: <span class="kw">true</span> }));
+
+<span class="cm">// Servir le frontend statiquement</span>
+<span class="var">app</span>.<span class="fn">use</span>(<span class="fn">express</span>.<span class="fn">static</span>(<span class="str">'frontend'</span>));
+
+<span class="cm">// Monter les routes API</span>
+<span class="var">app</span>.<span class="fn">use</span>(<span class="str">'/api/watches'</span>, <span class="var">watchRoutes</span>);
+<span class="var">app</span>.<span class="fn">use</span>(<span class="str">'/api/auth'</span>,    <span class="var">authRoutes</span>);
+<span class="var">app</span>.<span class="fn">use</span>(<span class="str">'/api/user'</span>,    <span class="var">userRoutes</span>);
+<span class="var">app</span>.<span class="fn">use</span>(<span class="str">'/api/favorites'</span>, <span class="var">favoriteRoutes</span>);
+<span class="var">app</span>.<span class="fn">use</span>(<span class="str">'/api/admin/invoices'</span>, <span class="var">invoiceRoutes</span>);
+
+<span class="var">app</span>.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ SECTION 3 -->
+  <div class="section" id="s3">
+    <div class="section-header bg-auth">
+      <div class="section-num">03</div>
+      <h2>Système d'authentification</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="highlight highlight-purple">
+        <strong>Principe clé :</strong> Le projet utilise <strong>2 systèmes d'auth séparés</strong> avec 2 cookies distincts et 2 secrets JWT différents. L'admin et l'utilisateur ne partagent aucun token.
+      </div>
+
+      <div class="two-col" style="margin-top: 20px;">
+        <div>
+          <h3 style="color:var(--adm); margin-bottom:12px;">Admin — xciv_admin_token</h3>
+          <div class="flow" style="flex-direction: column; gap:4px; align-items: stretch;">
+            <div class="flow-box" style="background:#7f1d1d;">POST /api/auth/login<br><span style="font-size:.75rem;opacity:.7;">email + password</span></div>
+            <div class="flow-arrow" style="text-align:center;">↓</div>
+            <div class="flow-box" style="background:#991b1b;">bcrypt.compare()<br><span style="font-size:.75rem;opacity:.7;">avec hash dans admin.js</span></div>
+            <div class="flow-arrow" style="text-align:center;">↓</div>
+            <div class="flow-box" style="background:#b91c1c;">jwt.sign(payload, ADMIN_SECRET)<br><span style="font-size:.75rem;opacity:.7;">expiration : 8h</span></div>
+            <div class="flow-arrow" style="text-align:center;">↓</div>
+            <div class="flow-box" style="background:#dc2626;">Cookie HttpOnly<br><span style="font-size:.75rem;opacity:.7;">xciv_admin_token</span></div>
+          </div>
+        </div>
+        <div>
+          <h3 style="color:var(--usr); margin-bottom:12px;">User — xciv_user_token</h3>
+          <div class="flow" style="flex-direction: column; gap:4px; align-items: stretch;">
+            <div class="flow-box" style="background:#1e3a8a;">POST /api/user/login<br><span style="font-size:.75rem;opacity:.7;">email + password</span></div>
+            <div class="flow-arrow" style="text-align:center;">↓</div>
+            <div class="flow-box" style="background:#1d4ed8;">bcrypt.compare()<br><span style="font-size:.75rem;opacity:.7;">avec hash dans users.json</span></div>
+            <div class="flow-arrow" style="text-align:center;">↓</div>
+            <div class="flow-box" style="background:#2563eb;">jwt.sign(payload, USER_SECRET)<br><span style="font-size:.75rem;opacity:.7;">expiration : 7j</span></div>
+            <div class="flow-arrow" style="text-align:center;">↓</div>
+            <div class="flow-box" style="background:#3b82f6;">Cookie HttpOnly<br><span style="font-size:.75rem;opacity:.7;">xciv_user_token</span></div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin: 28px 0 14px; font-size: 1.05rem;">Les 4 middleware d'authentification</h3>
+      <div class="middleware-grid">
+        <div class="mw-card" style="background: linear-gradient(135deg,#1e40af,#2563eb);">
+          <h4>requireAuth</h4>
+          <p>Vérifie le cookie admin. Si invalide → <code>401</code> JSON ou redirect vers login admin. Protège toutes les routes d'administration.</p>
+        </div>
+        <div class="mw-card" style="background: linear-gradient(135deg,#7c3aed,#9f67f0);">
+          <h4>requireAuthPage</h4>
+          <p>Comme requireAuth mais pour les pages HTML. Redirige vers <code>/admin/login</code> au lieu de renvoyer du JSON.</p>
+        </div>
+        <div class="mw-card" style="background: linear-gradient(135deg,#059669,#10b981);">
+          <h4>requireUserAuth</h4>
+          <p>Vérifie le cookie user. Si invalide → <code>401</code> JSON. Protège <code>/api/favorites</code>, <code>/api/user/me</code>.</p>
+        </div>
+        <div class="mw-card" style="background: linear-gradient(135deg,#0f766e,#0d9488);">
+          <h4>optionalUserAuth</h4>
+          <p>Tente de lire le token user. Succès → peuple <code>req.user</code>. Échec → passe quand même. <strong>Ne bloque jamais.</strong> Utilisé sur le site public.</p>
+        </div>
+      </div>
+
+      <h3 style="margin: 20px 0 12px; font-size: 1rem;">Exemple de code — middleware auth.js</h3>
+      <pre><span class="cm">// optionalUserAuth — ne bloque JAMAIS, essentiel pour le site public</span>
+<span class="kw">const</span> <span class="var">optionalUserAuth</span> = (<span class="var">req</span>, <span class="var">res</span>, <span class="var">next</span>) => {
+  <span class="kw">const</span> <span class="var">token</span> = <span class="var">req</span>.cookies[<span class="str">'xciv_user_token'</span>];
+  <span class="kw">if</span> (!<span class="var">token</span>) <span class="kw">return</span> <span class="fn">next</span>(); <span class="cm">// Pas de cookie → visiteur anonyme, on continue</span>
+  <span class="kw">try</span> {
+    <span class="var">req</span>.user = <span class="var">jwt</span>.<span class="fn">verify</span>(<span class="var">token</span>, <span class="var">USER_SECRET</span>);
+    <span class="fn">next</span>(); <span class="cm">// Token valide → req.user dispo dans le controller</span>
+  } <span class="kw">catch</span> {
+    <span class="fn">next</span>(); <span class="cm">// Token invalide/expiré → on continue quand même</span>
+  }
+};
+
+<span class="cm">// requireUserAuth — bloque si non connecté</span>
+<span class="kw">const</span> <span class="var">requireUserAuth</span> = (<span class="var">req</span>, <span class="var">res</span>, <span class="var">next</span>) => {
+  <span class="kw">const</span> <span class="var">token</span> = <span class="var">req</span>.cookies[<span class="str">'xciv_user_token'</span>];
+  <span class="kw">if</span> (!<span class="var">token</span>) <span class="kw">return</span> <span class="var">res</span>.<span class="fn">status</span>(<span class="num">401</span>).<span class="fn">json</span>({ error: <span class="str">'Non authentifié'</span> });
+  <span class="kw">try</span> {
+    <span class="var">req</span>.user = <span class="var">jwt</span>.<span class="fn">verify</span>(<span class="var">token</span>, <span class="var">USER_SECRET</span>);
+    <span class="fn">next</span>();
+  } <span class="kw">catch</span> {
+    <span class="kw">return</span> <span class="var">res</span>.<span class="fn">status</span>(<span class="num">401</span>).<span class="fn">json</span>({ error: <span class="str">'Token invalide'</span> });
+  }
+};</pre>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ SECTION 4 -->
+  <div class="section" id="s4">
+    <div class="section-header bg-api">
+      <div class="section-num">04</div>
+      <h2>API REST complète</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="highlight highlight-green">
+        <strong>Convention REST :</strong> Les méthodes HTTP ont une sémantique précise — GET = lire, POST = créer, PUT = modifier, DELETE = supprimer. L'URL identifie la ressource, la méthode l'action.
+      </div>
+
+      <h3 style="margin: 20px 0 10px; color: var(--pub);">Routes publiques (aucune auth)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Méthode</th><th>Endpoint</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/watches</td><td>Récupérer tout le catalogue de montres</td></tr>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/watches/:id</td><td>Récupérer une montre par son ID</td></tr>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/user/session</td><td>État de la session (renvoie null si non connecté, jamais d'erreur)</td></tr>
+            <tr><td><span class="badge badge-post">POST</span></td><td class="font-mono">/api/user/register</td><td>Créer un compte utilisateur</td></tr>
+            <tr><td><span class="badge badge-post">POST</span></td><td class="font-mono">/api/user/login</td><td>Connexion utilisateur (crée cookie)</td></tr>
+            <tr><td><span class="badge badge-post">POST</span></td><td class="font-mono">/api/user/logout</td><td>Déconnexion utilisateur (efface cookie)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin: 20px 0 10px; color: var(--adm);">Routes admin (requireAuth — cookie xciv_admin_token)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Méthode</th><th>Endpoint</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge badge-post">POST</span></td><td class="font-mono">/api/auth/login</td><td>Login admin (bcrypt + JWT admin)</td></tr>
+            <tr><td><span class="badge badge-post">POST</span></td><td class="font-mono">/api/auth/logout</td><td>Logout admin (efface cookie)</td></tr>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/auth/verify</td><td>Vérifier si le token admin est valide</td></tr>
+            <tr><td><span class="badge badge-post">POST</span></td><td class="font-mono">/api/watches</td><td>Créer une nouvelle montre</td></tr>
+            <tr><td><span class="badge badge-put">PUT</span></td><td class="font-mono">/api/watches/:id</td><td>Modifier une montre existante</td></tr>
+            <tr><td><span class="badge badge-delete">DELETE</span></td><td class="font-mono">/api/watches/:id</td><td>Supprimer une montre</td></tr>
+            <tr><td><span class="badge badge-post">POST</span></td><td class="font-mono">/api/upload</td><td>Upload image (multer → /assets/images/uploads)</td></tr>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/admin/invoices</td><td>Liste factures avec filtres (search/status/dates)</td></tr>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/admin/invoices/:id</td><td>Détail d'une facture</td></tr>
+            <tr><td><span class="badge badge-post">POST</span></td><td class="font-mono">/api/admin/invoices</td><td>Créer une facture</td></tr>
+            <tr><td><span class="badge badge-put">PUT</span></td><td class="font-mono">/api/admin/invoices/:id</td><td>Modifier une facture</td></tr>
+            <tr><td><span class="badge badge-delete">DELETE</span></td><td class="font-mono">/api/admin/invoices/:id</td><td>Supprimer une facture</td></tr>
+            <tr><td><span class="badge badge-post">POST</span></td><td class="font-mono">/api/admin/invoices/:id/duplicate</td><td>Dupliquer une facture</td></tr>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/admin/invoices/stats</td><td>Statistiques globales</td></tr>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/admin/invoices/next-number</td><td>Prochain numéro de facture disponible</td></tr>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/admin/invoices/clients-summary</td><td>Synthèse par client</td></tr>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/admin/invoices/export/csv</td><td>Export CSV (avec filtres actifs)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin: 20px 0 10px; color: var(--usr);">Routes user connecté (requireUserAuth — cookie xciv_user_token)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Méthode</th><th>Endpoint</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/user/me</td><td>Profil de l'utilisateur connecté</td></tr>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/favorites</td><td>Liste des montres en favoris</td></tr>
+            <tr><td><span class="badge badge-get">GET</span></td><td class="font-mono">/api/favorites/ids</td><td>Seulement les IDs des favoris</td></tr>
+            <tr><td><span class="badge badge-post">POST</span></td><td class="font-mono">/api/favorites/:id</td><td>Ajouter/retirer un favori (toggle)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin: 20px 0 12px; font-size: 1rem;">Exemple de requête / réponse JSON</h3>
+      <pre><span class="cm">// POST /api/user/login — Requête</span>
+{
+  <span class="str">"email"</span>:    <span class="str">"alice@example.com"</span>,
+  <span class="str">"password"</span>: <span class="str">"monMotDePasse123"</span>
+}
+
+<span class="cm">// Réponse 200 — Le cookie est créé côté serveur (Set-Cookie header)</span>
+{
+  <span class="str">"success"</span>: <span class="kw">true</span>,
+  <span class="str">"user"</span>: {
+    <span class="str">"id"</span>:    <span class="str">"abc123"</span>,
+    <span class="str">"email"</span>: <span class="str">"alice@example.com"</span>,
+    <span class="str">"name"</span>:  <span class="str">"Alice"</span>
+  }
+}
+
+<span class="cm">// GET /api/watches — Réponse</span>
+{
+  <span class="str">"watches"</span>: [
+    { <span class="str">"id"</span>: <span class="str">"w1"</span>, <span class="str">"name"</span>: <span class="str">"Submariner"</span>, <span class="str">"price"</span>: <span class="num">15000</span>, <span class="str">"brand"</span>: <span class="str">"Rolex"</span> }
+  ]
+}</pre>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ SECTION 5 -->
+  <div class="section" id="s5">
+    <div class="section-header bg-db">
+      <div class="section-num">05</div>
+      <h2>Base de données JSON</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="highlight highlight-amber">
+        <strong>Choix architectural :</strong> Pas de SQLite ni de PostgreSQL car le projet tourne sur Windows sans les Visual C++ Build Tools (requis pour compiler sqlite3). Les fichiers JSON remplacent la DB avec un pattern simple : lire tout → modifier → réécrire.
+      </div>
+
+      <div class="card-grid" style="margin-top: 20px;">
+        <div class="card card-db">
+          <h3 style="color:var(--db);">watches.json</h3>
+          <pre style="font-size:.75rem;padding:12px;margin:8px 0;">[
+  {
+    <span class="str">"id"</span>:       <span class="str">"w1"</span>,
+    <span class="str">"name"</span>:     <span class="str">"Submariner"</span>,
+    <span class="str">"brand"</span>:    <span class="str">"Rolex"</span>,
+    <span class="str">"price"</span>:    <span class="num">15000</span>,
+    <span class="str">"promo"</span>:    <span class="num">12000</span>,
+    <span class="str">"image"</span>:    <span class="str">"/assets/..."</span>,
+    <span class="str">"category"</span>: <span class="str">"Plongée"</span>,
+    <span class="str">"stock"</span>:    <span class="num">3</span>
+  }
+]</pre>
+        </div>
+        <div class="card card-db">
+          <h3 style="color:var(--db);">users.json</h3>
+          <pre style="font-size:.75rem;padding:12px;margin:8px 0;">[
+  {
+    <span class="str">"id"</span>:        <span class="str">"u1"</span>,
+    <span class="str">"email"</span>:     <span class="str">"alice@ex.com"</span>,
+    <span class="str">"password"</span>:  <span class="str">"$2b$10$..."</span>,
+    <span class="str">"name"</span>:      <span class="str">"Alice"</span>,
+    <span class="str">"createdAt"</span>: <span class="str">"2025-01-15"</span>
+  }
+]</pre>
+          <p style="font-size:.8rem;color:#92400e;">Le mot de passe est toujours un hash bcrypt, jamais en clair.</p>
+        </div>
+        <div class="card card-db">
+          <h3 style="color:var(--db);">favorites.json</h3>
+          <pre style="font-size:.75rem;padding:12px;margin:8px 0;">[
+  {
+    <span class="str">"userId"</span>:  <span class="str">"u1"</span>,
+    <span class="str">"watchId"</span>: <span class="str">"w1"</span>
+  },
+  {
+    <span class="str">"userId"</span>:  <span class="str">"u1"</span>,
+    <span class="str">"watchId"</span>: <span class="str">"w3"</span>
+  }
+]</pre>
+          <p style="font-size:.8rem;color:#92400e;">Table de jointure simple (userId ↔ watchId).</p>
+        </div>
+        <div class="card card-db">
+          <h3 style="color:var(--db);">invoices.json</h3>
+          <pre style="font-size:.75rem;padding:12px;margin:8px 0;">[
+  {
+    <span class="str">"id"</span>:       <span class="str">"inv_001"</span>,
+    <span class="str">"number"</span>:  <span class="str">"XCIV-2025-001"</span>,
+    <span class="str">"client"</span>:  { <span class="str">"name"</span>: <span class="str">"..."</span> },
+    <span class="str">"items"</span>:   [],
+    <span class="str">"total"</span>:   <span class="num">15000</span>,
+    <span class="str">"status"</span>:  <span class="str">"paid"</span>
+  }
+]</pre>
+        </div>
+      </div>
+
+      <h3 style="margin: 24px 0 12px; font-size: 1rem;">Pattern de chaque module DB (ex: database.js)</h3>
+      <pre><span class="kw">const</span> <span class="var">fs</span>   = <span class="fn">require</span>(<span class="str">'fs'</span>);
+<span class="kw">const</span> <span class="var">path</span> = <span class="fn">require</span>(<span class="str">'path'</span>);
+
+<span class="kw">const</span> <span class="var">DB_PATH</span> = <span class="var">path</span>.<span class="fn">join</span>(__dirname, <span class="str">'watches.json'</span>);
+
+<span class="cm">// Lire toutes les montres (synchrone car simple)</span>
+<span class="kw">function</span> <span class="fn">readWatches</span>() {
+  <span class="kw">return</span> <span class="var">JSON</span>.<span class="fn">parse</span>(<span class="var">fs</span>.<span class="fn">readFileSync</span>(<span class="var">DB_PATH</span>, <span class="str">'utf8'</span>));
+}
+
+<span class="cm">// Écrire (remplace tout le fichier)</span>
+<span class="kw">function</span> <span class="fn">writeWatches</span>(<span class="var">watches</span>) {
+  <span class="var">fs</span>.<span class="fn">writeFileSync</span>(<span class="var">DB_PATH</span>, <span class="var">JSON</span>.<span class="fn">stringify</span>(<span class="var">watches</span>, <span class="kw">null</span>, <span class="num">2</span>));
+}
+
+<span class="cm">// Exemple : ajouter une montre</span>
+<span class="kw">function</span> <span class="fn">addWatch</span>(<span class="var">watch</span>) {
+  <span class="kw">const</span> <span class="var">watches</span> = <span class="fn">readWatches</span>();
+  <span class="var">watches</span>.<span class="fn">push</span>(<span class="var">watch</span>);
+  <span class="fn">writeWatches</span>(<span class="var">watches</span>);
+  <span class="kw">return</span> <span class="var">watch</span>;
+}
+
+<span class="var">module</span>.exports = { <span class="var">readWatches</span>, <span class="var">writeWatches</span>, <span class="var">addWatch</span> };</pre>
+
+      <div class="highlight highlight-amber" style="margin-top: 16px;">
+        <strong>Limite de l'approche JSON :</strong> Pas de transactions, pas de requêtes complexes, tout le fichier est relu à chaque opération. Suffit pour un projet de démonstration ; en production on utiliserait PostgreSQL ou MongoDB.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ SECTION 6 -->
+  <div class="section" id="s6">
+    <div class="section-header bg-frontend">
+      <div class="section-num">06</div>
+      <h2>Frontend — Pages &amp; Fonctions JS clés</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="card-grid">
+        <div class="card card-frontend">
+          <h3 style="color:var(--frontend);">/ — index.html</h3>
+          <p>Site public. Catalogue de montres. Navigation dynamique selon auth. Cœurs favoris. Modal de connexion.</p>
+          <ul style="margin-top:8px;">
+            <li><code>initAuth()</code></li>
+            <li><code>loadWatches()</code></li>
+            <li><code>buildCard()</code></li>
+            <li><code>toggleFavorite()</code></li>
+          </ul>
+        </div>
+        <div class="card card-frontend">
+          <h3 style="color:var(--frontend);">/connexion — Login</h3>
+          <p>Formulaire de connexion. Envoie POST /api/user/login. Redirige vers /mon-espace si succès.</p>
+          <ul style="margin-top:8px;">
+            <li><code>handleLogin()</code></li>
+            <li>Validation frontend</li>
+          </ul>
+        </div>
+        <div class="card card-frontend">
+          <h3 style="color:var(--frontend);">/inscription — Register</h3>
+          <p>Formulaire d'inscription. Valide les règles (longueur password, format email). POST /api/user/register.</p>
+        </div>
+        <div class="card card-frontend">
+          <h3 style="color:var(--frontend);">/mon-espace — Espace client</h3>
+          <p>Affiche les favoris de l'utilisateur connecté. <code>profil.js</code> appelle GET /api/favorites et construit les cartes.</p>
+        </div>
+        <div class="card card-frontend">
+          <h3 style="color:var(--frontend);">/admin — Dashboard admin</h3>
+          <p>CRUD montres complet. Upload image. Tableau de bord stats. Module facturation SPA.</p>
+          <ul style="margin-top:8px;">
+            <li>Toutes les actions passent par l'API admin</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="margin: 24px 0 12px; font-size: 1rem;">Flux du chargement de la page d'accueil</h3>
+      <div class="flow" style="flex-direction:column;align-items:stretch;max-width:560px;margin:0 auto;gap:4px;">
+        <div class="flow-box" style="background:#0f172a;">DOMContentLoaded<br><span style="font-size:.75rem;opacity:.6;">Le DOM est prêt</span></div>
+        <div class="flow-arrow" style="text-align:center;">↓</div>
+        <div class="flow-box" style="background:#7c3aed;">initAuth()<br><span style="font-size:.75rem;opacity:.8;">GET /api/user/session → récupère favoriteIds</span></div>
+        <div class="flow-arrow" style="text-align:center;">↓</div>
+        <div class="flow-box" style="background:#059669;">loadWatches()<br><span style="font-size:.75rem;opacity:.8;">GET /api/watches → tableau JSON</span></div>
+        <div class="flow-arrow" style="text-align:center;">↓</div>
+        <div class="flow-box" style="background:#1e40af;">buildCard(watch, favoriteIds)<br><span style="font-size:.75rem;opacity:.8;">Crée le HTML de chaque carte avec cœur pré-calculé</span></div>
+        <div class="flow-arrow" style="text-align:center;">↓</div>
+        <div class="flow-box" style="background:#0f766e;">updateNavAuth(session)<br><span style="font-size:.75rem;opacity:.8;">Affiche "Mon Espace" ou "Connexion" selon session</span></div>
+      </div>
+
+      <h3 style="margin: 24px 0 12px; font-size: 1rem;">Fonctions JS clés — script.js</h3>
+      <pre><span class="cm">// 1. initAuth — premier appel, doit finir AVANT loadWatches</span>
+<span class="kw">async function</span> <span class="fn">initAuth</span>() {
+  <span class="kw">const</span> <span class="var">res</span>  = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/user/session'</span>, { credentials: <span class="str">'include'</span> });
+  <span class="kw">const</span> <span class="var">data</span> = <span class="kw">await</span> <span class="var">res</span>.<span class="fn">json</span>();
+  <span class="var">currentUser</span>  = <span class="var">data</span>.user;      <span class="cm">// null si visiteur</span>
+  <span class="var">favoriteIds</span>  = <span class="var">data</span>.favoriteIds || []; <span class="cm">// [] si non connecté</span>
+  <span class="fn">updateNavAuth</span>(<span class="var">currentUser</span>);
+}
+
+<span class="cm">// 2. buildCard — injecte le cœur avec état pré-calculé</span>
+<span class="kw">function</span> <span class="fn">buildCard</span>(<span class="var">watch</span>, <span class="var">ids</span>) {
+  <span class="kw">const</span> <span class="var">isFav</span> = <span class="var">ids</span>.<span class="fn">includes</span>(<span class="var">watch</span>.id);
+  <span class="kw">return</span> <span class="str">`&lt;div class="card"&gt;
+    &lt;button class="heart <span class="var">${isFav ? 'active' : ''}</span>"
+            onclick="toggleFavorite('<span class="var">${watch.id}</span>')"&gt;♥&lt;/button&gt;
+    &lt;img src="<span class="var">${watch.image}</span>" /&gt;
+    &lt;h3&gt;<span class="var">${watch.name}</span>&lt;/h3&gt;
+  &lt;/div&gt;`</span>;
+}
+
+<span class="cm">// 3. toggleFavorite — POST avec gestion 401</span>
+<span class="kw">async function</span> <span class="fn">toggleFavorite</span>(<span class="var">id</span>) {
+  <span class="kw">const</span> <span class="var">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`/api/favorites/<span class="var">${id}</span>`</span>, {
+    method: <span class="str">'POST'</span>, credentials: <span class="str">'include'</span>
+  });
+  <span class="kw">if</span> (<span class="var">res</span>.status === <span class="num">401</span>) <span class="kw">return</span> <span class="fn">showLoginModal</span>(); <span class="cm">// Visiteur → modal</span>
+  <span class="cm">// Mettre à jour favoriteIds et reconstruire le cœur</span>
+}</pre>
+
+      <h3 style="margin: 20px 0 12px; font-size: 1rem;">IntersectionObserver — Apparition animée des cartes</h3>
+      <pre><span class="cm">// Déclenche l'animation d'entrée quand une carte devient visible</span>
+<span class="kw">const</span> <span class="var">observer</span> = <span class="kw">new</span> <span class="fn">IntersectionObserver</span>((<span class="var">entries</span>) => {
+  <span class="var">entries</span>.<span class="fn">forEach</span>((<span class="var">entry</span>) => {
+    <span class="kw">if</span> (<span class="var">entry</span>.isIntersecting) {
+      <span class="var">entry</span>.target.classList.<span class="fn">add</span>(<span class="str">'visible'</span>);
+      <span class="var">observer</span>.<span class="fn">unobserve</span>(<span class="var">entry</span>.target); <span class="cm">// Une seule fois suffit</span>
+    }
+  });
+}, { threshold: <span class="num">0.1</span> }); <span class="cm">// Se déclenche à 10% de visibilité</span>
+
+document.<span class="fn">querySelectorAll</span>(<span class="str">'.card'</span>).<span class="fn">forEach</span>(<span class="var">c</span> => <span class="var">observer</span>.<span class="fn">observe</span>(<span class="var">c</span>));</pre>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ SECTION 7 -->
+  <div class="section" id="s7">
+    <div class="section-header bg-invoice">
+      <div class="section-num">07</div>
+      <h2>Module Facturation</h2>
+    </div>
+    <div class="section-body">
+
+      <p style="margin-bottom: 16px;">Le module de facturation est une <strong>SPA (Single Page Application)</strong> intégrée dans le dashboard admin. Il permet la gestion complète du cycle de vie des factures sans rechargement de page.</p>
+
+      <div class="card-grid">
+        <div class="card card-adm">
+          <h3 style="color:var(--adm);">CRUD Factures</h3>
+          <ul>
+            <li>Créer avec numérotation auto (XCIV-YYYY-NNN)</li>
+            <li>Modifier statut (brouillon, envoyée, payée, annulée)</li>
+            <li>Supprimer avec confirmation</li>
+            <li>Dupliquer (gain de temps)</li>
+          </ul>
+        </div>
+        <div class="card card-adm">
+          <h3 style="color:var(--adm);">Filtres avancés</h3>
+          <ul>
+            <li>Recherche textuelle (client, numéro)</li>
+            <li>Filtre par statut</li>
+            <li>Filtre par statut de paiement</li>
+            <li>Filtre par plage de dates</li>
+          </ul>
+        </div>
+        <div class="card card-adm">
+          <h3 style="color:var(--adm);">Statistiques</h3>
+          <ul>
+            <li>Total facturé (toutes périodes)</li>
+            <li>Montant en attente</li>
+            <li>Nombre de factures par statut</li>
+            <li>Synthèse par client</li>
+          </ul>
+        </div>
+        <div class="card card-adm">
+          <h3 style="color:var(--adm);">Export CSV</h3>
+          <ul>
+            <li>Respecte les filtres actifs</li>
+            <li>Généré côté serveur</li>
+            <li>Headers : Content-Type text/csv</li>
+            <li>Téléchargement direct navigateur</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="margin: 20px 0 12px; font-size: 1rem;">Exemple — Export CSV dans le controller</h3>
+      <pre><span class="cm">// invoicesController.js — exportCSV</span>
+<span class="kw">async function</span> <span class="fn">exportCSV</span>(<span class="var">req</span>, <span class="var">res</span>) {
+  <span class="kw">const</span> <span class="var">invoices</span> = <span class="var">invoiceModel</span>.<span class="fn">getAll</span>(<span class="var">req</span>.query); <span class="cm">// Filtres passés en query</span>
+
+  <span class="kw">const</span> <span class="var">header</span> = <span class="str">'Numéro,Client,Date,Montant,Statut\n'</span>;
+  <span class="kw">const</span> <span class="var">rows</span>   = <span class="var">invoices</span>.<span class="fn">map</span>(<span class="var">i</span> =>
+    <span class="str">`<span class="var">${i.number}</span>,<span class="var">${i.client.name}</span>,<span class="var">${i.date}</span>,<span class="var">${i.total}</span>,<span class="var">${i.status}</span>`</span>
+  ).<span class="fn">join</span>(<span class="str">'\n'</span>);
+
+  <span class="var">res</span>.<span class="fn">setHeader</span>(<span class="str">'Content-Type'</span>, <span class="str">'text/csv'</span>);
+  <span class="var">res</span>.<span class="fn">setHeader</span>(<span class="str">'Content-Disposition'</span>, <span class="str">'attachment; filename=factures.csv'</span>);
+  <span class="var">res</span>.<span class="fn">send</span>(<span class="var">header</span> + <span class="var">rows</span>);
+}</pre>
+
+      <h3 style="margin: 20px 0 12px; font-size: 1rem;">Upload d'images (multer)</h3>
+      <pre><span class="cm">// upload.js — Configuration multer</span>
+<span class="kw">const</span> <span class="var">storage</span> = <span class="var">multer</span>.<span class="fn">diskStorage</span>({
+  destination: (<span class="var">req</span>, <span class="var">file</span>, <span class="var">cb</span>) => {
+    <span class="fn">cb</span>(<span class="kw">null</span>, <span class="str">'frontend/assets/images/uploads'</span>); <span class="cm">// Dossier de destination</span>
+  },
+  filename: (<span class="var">req</span>, <span class="var">file</span>, <span class="var">cb</span>) => {
+    <span class="kw">const</span> <span class="var">unique</span> = <span class="var">Date</span>.<span class="fn">now</span>() + <span class="str">'-'</span> + <span class="var">Math</span>.<span class="fn">round</span>(<span class="var">Math</span>.<span class="fn">random</span>() * <span class="num">1e9</span>);
+    <span class="fn">cb</span>(<span class="kw">null</span>, <span class="var">unique</span> + <span class="var">path</span>.<span class="fn">extname</span>(<span class="var">file</span>.originalname)); <span class="cm">// Nom unique</span>
+  }
+});
+<span class="kw">const</span> <span class="var">upload</span> = <span class="fn">multer</span>({ storage, limits: { fileSize: <span class="num">5</span> * <span class="num">1024</span> * <span class="num">1024</span> } }); <span class="cm">// 5 MB max</span>
+
+<span class="var">router</span>.<span class="fn">post</span>(<span class="str">'/'</span>, <span class="var">requireAuth</span>, <span class="var">upload</span>.<span class="fn">single</span>(<span class="str">'image'</span>), (<span class="var">req</span>, <span class="var">res</span>) => {
+  <span class="var">res</span>.<span class="fn">json</span>({ url: <span class="str">`/assets/images/uploads/<span class="var">${req.file.filename}</span>`</span> });
+});</pre>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ SECTION 8 — Q&A -->
+  <div class="section" id="s8">
+    <div class="section-header bg-qa">
+      <div class="section-num">08</div>
+      <h2>Questions d'oral &amp; Réponses</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q1</span> Pourquoi avoir choisi JSON et pas SQLite comme base de données ?</div>
+        <div class="flashcard-a">
+          SQLite nécessite de compiler un module natif C++ lors de <code>npm install</code>, ce qui requiert les <strong>Visual C++ Build Tools</strong> sur Windows — non installés sur la machine de développement. Plutôt que de bloquer le projet sur une configuration système complexe, les fichiers JSON avec le module <code>fs</code> de Node.js offrent une solution <strong>zéro dépendance native</strong>, simple à comprendre et suffisante pour les volumes de données d'un portfolio. Le code reste lisible et portable.
+          <div class="analogy">Analogie : c'est comme utiliser une feuille Excel au lieu d'un vrai SGBD pour gérer 100 clients. Ca fonctionne parfaitement à cette échelle.</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q2</span> Comment fonctionne JWT (JSON Web Token) ?</div>
+        <div class="flashcard-a">
+          Un JWT est composé de <strong>3 parties encodées en Base64 et séparées par des points</strong> : <code>header.payload.signature</code>. Le serveur crée le token avec <code>jwt.sign(payload, secret)</code>, le signe avec une clé secrète (HMAC SHA-256), et l'envoie au client. À chaque requête suivante, le client renvoie le token. Le serveur vérifie la signature avec <code>jwt.verify(token, secret)</code> — si quelqu'un a modifié le payload, la signature ne correspond plus et le token est rejeté. <strong>Le serveur ne stocke rien</strong> : le token est autoporteur.
+          <div class="analogy">Analogie : c'est comme un passeport. Le pays émetteur (serveur) appose un tampon (signature). Chaque frontière (endpoint) vérifie l'authenticité du tampon sans appeler le pays d'origine.</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q3</span> Pourquoi 2 cookies séparés (admin vs user) ?</div>
+        <div class="flashcard-a">
+          Pour des raisons de <strong>sécurité et de séparation des responsabilités</strong>. Les deux rôles ont des durées de vie différentes (admin 8h, user 7j), des secrets JWT différents, et des niveaux de privilège complètement distincts. Si le token user était compromis, il ne donnerait aucun accès admin. Les middleware peuvent vérifier indépendamment chaque token. Cette architecture suit le <strong>principe du moindre privilège</strong>.
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q4</span> Qu'est-ce que bcrypt et pourquoi l'utiliser ?</div>
+        <div class="flashcard-a">
+          bcrypt est un algorithme de <strong>hachage de mots de passe</strong>. Contrairement à MD5 ou SHA-1 qui sont des fonctions rapides, bcrypt est <strong>intentionnellement lent</strong> (paramétrable avec un "cost factor") pour rendre le brute-force difficile. Il intègre automatiquement un <strong>salt aléatoire</strong>, ce qui signifie que deux mots de passe identiques produisent des hashes différents (protection contre les rainbow tables). On ne stocke jamais le mot de passe en clair, seulement son hash. <code>bcrypt.compare()</code> rehache le mdp fourni et compare.
+          <div class="analogy">Analogie : bcrypt est comme un coffre-fort dont l'ouverture prend intentionnellement 10 secondes. Pas gênant pour un vrai utilisateur, mais catastrophique pour un attaquant qui essaie un milliard de mots de passe.</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q5</span> Comment fonctionne optionalUserAuth ?</div>
+        <div class="flashcard-a">
+          C'est un middleware Express qui <strong>essaie</strong> de lire et valider le cookie <code>xciv_user_token</code>. Si le cookie est absent ou invalide, il appelle <code>next()</code> quand même — la requête continue. Si le token est valide, il peuple <code>req.user</code> avec les données décodées. L'avantage : le site public fonctionne pour tout le monde (visiteurs anonymes et connectés), mais les fonctions qui utilisent <code>req.user</code> peuvent personnaliser l'expérience si l'utilisateur est connecté (ex: pré-calculer les favoris pour <code>buildCard()</code>).
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q6</span> Qu'est-ce qu'un middleware Express ?</div>
+        <div class="flashcard-a">
+          Un middleware est une <strong>fonction intermédiaire</strong> qui s'exécute entre la réception d'une requête HTTP et l'envoi de la réponse. Sa signature est <code>(req, res, next)</code>. Il peut modifier <code>req</code> (ex: ajouter <code>req.user</code>), répondre directement (bloquer), ou appeler <code>next()</code> pour passer au middleware/handler suivant. Les middleware s'enchaînent : <code>app.use(cors())</code> → <code>app.use(cookieParser())</code> → route handler. C'est la colonne vertébrale d'Express.
+          <div class="analogy">Analogie : comme des agents de sécurité à l'entrée d'un club. Le premier vérifie l'âge (cors), le second vérifie les cookies (cookieParser), le troisième vérifie le token (auth). Si tous passent, vous entrez dans la salle (controller).</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q7</span> Comment multer gère l'upload d'images ?</div>
+        <div class="flashcard-a">
+          multer est un middleware Express qui intercepte les requêtes <code>multipart/form-data</code> (le format utilisé pour les uploads). On configure <code>multer.diskStorage()</code> avec deux fonctions : <code>destination</code> (quel dossier) et <code>filename</code> (comment nommer le fichier). <code>upload.single('image')</code> indique qu'on attend un seul fichier avec le champ "image". Après traitement, <code>req.file</code> contient les métadonnées du fichier sauvegardé (nom, chemin, taille...).
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q8</span> Qu'est-ce que CORS et pourquoi est-ce nécessaire ?</div>
+        <div class="flashcard-a">
+          CORS (Cross-Origin Resource Sharing) est un mécanisme de sécurité des navigateurs qui <strong>bloque les requêtes HTTP vers un domaine différent</strong> de la page courante (par défaut). Quand le frontend (port 3000) fait un <code>fetch</code> vers l'API (même port ici, mais en général différent), le navigateur vérifie que le serveur autorise cette origine via les headers <code>Access-Control-Allow-Origin</code>. Avec <code>credentials: true</code>, l'origine doit être explicite (pas <code>*</code>) pour permettre l'envoi de cookies.
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q9</span> Comment les favoris sont-ils stockés et gérés ?</div>
+        <div class="flashcard-a">
+          Les favoris sont stockés dans <code>favorites.json</code> comme une <strong>table de jointure plate</strong> : un tableau d'objets <code>{userId, watchId}</code>. Quand un utilisateur clique sur un cœur, le frontend envoie <code>POST /api/favorites/:watchId</code>. Le controller vérifie si la paire (userId, watchId) existe déjà : si oui, il la supprime (unfavorite) ; sinon, il l'ajoute (favorite). C'est le pattern <strong>toggle</strong>. Pour afficher les cœurs à la page, <code>GET /api/favorites/ids</code> retourne uniquement les IDs — plus léger qu'envoyer toutes les montres.
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q10</span> Différence entre requireAuth et requireUserAuth ?</div>
+        <div class="flashcard-a">
+          <strong>requireAuth</strong> protège les routes <strong>admin</strong> : vérifie le cookie <code>xciv_admin_token</code> signé avec le secret admin. Si invalide → 401 ou redirect vers /admin/login. Utilisé sur toutes les routes de gestion (CRUD montres, factures, upload).<br><br>
+          <strong>requireUserAuth</strong> protège les routes <strong>utilisateur connecté</strong> : vérifie <code>xciv_user_token</code> avec le secret user. Si invalide → 401 JSON. Utilisé sur /api/favorites et /api/user/me. Les deux middleware sont totalement indépendants.
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q11</span> Qu'est-ce qu'un cookie HttpOnly et pourquoi l'utiliser ?</div>
+        <div class="flashcard-a">
+          Un cookie <code>HttpOnly</code> est un cookie que <strong>JavaScript ne peut pas lire</strong> (<code>document.cookie</code> ne le voit pas). Il est transmis automatiquement par le navigateur dans chaque requête HTTP, mais reste inaccessible au code JS de la page. Cela protège contre les attaques <strong>XSS (Cross-Site Scripting)</strong> : même si un attaquant injecte du JS malveillant dans la page, il ne peut pas voler le token JWT stocké dans le cookie.
+          <div class="analogy">Analogie : c'est comme un badge d'accès que vous portez mais que vous ne pouvez pas voir ni donner à quelqu'un — seul le lecteur de badge (le serveur) peut l'utiliser.</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q12</span> Comment le frontend sait si l'utilisateur est connecté ?</div>
+        <div class="flashcard-a">
+          Au chargement de la page, <code>initAuth()</code> appelle <code>GET /api/user/session</code> avec <code>credentials: 'include'</code> (pour envoyer les cookies). Le serveur lit le cookie <code>xciv_user_token</code> via <code>optionalUserAuth</code> et renvoie <code>{user: {...}, favoriteIds: [...]}</code> si connecté, ou <code>{user: null, favoriteIds: []}</code> si non connecté. <strong>Cette route ne renvoie jamais d'erreur</strong> — le JS peut toujours lire la réponse. Ensuite, la nav est mise à jour et les cœurs sont colorés selon <code>favoriteIds</code>.
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q13</span> Pourquoi nodemon en développement ?</div>
+        <div class="flashcard-a">
+          nodemon surveille les fichiers du projet et <strong>redémarre automatiquement le serveur Node.js</strong> à chaque modification. Sans nodemon, il faudrait arrêter (<code>Ctrl+C</code>) et relancer manuellement <code>node server.js</code> après chaque changement de code. nodemon est une dépendance de développement (<code>devDependencies</code>) — il n'est pas installé en production. D'où les deux scripts : <code>npm start</code> → <code>node server.js</code>, <code>npm run dev</code> → <code>nodemon server.js</code>.
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q14</span> Comment fonctionne l'export CSV ?</div>
+        <div class="flashcard-a">
+          Le controller <code>exportCSV</code> récupère les factures en appliquant les mêmes filtres que l'affichage (passés en query string). Il construit une chaîne CSV manuellement (header + lignes). Il configure la réponse HTTP avec les headers appropriés : <code>Content-Type: text/csv</code> et <code>Content-Disposition: attachment; filename=factures.csv</code>. Ce dernier header indique au navigateur de <strong>télécharger le fichier</strong> plutôt que de l'afficher. Le navigateur crée automatiquement un fichier .csv sur l'ordinateur de l'utilisateur.
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q15</span> Qu'est-ce que le pattern MVC ?</div>
+        <div class="flashcard-a">
+          MVC signifie <strong>Model — View — Controller</strong>. C'est un pattern d'architecture qui sépare les responsabilités :<br>
+          • <strong>Model</strong> : accès aux données (models/ dans ce projet, lit/écrit les JSON)<br>
+          • <strong>View</strong> : présentation (frontend HTML/CSS/JS)<br>
+          • <strong>Controller</strong> : logique métier (controllers/, orchestre Model et View)<br><br>
+          Cette séparation facilite la maintenance : changer la DB (ex: passer à PostgreSQL) ne touche que les Models. Changer l'UI ne touche que le Frontend.
+          <div class="analogy">Analogie : comme un restaurant. Le Model est la cuisine (données brutes), la View est la salle (présentation), le Controller est le serveur (fait le lien).</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q16</span> Comment Express route les requêtes ?</div>
+        <div class="flashcard-a">
+          Express parcourt les routes dans l'ordre où elles sont définies. Quand une requête arrive, il cherche la première route dont la <strong>méthode HTTP et le chemin correspondent</strong>. Les routeurs (<code>express.Router()</code>) permettent de grouper des routes et de les monter sur un préfixe. Ex : <code>app.use('/api/watches', watchRouter)</code> → toutes les routes du watchRouter sont prefixées par <code>/api/watches</code>. Les paramètres dynamiques (<code>:id</code>) sont accessibles via <code>req.params.id</code>.
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q17</span> Qu'est-ce que bcryptjs.compare() fait exactement ?</div>
+        <div class="flashcard-a">
+          <code>bcrypt.compare(plaintext, hash)</code> ne "déchiffre" pas le hash (c'est impossible). Il <strong>rehache le mot de passe en clair</strong> avec le même salt que celui intégré dans le hash stocké (le salt fait partie du hash bcrypt), puis compare les deux résultats. Si le mot de passe est identique à celui qui a produit le hash, les résultats correspondent. La fonction retourne une promesse qui résout à <code>true</code> ou <code>false</code>. La comparaison est en <strong>temps constant</strong> (protection contre les timing attacks).
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q18</span> Comment le JWT est-il vérifié côté serveur ?</div>
+        <div class="flashcard-a">
+          <code>jwt.verify(token, secret)</code> effectue 3 vérifications :<br>
+          1. <strong>Intégrité</strong> : re-signe le header + payload avec le secret et compare à la signature du token. Si différent → rejet.<br>
+          2. <strong>Expiration</strong> : vérifie le champ <code>exp</code> du payload. Si date passée → <code>TokenExpiredError`.<br>
+          3. <strong>Algorithme</strong> : vérifie que l'algorithme déclaré dans le header est celui attendu.<br><br>
+          Si toutes les vérifications passent, il retourne le payload décodé. Sinon il lève une exception catchée dans les middleware.
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q19</span> Qu'est-ce que multer.diskStorage ?</div>
+        <div class="flashcard-a">
+          <code>multer.diskStorage()</code> configure comment multer stocke les fichiers uploadés <strong>directement sur le disque</strong> (par opposition à <code>memoryStorage</code> qui garde le fichier en RAM). On lui passe un objet avec 2 callbacks :<br>
+          • <code>destination(req, file, cb)</code> : détermine le dossier de sauvegarde. On appelle <code>cb(null, 'chemin/du/dossier')</code>.<br>
+          • <code>filename(req, file, cb)</code> : détermine le nom du fichier. On génère un nom unique (Date.now + random) pour éviter les collisions.
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q20</span> Comment fonctionne IntersectionObserver ?</div>
+        <div class="flashcard-a">
+          <code>IntersectionObserver</code> est une API native du navigateur qui observe si un élément <strong>entre dans le viewport</strong> (zone visible de l'écran). On crée un observer avec un callback et un seuil (<code>threshold: 0.1</code> = se déclenche quand 10% de l'élément est visible). On l'attache à des éléments avec <code>observer.observe(element)</code>. Quand la condition est remplie, le callback reçoit un tableau d'<code>IntersectionObserverEntry</code>. On ajoute une classe CSS pour déclencher l'animation, puis <code>unobserve()</code> pour ne pas répéter. <strong>C'est plus performant que d'écouter l'événement scroll</strong>.
+          <div class="analogy">Analogie : comme une caméra de surveillance qui notifie quand quelqu'un entre dans son champ de vision — au lieu de regarder en permanence si la personne est là.</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q21</span> Comment fonctionne l'inscription utilisateur côté serveur ?</div>
+        <div class="flashcard-a">
+          1. <code>POST /api/user/register</code> reçoit <code>{email, password, name}</code><br>
+          2. Le controller vérifie que l'email n'existe pas déjà dans <code>users.json</code><br>
+          3. Validation des règles (longueur mdp, format email)<br>
+          4. <code>bcrypt.hash(password, 10)</code> → hash du mot de passe<br>
+          5. Création de l'objet user avec un ID unique (<code>Date.now()</code> ou <code>crypto.randomUUID()</code>)<br>
+          6. Sauvegarde dans <code>users.json</code><br>
+          7. Création du JWT et du cookie <code>xciv_user_token</code><br>
+          8. Réponse 201 avec les infos user (sans le hash !)
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flashcard-q"><span class="flashcard-num">Q22</span> Pourquoi initAuth() doit être appelé AVANT loadWatches() ?</div>
+        <div class="flashcard-a">
+          <code>initAuth()</code> récupère la liste des <code>favoriteIds</code> de l'utilisateur connecté. <code>loadWatches()</code> → <code>buildCard()</code> utilise ces <code>favoriteIds</code> pour colorer les cœurs en rouge dès le premier affichage. Si <code>loadWatches()</code> était appelé avant, les cœurs seraient tous vides (favoriteIds = []), et il faudrait re-rendre toutes les cartes après. En attendant la promesse d'<code>initAuth()</code> avec <code>await</code>, on s'assure que les données sont prêtes. C'est une question d'<strong>ordre d'exécution asynchrone</strong>.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ SECTION 9 — MIND MAPS -->
+  <div class="section" id="s9">
+    <div class="section-header bg-mindmap">
+      <div class="section-num">09</div>
+      <h2>Cartes mentales des flux</h2>
+    </div>
+    <div class="section-body">
+
+      <!-- MINDMAP 1 : Requête admin -->
+      <h3 style="margin-bottom: 14px; font-size: 1.05rem; color: var(--adm);">Flux d'une requête admin (ex: créer une montre)</h3>
+      <div class="mindmap">
+        <div class="mindmap-center">
+          <div class="mindmap-root">POST /api/watches (admin)</div>
+        </div>
+        <div class="mindmap-branches">
+          <div class="mindmap-branch" style="background:#1e3a8a;">
+            <strong>1. Navigateur</strong>
+            <ul>
+              <li>fetch POST /api/watches</li>
+              <li>credentials: 'include'</li>
+              <li>body: JSON montre</li>
+              <li>Cookie auto-envoyé</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#7c3aed;">
+            <strong>2. Express Router</strong>
+            <ul>
+              <li>watches.js</li>
+              <li>POST '/' route match</li>
+              <li>Appel middleware</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#b91c1c;">
+            <strong>3. requireAuth</strong>
+            <ul>
+              <li>Lit xciv_admin_token</li>
+              <li>jwt.verify() admin</li>
+              <li>OK → next()</li>
+              <li>KO → 401 JSON</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#059669;">
+            <strong>4. watchesController</strong>
+            <ul>
+              <li>Valide les données</li>
+              <li>Génère un ID unique</li>
+              <li>Appelle watchModel.add()</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#b45309;">
+            <strong>5. watchModel + JSON</strong>
+            <ul>
+              <li>readWatches()</li>
+              <li>watches.push(new)</li>
+              <li>writeWatches()</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#0f766e;">
+            <strong>6. Réponse</strong>
+            <ul>
+              <li>res.status(201)</li>
+              <li>res.json(newWatch)</li>
+              <li>Frontend refresh</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- MINDMAP 2 : Inscription -->
+      <h3 style="margin: 28px 0 14px; font-size: 1.05rem; color: var(--usr);">Flux inscription utilisateur</h3>
+      <div class="mindmap">
+        <div class="mindmap-center">
+          <div class="mindmap-root">POST /api/user/register</div>
+        </div>
+        <div class="mindmap-branches">
+          <div class="mindmap-branch" style="background:#1e3a8a;">
+            <strong>1. Formulaire</strong>
+            <ul>
+              <li>Validation JS frontend</li>
+              <li>email + password + name</li>
+              <li>fetch POST</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#7c3aed;">
+            <strong>2. userController</strong>
+            <ul>
+              <li>Email existe déjà ?</li>
+              <li>Règles password OK ?</li>
+              <li>Si erreur → 400</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#b45309;">
+            <strong>3. bcrypt.hash()</strong>
+            <ul>
+              <li>10 rounds de salage</li>
+              <li>Produit $2b$10$...</li>
+              <li>Irréversible</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#059669;">
+            <strong>4. userModel.create()</strong>
+            <ul>
+              <li>Génère ID unique</li>
+              <li>Ajoute à users.json</li>
+              <li>Retourne user (sans hash)</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#be185d;">
+            <strong>5. jwt.sign()</strong>
+            <ul>
+              <li>Payload: id, email</li>
+              <li>Secret USER_SECRET</li>
+              <li>Expire en 7j</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#0f766e;">
+            <strong>6. Cookie + Réponse</strong>
+            <ul>
+              <li>Set-Cookie HttpOnly</li>
+              <li>xciv_user_token</li>
+              <li>201 + redirect /mon-espace</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- MINDMAP 3 : Toggle favori -->
+      <h3 style="margin: 28px 0 14px; font-size: 1.05rem; color: var(--frontend);">Flux toggle favori (cœur)</h3>
+      <div class="mindmap">
+        <div class="mindmap-center">
+          <div class="mindmap-root">Clic sur le cœur ♥</div>
+        </div>
+        <div class="mindmap-branches">
+          <div class="mindmap-branch" style="background:#1e3a8a;">
+            <strong>1. toggleFavorite(id)</strong>
+            <ul>
+              <li>Appel JS frontend</li>
+              <li>POST /api/favorites/:id</li>
+              <li>credentials: include</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#7c3aed;">
+            <strong>2. requireUserAuth</strong>
+            <ul>
+              <li>Lit xciv_user_token</li>
+              <li>Non connecté → 401</li>
+              <li>401 → showLoginModal()</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#059669;">
+            <strong>3. favoritesController</strong>
+            <ul>
+              <li>req.user.id disponible</li>
+              <li>Cherche (userId, watchId)</li>
+              <li>Existe ? → supprime</li>
+              <li>Non ? → ajoute</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#b45309;">
+            <strong>4. favoriteModel</strong>
+            <ul>
+              <li>Lit favorites.json</li>
+              <li>filter() ou push()</li>
+              <li>Réécrit le fichier</li>
+            </ul>
+          </div>
+          <div class="mindmap-branch" style="background:#0f766e;">
+            <strong>5. Réponse + UI</strong>
+            <ul>
+              <li>{isFavorite: true/false}</li>
+              <li>Mise à jour favoriteIds[]</li>
+              <li>Classe CSS active toggle</li>
+              <li>Animation cœur</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recap URLs -->
+      <h3 style="margin: 28px 0 14px; font-size: 1.05rem;">Récapitulatif des URLs du projet</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>URL</th><th>Description</th><th>Accès</th></tr></thead>
+          <tbody>
+            <tr><td class="font-mono">/</td><td>Site public — catalogue montres</td><td><span class="badge badge-pub">Public</span></td></tr>
+            <tr><td class="font-mono">/connexion</td><td>Login utilisateur</td><td><span class="badge badge-pub">Public</span></td></tr>
+            <tr><td class="font-mono">/inscription</td><td>Création de compte</td><td><span class="badge badge-pub">Public</span></td></tr>
+            <tr><td class="font-mono">/mon-espace</td><td>Espace client — favoris</td><td><span class="badge badge-usr">User connecté</span></td></tr>
+            <tr><td class="font-mono">/admin/login</td><td>Login administrateur</td><td><span class="badge badge-pub">Public</span></td></tr>
+            <tr><td class="font-mono">/admin/dashboard</td><td>Dashboard admin — CRUD montres</td><td><span class="badge badge-adm">Admin</span></td></tr>
+            <tr><td class="font-mono">/admin/facturation</td><td>Module facturation complet</td><td><span class="badge badge-adm">Admin</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Identifiants -->
+      <div class="card-grid" style="margin-top: 20px;">
+        <div class="card card-adm">
+          <h3 style="color:var(--adm);">Identifiants Admin</h3>
+          <p class="font-mono" style="margin-top:8px; font-size:.9rem;">
+            Email : <strong>admin@maisonxciv.com</strong><br>
+            Mot de passe : <strong>Xciv2025!</strong>
+          </p>
+        </div>
+        <div class="card card-backend">
+          <h3 style="color:var(--backend);">Lancement du serveur</h3>
+          <pre style="margin:8px 0;padding:10px;font-size:.8rem;"><span class="cm"># Production</span>
+npm start
+
+<span class="cm"># Développement (nodemon)</span>
+npm run dev
+
+<span class="cm"># → http://localhost:3000</span></pre>
+        </div>
+      </div>
+
+      <!-- Points cles a retenir -->
+      <div class="card" style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; margin-top: 20px; border: none;">
+        <h3 style="color:#93c5fd; margin-bottom: 14px;">Points cles a retenir pour l'oral</h3>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <ul style="color:rgba(255,255,255,.85); font-size:.87rem; padding-left:18px;">
+            <li style="margin-bottom:8px;">JSON DB = choix pragmatique (pas de build tools C++)</li>
+            <li style="margin-bottom:8px;">2 cookies séparés = sécurité et séparation des rôles</li>
+            <li style="margin-bottom:8px;">optionalUserAuth = site public toujours accessible</li>
+            <li style="margin-bottom:8px;">JWT = token autoporteur, serveur sans état (stateless)</li>
+            <li style="margin-bottom:8px;">bcrypt = hachage lent intentionnel (protection brute-force)</li>
+          </ul>
+          <ul style="color:rgba(255,255,255,.85); font-size:.87rem; padding-left:18px;">
+            <li style="margin-bottom:8px;">HttpOnly cookie = protection XSS</li>
+            <li style="margin-bottom:8px;">initAuth() avant loadWatches() = ordre asynchrone</li>
+            <li style="margin-bottom:8px;">Pattern MVC : Routes → Controllers → Models</li>
+            <li style="margin-bottom:8px;">multer.diskStorage = sauvegarde images sur disque</li>
+            <li style="margin-bottom:8px;">IntersectionObserver = animations performantes au scroll</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-footer">
+    Maison XCIV — Guide de Révision Oral &mdash; Node.js · Express · JWT · JSON Database &mdash; 2026
+  </div>
+
+</div>
+</body>
+</html>

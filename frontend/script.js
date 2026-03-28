@@ -987,7 +987,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const adminForm = document.getElementById('adminForm');
   if (adminForm) adminForm.addEventListener('submit', handleFormSubmit);
 
-  console.log('[XCIV] script.js v3 chargé — DOMContentLoaded OK');
+  console.log('[XCIV] script.js v4 chargé — DOMContentLoaded OK');
   restoreNouveautesView(); // restaure la vue choisie par l'utilisateur
   await initAuth();        // charge session + favoris en premier
   loadWatches();           // puis le catalogue (buildCard utilisera favoriteIds)

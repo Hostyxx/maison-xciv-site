@@ -2079,10 +2079,21 @@ footer {
   margin-bottom: 4px;
 }
 
-/* Afficher le bouton expand uniquement en vue grille mobile (< 600px)
-   où wc-desc est masquée. En vue liste (view-1), la desc est visible
-   à ≥ 720px et le layout row compact (< 720px) n'a pas de place. */
+/* ─── Expand button visibility rules ───────────────────────────
+   Desktop (hover:hover) : l'overlay remplace le bouton → caché.
+   Mobile/tablette (hover:none / touch) : pas d'overlay disponible
+   → bouton toujours visible en vue grille.
+   View-1 compact (< 720px) : pas de place dans le row compact → caché.
+   ─────────────────────────────────────────────────────────────── */
+
+/* Vue grille < 600px : desc masquée → expand visible */
 @media (max-width: 600px) {
+  .nouv-grid.view-2 .wc-more-btn { display: flex; }
+}
+
+/* Tout appareil touch (mobile, tablette, Surface…) :
+   pas d'overlay hover disponible → expand toujours visible en vue grille */
+@media (hover: none), (pointer: coarse) {
   .nouv-grid.view-2 .wc-more-btn { display: flex; }
 }
 
@@ -3501,6 +3512,10 @@ section, #watches, #services, #nouveautes, #about, #process, #projects, #contact
     margin-top: 16px !important;
     overflow: visible !important;
   }
+
+  /* En vue grille : masque desc + sep — le bouton expand les remplace */
+  .nouv-grid.view-2 .wc-desc,
+  .nouv-grid.view-2 .wc-sep { display: none; }
 
   /* Supprime les transforms au hover sur les cartes (pas de hover iOS) */
   .watch-card-item:hover {

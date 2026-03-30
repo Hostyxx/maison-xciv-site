@@ -32,12 +32,26 @@ function escapeHtml(str) {
 
 // ═══════════════════════════════════════════
 //  1. LOADER
+//  Durée réduite à 1500ms + bouton skip UX
+//  Fallback automatique si l'événement 'load' tarde
 // ═══════════════════════════════════════════
+function hideLoader() {
+  const loader = document.getElementById('loader');
+  if (loader && !loader.classList.contains('hidden')) {
+    loader.classList.add('hidden');
+  }
+}
+
+// Fallback : masque le loader après 3s même si 'load' ne se déclenche pas
+const loaderFallback = setTimeout(hideLoader, 3000);
+
 window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('loader').classList.add('hidden');
-  }, 2200);
+  clearTimeout(loaderFallback);
+  setTimeout(hideLoader, 1500);
 });
+
+// Bouton skip — permet de passer l'animation immédiatement
+document.getElementById('loaderSkip')?.addEventListener('click', hideLoader);
 
 
 // ═══════════════════════════════════════════
@@ -937,7 +951,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ── Hamburger ────────────────────────────────────────────────
   document.getElementById('hamburger').addEventListener('click', () => {
-    console.log('[XCIV] hamburger tap → toggleMobile()');
     toggleMobile();
   });
 
@@ -958,7 +971,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ── Sélecteur de vue ─────────────────────────────────────────
   document.querySelectorAll('.view-btn').forEach(btn => {
     btn.addEventListener('click', function () {
-      console.log('[XCIV] view-btn tap →', this.dataset.view);
       setNouveautesView(this.dataset.view, this);
     });
   });
@@ -987,7 +999,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const adminForm = document.getElementById('adminForm');
   if (adminForm) adminForm.addEventListener('submit', handleFormSubmit);
 
-  console.log('[XCIV] script.js v4 chargé — DOMContentLoaded OK');
+  // ── Copyright année dynamique ────────────────────────────────
+  const footerYear = document.getElementById('footer-year');
+  if (footerYear) footerYear.textContent = new Date().getFullYear();
+
   restoreNouveautesView(); // restaure la vue choisie par l'utilisateur
   await initAuth();        // charge session + favoris en premier
   loadWatches();           // puis le catalogue (buildCard utilisera favoriteIds)

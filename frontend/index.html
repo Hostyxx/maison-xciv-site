@@ -8,7 +8,7 @@
        SEO — Titre & Description
   ═══════════════════════════════════════════ -->
   <title>Maison XCIV — Montres de Collection de Luxe | Rolex, Patek Philippe, Audemars Piguet</title>
-  <meta name="description" content="Maison XCIV — Boutique spécialisée en montres de collection de prestige. Découvrez notre sélection exclusive : Rolex, Patek Philippe, Audemars Piguet et bien plus. Achat, vente et conseil en horlogerie de luxe.">
+  <meta name="description" content="Maison XCIV — Montres de collection de prestige. Rolex, Patek Philippe, Audemars Piguet. Achat, vente et conseil en horlogerie de luxe.">
   <meta name="keywords" content="montres de collection, horlogerie de luxe, Rolex, Patek Philippe, Audemars Piguet, montre vintage, achat montre, Maison XCIV">
   <meta name="author" content="Maison XCIV">
   <meta name="robots" content="index, follow">
@@ -39,23 +39,36 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "JewelryStore",
+    "@type": ["LocalBusiness", "ProfessionalService"],
+    "@id": "https://maisonxciv.com/#business",
     "name": "Maison XCIV",
     "description": "Boutique spécialisée en montres de collection de prestige. Achat, vente et conseil en horlogerie de luxe.",
     "url": "https://maisonxciv.com",
-    "logo": "https://maisonxciv.com/assets/images/logo.png",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://maisonxciv.com/assets/images/logo.png"
+    },
     "image": "https://maisonxciv.com/assets/images/og-preview.jpg",
+    "telephone": "+33601918798",
+    "email": "contact@maisonxciv.com",
     "priceRange": "€€€€",
     "currenciesAccepted": "EUR",
-    "paymentAccepted": "Cash, Bank Transfer",
+    "paymentAccepted": "Virement bancaire, Espèces",
     "openingHours": "Mo-Sa 10:00-19:00",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "FR",
+      "addressLocality": "France"
+    },
     "contactPoint": {
       "@type": "ContactPoint",
+      "telephone": "+33601918798",
       "contactType": "customer service",
       "availableLanguage": ["French", "English"]
     },
     "sameAs": [
-      "https://www.instagram.com/maisonxciv"
+      "https://www.instagram.com/maisonxciv",
+      "https://wa.me/33601918798"
     ]
   }
   </script>
@@ -70,16 +83,22 @@
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@200;300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=6">
 </head>
+<body>
+
+<!-- ─── SKIP LINK — accessibilité clavier (WCAG 2.2 AA) ─── -->
+<a href="#hero" class="skip-link">Aller au contenu principal</a>
 
 <!-- ─── CURSOR ─── -->
 <div id="cur-dot"></div>
 <div id="cur-ring"></div>
 
 <!-- ─── LOADER ─── -->
-<div id="loader">
+<div id="loader" role="status" aria-label="Chargement de Maison XCIV">
   <div class="loader-logo">XCIV</div>
   <div class="loader-bar"><div class="loader-bar-fill"></div></div>
   <div class="loader-sub">Maison Digitale & Horlogère</div>
+  <!-- Bouton skip : UX pour utilisateurs qui reviennent -->
+  <button class="loader-skip-btn" id="loaderSkip" aria-label="Passer l'introduction">Passer →</button>
 </div>
 
 <!-- ─── MOBILE NAV ─── -->
@@ -809,7 +828,7 @@ c160 0 200 9 252 56 45 41 63 88 63 164 0 96 -45 165 -128 195 -37 13 -273 26
           <div class="proj-cat">Branding · Identité Visuelle</div>
           <div class="proj-name">Cedric Grolet</div>
           <div class="proj-text">Pâtisserie dédiée à l’excellence artisanale. Direction artistique sensorielle et minimaliste, mise en scène gastronomique des créations, parcours de commande élégant pensé comme une expérience pâtissière immersive.</div>
-          <a href="https://cedric-grolet.com/" class="proj-link" target="_blank" rel="noopener">Voir le projet →</a>
+          <a href="https://cedric-grolet.com/" class="proj-link" target="_blank" rel="noopener noreferrer">Voir le projet →</a>
         </div>
       </div>
     </div>
@@ -822,7 +841,7 @@ c160 0 200 9 252 56 45 41 63 88 63 164 0 96 -45 165 -128 195 -37 13 -273 26
           <div class="proj-cat">Branding · Web Design</div>
           <div class="proj-name">Core Atelier<br>Pilates</div>
           <div class="proj-text">Studio de pilates contemporain alliant rigueur et élégance. Identité visuelle épurée, univers graphique inspiré du mouvement et du corps, site pensé pour convertir et fidéliser une clientèle exigeante.</div>
-          <a href="https://coreatelierpilates.com/" class="proj-link" target="_blank" rel="noopener">Voir le projet →</a>
+          <a href="https://coreatelierpilates.com/" class="proj-link" target="_blank" rel="noopener noreferrer">Voir le projet →</a>
         </div>
       </div>
     </div>
@@ -835,7 +854,7 @@ c160 0 200 9 252 56 45 41 63 88 63 164 0 96 -45 165 -128 195 -37 13 -273 26
           <div class="proj-cat">Branding · Communication</div>
           <div class="proj-name">Deadline<br>Communications</div>
           <div class="proj-text">Agence de communication à l'identité affirée. Positionnement éditorial distinctif, direction artistique percutante et site conçu pour incarner une vision singulière dans un marché concurrentiel.</div>
-          <a href="https://www.qivo.co.uk/" class="proj-link" target="_blank" rel="noopener">Voir le projet →</a>
+          <a href="https://www.qivo.co.uk/" class="proj-link" target="_blank" rel="noopener noreferrer">Voir le projet →</a>
         </div>
       </div>
     </div>
@@ -914,7 +933,7 @@ c160 0 200 9 252 56 45 41 63 88 63 164 0 96 -45 165 -128 195 -37 13 -273 26
       </div>
     </form>
 
-    <a href="https://instagram.com/maisonxciv" class="contact-ig sr sr-d4" target="_blank">
+    <a href="https://instagram.com/maisonxciv" class="contact-ig sr sr-d4" target="_blank" rel="noopener noreferrer">
       <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       @maisonxciv
     </a>
@@ -947,8 +966,8 @@ c160 0 200 9 252 56 45 41 63 88 63 164 0 96 -45 165 -128 195 -37 13 -273 26
         <li><a href="/collection">Collection complète</a></li>
         <li><a href="/authenticite-garantie">Authenticité & garantie</a></li>
         <li><a href="/livraison-retours">Livraison & retours</a></li>
-        <li><a href="https://instagram.com/maisonxciv" target="_blank">Instagram</a></li>
-        <li><a href="https://wa.me/33601918798" target="_blank">WhatsApp</a></li>
+        <li><a href="https://instagram.com/maisonxciv" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        <li><a href="https://wa.me/33601918798" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -963,7 +982,7 @@ c160 0 200 9 252 56 45 41 63 88 63 164 0 96 -45 165 -128 195 -37 13 -273 26
     </div>
   </div>
   <div class="footer-bottom">
-    <span class="footer-copy">© 2025 Maison XCIV · Tous droits réservés</span>
+    <span class="footer-copy">© <span id="footer-year">2025</span> Maison XCIV · Tous droits réservés</span>
     <div class="footer-bottom-right">
       <a href="/mentions-legales">Mentions légales</a>
       <a href="/politique-confidentialite">Confidentialité</a>

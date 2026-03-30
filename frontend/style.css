@@ -49,6 +49,55 @@ a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 
 /* ═══════════════════════════════════════════
+   SKIP LINK — Accessibilité clavier (WCAG 2.2 AA)
+   Invisible par défaut, visible au focus clavier uniquement
+═══════════════════════════════════════════ */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--c-ink);
+  color: var(--c-white);
+  padding: 0.75rem 1.75rem;
+  font-family: var(--f-sans);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  z-index: 10000;
+  border-radius: 0 0 6px 6px;
+  transition: top 0.2s var(--ease-out);
+  white-space: nowrap;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--c-beige);
+  outline-offset: 2px;
+}
+
+/* ── Bouton "Passer" du loader ───────────────── */
+.loader-skip-btn {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  background: transparent;
+  border: 1px solid rgba(196, 170, 140, 0.35);
+  color: var(--c-beige);
+  font-family: var(--f-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.1rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.4s 0.8s;
+  border-radius: 2px;
+}
+.loader-skip-btn:hover { opacity: 1 !important; }
+/* Apparaît après 800ms pour ne pas distraire au premier chargement */
+#loader:not(.hidden) .loader-skip-btn { opacity: 0.55; }
+
+/* ═══════════════════════════════════════════
    CURSOR
 ═══════════════════════════════════════════ */
 #cur-dot {

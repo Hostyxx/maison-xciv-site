@@ -574,6 +574,18 @@ c160 0 200 9 252 56 45 41 63 88 63 164 0 96 -45 165 -128 195 -37 13 -273 26
     <button class="nouv-filter-btn" data-filter="Vendu">Vendues</button>
   </div>
 
+  <!-- Sélecteur de tri — A→Z, Z→A, Plus récent, Plus ancien -->
+  <div class="nouv-sort-bar sr sr-d2">
+    <label for="nouvSort" class="nouv-sort-label">Trier par</label>
+    <select id="nouvSort" class="nouv-sort-select" aria-label="Trier les montres">
+      <option value="order">Ordre par défaut</option>
+      <option value="az">A → Z</option>
+      <option value="za">Z → A</option>
+      <option value="newest">Plus récent</option>
+      <option value="oldest">Plus ancien</option>
+    </select>
+  </div>
+
   <!-- Grille de montres — vue par défaut : 2 colonnes -->
   <div class="nouv-grid view-2" id="nouv-grid"></div>
 
@@ -583,6 +595,21 @@ c160 0 200 9 252 56 45 41 63 88 63 164 0 96 -45 165 -128 195 -37 13 -273 26
       <span>→</span>
     </a>
   </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+   6 MONTRES LES PLUS RÉCENTES
+   Alimenté automatiquement par renderRecents() via watchesCache.
+   Se met à jour à chaque chargement du catalogue.
+═══════════════════════════════════════ -->
+<section id="recentes">
+  <div class="rec-header">
+    <div class="tag sr">Sélection</div>
+    <h2 class="h2 sr sr-d1">Les plus<br><em>récentes</em></h2>
+    <p class="rec-sub sr sr-d2">Les 6 dernières pièces entrées dans la collection, classées par millésime.</p>
+  </div>
+  <!-- Grille — remplie dynamiquement, jamais vide si le catalogue contient des montres -->
+  <div class="rec-grid view-2" id="rec-grid"></div>
 </section>
 
 <!-- ═══════════════════════════════════════

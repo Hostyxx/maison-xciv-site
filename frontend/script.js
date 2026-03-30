@@ -265,8 +265,11 @@ const API_BASE = '/api/watches';
 /** Cache local pour les montres (évite des requêtes inutiles) */
 let watchesCache = [];
 
-/** Filtre actif */
+/** Filtre actif (statut) */
 let currentFilter = 'all';
+
+/** Tri actif : 'order' | 'az' | 'za' | 'newest' | 'oldest' */
+let currentSort = 'order';
 
 // ── SVG placeholder (affiché si pas d'image) ────────────────
 const watchSVGPlaceholder = `<svg viewBox="0 0 120 152" xmlns="http://www.w3.org/2000/svg">
@@ -391,6 +394,45 @@ const wcObserver = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
 
+/**
+ * Applique le tri sélectionné à un tableau de montres.
+ * N'altère jamais le tableau source — retourne une copie triée.
+ *
+ * @param  {Array} arr  Tableau de montres à trier
+ * @returns {Array}     Nouvelle copie triée selon currentSort
+ */
+function applySort(arr) {
+  const copy = [...arr];
+  switch (currentSort) {
+    // Tri alphabétique A→Z sur "Marque Modèle"
+    case 'az':
+      return copy.sort((a, b) =>
+        `${a.brand} ${a.name}`.localeCompare(`${b.brand} ${b.name}`, 'fr', { sensitivity: 'base' }));
+
+    // Tri alphabétique Z→A
+    case 'za':
+      return copy.sort((a, b) =>
+        `${b.brand} ${b.name}`.localeCompare(`${a.brand} ${a.name}`, 'fr', { sensitivity: 'base' }));
+
+    // Année décroissante (plus récent en premier)
+    case 'newest':
+      return copy.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
+
+    // Année croissante (plus ancien en premier)
+    case 'oldest':
+      return copy.sort((a, b) => (Number(a.year) || 0) - (Number(b.year) || 0));
+
+    // 'order' (défaut) : displayOrder admin puis created_at
+    default:
+      return copy.sort((a, b) => {
+        const aO = a.displayOrder ?? Infinity;
+        const bO = b.displayOrder ?? Infinity;
+        if (aO !== bO) return aO - bO;
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+  }
+}
+
 function renderWatches(filter) {
   const grid    = document.getElementById('nouv-grid');
   const countEl = document.getElementById('nouv-count');
@@ -400,13 +442,8 @@ function renderWatches(filter) {
     ? watchesCache
     : watchesCache.filter(w => w.status === filter);
 
-  // Tri par displayOrder (ordre défini dans l'admin)
-  filtered = [...filtered].sort((a, b) => {
-    const aO = a.displayOrder ?? Infinity;
-    const bO = b.displayOrder ?? Infinity;
-    if (aO !== bO) return aO - bO;
-    return new Date(b.created_at) - new Date(a.created_at);
-  });
+  // Applique le tri sélectionné (ordre admin, A→Z, Z→A, ou par année)
+  filtered = applySort(filtered);
 
   // Page d'accueil : affichage limité à 6 montres
   filtered = filtered.slice(0, 6);
@@ -477,11 +514,39 @@ async function loadWatches() {
 
     watchesCache = json.data;
     renderWatches(currentFilter);
+    renderRecents(); // Alimente la section "Les 6 plus récentes"
 
   } catch (err) {
     console.error('[API] Impossible de charger les montres :', err);
     grid.innerHTML = `<div class="nouv-empty"><p>Impossible de charger le catalogue. Vérifiez que le serveur est démarré.</p></div>`;
   }
+}
+
+
+/**
+ * Affiche les 6 montres les plus récentes dans #rec-grid.
+ * Critère : année de production décroissante.
+ * Se déclenche automatiquement après chaque chargement du catalogue.
+ * Compatible avec les nouvelles montres ajoutées via l'admin.
+ */
+function renderRecents() {
+  const grid = document.getElementById('rec-grid');
+  if (!grid) return;
+
+  if (!watchesCache.length) {
+    grid.innerHTML = '';
+    return;
+  }
+
+  // Tri par année décroissante — sans-année placés en dernier
+  const recents = [...watchesCache]
+    .sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0))
+    .slice(0, 6);
+
+  grid.innerHTML = recents.map((w, i) => buildCard(w, i)).join('');
+
+  // Déclenche les animations scroll-reveal sur les nouvelles cartes
+  grid.querySelectorAll('.wc-sr').forEach(el => wcObserver.observe(el));
 }
 
 
@@ -918,8 +983,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (e.target.tagName === 'A') closeMobile();
   });
 
-  // ── Délégation : boutons favoris + expand dans la grille Nouveautés ──
-  document.getElementById('nouv-grid').addEventListener('click', e => {
+  // ── Délégation : favoris + expand dans les deux grilles ──────
+  // Fonction commune pour éviter la duplication de code
+  function handleGridClick(e) {
     const favBtn  = e.target.closest('.wc-fav-btn');
     const moreBtn = e.target.closest('.wc-more-btn');
     if (favBtn) toggleFavorite(parseInt(favBtn.dataset.watchId, 10), favBtn);
@@ -932,7 +998,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         drawer.setAttribute('aria-hidden', String(!isOpen));
       }
     }
-  });
+  }
+
+  // Grille "Nouveautés" + grille "Les plus récentes"
+  document.getElementById('nouv-grid').addEventListener('click', handleGridClick);
+  document.getElementById('rec-grid')?.addEventListener('click', handleGridClick);
 
   // ── Délégation : boutons Modifier / Supprimer dans l'admin panel ─
   const adminList = document.getElementById('adminList');
@@ -963,10 +1033,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     dot.addEventListener('click', () => goToWatch(parseInt(dot.dataset.index, 10)));
   });
 
-  // ── Filtre montres ───────────────────────────────────────────
+  // ── Filtre montres (statut) ─────────────────────────────────
   document.querySelectorAll('.nouv-filter-btn').forEach(btn => {
     btn.addEventListener('click', function () { filterWatches(this.dataset.filter, this); });
   });
+
+  // ── Tri du catalogue ─────────────────────────────────────────
+  // Déclenche un micro-flash du grid + re-render instantané
+  const nouvSort = document.getElementById('nouvSort');
+  if (nouvSort) {
+    nouvSort.addEventListener('change', function () {
+      currentSort = this.value;
+      const grid = document.getElementById('nouv-grid');
+      if (grid) {
+        grid.classList.add('sorting'); // légère transparence pendant le tri
+        renderWatches(currentFilter);
+        requestAnimationFrame(() => grid.classList.remove('sorting'));
+      }
+    });
+  }
 
   // ── Sélecteur de vue ─────────────────────────────────────────
   document.querySelectorAll('.view-btn').forEach(btn => {

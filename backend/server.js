@@ -100,24 +100,8 @@ app.use('/api/', apiLimiter);
 // Prioritaire sur frontend/sitemap.xml — reflète le catalogue live
 app.get('/sitemap.xml', sitemapRouter);
 
-// ─── Fichiers statiques ──────────────────────────────────────
-app.use(express.static(path.join(__dirname, '../frontend'), {
-  dotfiles: 'deny',
-  // Images et fonts : cache 1h en prod
-  // HTML, JS, CSS : jamais mis en cache (no-cache) — évite les versions
-  // obsolètes sur iPhone/Safari après un déploiement
-  maxAge: 0,
-  setHeaders(res, filePath) {
-    const ext = filePath.split('.').pop().toLowerCase();
-    if (['html', 'js', 'css'].includes(ext)) {
-      res.setHeader('Cache-Control', 'no-cache, must-revalidate');
-    } else if (['jpg', 'jpeg', 'png', 'webp', 'avif', 'ico', 'svg', 'woff', 'woff2'].includes(ext)) {
-      res.setHeader('Cache-Control', isProduction ? 'public, max-age=3600' : 'no-cache');
-    }
-  }
-}));
-
 // ─── Routes API ──────────────────────────────────────────────
+// Déclarées AVANT express.static pour ne jamais être interceptées.
 // Auth admin (rate limited)
 app.use('/api/auth',          authLimiter,    authRouter);
 // Utilisateurs (login rate limited, register rate limited)
@@ -134,6 +118,8 @@ app.use('/api/admin/clients', adminClientsRouter);
 app.use('/api/admin/invoices', invoicesRouter);
 
 // ─── Pages admin (protégées côté serveur) ────────────────────
+// Déclarées AVANT express.static — les fichiers admin/dashboard.html
+// ne sont pas servis directement, ils passent par requireAuthPage.
 app.get('/admin',            requireAuthPage, (req, res) => res.redirect('/admin/dashboard'));
 app.get('/admin/dashboard',  requireAuthPage, (req, res) =>
   res.sendFile(path.join(__dirname, '../frontend/admin/dashboard.html')));
@@ -144,7 +130,20 @@ app.get('/admin/merci',      requireAuthPage, (req, res) =>
 app.get('/admin/login',      (req, res) =>
   res.sendFile(path.join(__dirname, '../frontend/admin/login.html')));
 
-// ─── Page Collection (SSR — contenu visible par Googlebot) ──
+// ─── Page Collection ─────────────────────────────────────────
+// DÉCLARÉE AVANT express.static — sinon serve-static intercepte le
+// répertoire frontend/collection/ et envoie un redirect 301 vers
+// /collection/ (avec slash). Safari iOS interprète ce redirect comme
+// un téléchargement de fichier au lieu d'une navigation.
+//
+//  - /collection   → route SSR ci-dessous (répond en premier)
+//  - /collection/  → redirect 301 vers /collection (ci-dessous)
+//  - /collection/collection.js → express.static sert le fichier .js
+//  - /collection/collection.css → express.static sert le fichier .css
+app.get('/collection/', (req, res) => res.redirect(301, '/collection'));
+
+// Route SSR — contenu pré-rendu pour Googlebot + envoi HTML propre
+// Content-Type: text/html est explicitement forcé → jamais de download
 app.get('/collection', (req, res) => {
   try {
     const { watches } = readDB();
@@ -219,6 +218,23 @@ app.get('/collection', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/collection/index.html'));
   }
 });
+
+// ─── Fichiers statiques ──────────────────────────────────────
+// Déclaré APRÈS /collection — voir commentaire ci-dessus.
+// HTML, JS, CSS : no-cache (évite les versions obsolètes sur Safari iOS)
+// Images/fonts  : cache 1h en prod
+app.use(express.static(path.join(__dirname, '../frontend'), {
+  dotfiles: 'deny',
+  maxAge: 0,
+  setHeaders(res, filePath) {
+    const ext = filePath.split('.').pop().toLowerCase();
+    if (['html', 'js', 'css'].includes(ext)) {
+      res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+    } else if (['jpg', 'jpeg', 'png', 'webp', 'avif', 'ico', 'svg', 'woff', 'woff2'].includes(ext)) {
+      res.setHeader('Cache-Control', isProduction ? 'public, max-age=3600' : 'no-cache');
+    }
+  }
+}));
 
 // ─── Pages utilisateur ────────────────────────────────────────
 app.get('/connexion',   (req, res) =>

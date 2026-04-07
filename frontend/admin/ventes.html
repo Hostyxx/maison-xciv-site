@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ventes — Maison XCIV Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@200;300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="ventes.css">
+</head>
+<body class="dashboard-body">
+
+  <!-- ─── Topbar mobile ─── -->
+  <div class="mobile-topbar">
+    <div class="mobile-topbar-logo">XCIV</div>
+    <button class="sidebar-toggle-btn" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ─── Overlay sidebar mobile ─── -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ─── Sidebar ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-eyebrow">Maison</div>
+      <div class="sidebar-logo-main">XCIV</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="/admin/dashboard" class="sidebar-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+        <span>Catalogue</span>
+      </a>
+      <a href="/admin/facturation" class="sidebar-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        <span>Facturation</span>
+      </a>
+      <a href="#" class="sidebar-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+          <polyline points="16 7 22 7 22 13"/>
+        </svg>
+        <span>Ventes</span>
+      </a>
+      <a href="/admin/merci" class="sidebar-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+        </svg>
+        <span>Remerciement</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="/" target="_blank" rel="noopener noreferrer" class="sidebar-site-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        <span>Voir le site</span>
+      </a>
+      <button class="sidebar-logout" id="logoutBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        <span>Déconnexion</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ─── Contenu principal ─── -->
+  <main class="dash-main">
+
+    <!-- Header -->
+    <header class="dash-header">
+      <div class="dash-header-left">
+        <h1 class="dash-title">Historique des <em>Ventes</em></h1>
+        <p class="dash-subtitle">Répertoriez et suivez toutes vos ventes de montres</p>
+      </div>
+      <div class="vt-header-actions">
+        <button class="btn-secondary btn-sm" id="exportCsvBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Export CSV
+        </button>
+        <button class="dash-add-btn" id="newVenteBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v8M8 12h8"/>
+          </svg>
+          Nouvelle vente
+        </button>
+      </div>
+    </header>
+
+    <!-- KPI Cards -->
+    <div class="vt-kpi-row" id="kpiRow">
+      <div class="vt-kpi vt-kpi-accent">
+        <div class="vt-kpi-label">CA Total réalisé</div>
+        <div class="vt-kpi-value" id="kpiRevenue">—</div>
+        <div class="vt-kpi-sub" id="kpiRevenueSub">sur l'ensemble des ventes</div>
+      </div>
+      <div class="vt-kpi">
+        <div class="vt-kpi-label">Nombre de ventes</div>
+        <div class="vt-kpi-value" id="kpiCount">—</div>
+        <div class="vt-kpi-sub" id="kpiCountSub">montres vendues</div>
+      </div>
+      <div class="vt-kpi">
+        <div class="vt-kpi-label">Prix moyen</div>
+        <div class="vt-kpi-value" id="kpiAvg">—</div>
+        <div class="vt-kpi-sub">par transaction</div>
+      </div>
+      <div class="vt-kpi">
+        <div class="vt-kpi-label">Marque phare</div>
+        <div class="vt-kpi-value" id="kpiBrand">—</div>
+        <div class="vt-kpi-sub" id="kpiBrandSub">ventes les plus nombreuses</div>
+      </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="vt-filters">
+      <div class="vt-search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="search" class="vt-search" id="searchInput" placeholder="Rechercher une marque, modèle, acheteur…" aria-label="Rechercher">
+      </div>
+      <select class="vt-select" id="brandFilter" aria-label="Filtrer par marque">
+        <option value="">Toutes les marques</option>
+        <option value="Rolex">Rolex</option>
+        <option value="Patek Philippe">Patek Philippe</option>
+        <option value="Audemars Piguet">Audemars Piguet</option>
+        <option value="Autre">Autre</option>
+      </select>
+      <select class="vt-select" id="yearFilter" aria-label="Filtrer par année de vente">
+        <option value="">Toutes les années</option>
+      </select>
+      <button class="vt-filters-reset" id="resetFilters">Réinitialiser</button>
+    </div>
+
+    <!-- Barre résultats -->
+    <div class="vt-results-bar">
+      <span class="vt-results-count" id="resultsCount">Chargement…</span>
+    </div>
+
+    <!-- Tableau -->
+    <div class="vt-table-wrap" id="tableWrap">
+      <table class="vt-table" id="ventesTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Montre</th>
+            <th>Millésime</th>
+            <th>Acheteur</th>
+            <th>Paiement</th>
+            <th style="text-align:right">Prix</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="ventesBody">
+          <tr><td colspan="7"><div class="vt-empty"><div class="vt-empty-icon">⏳</div><div class="vt-empty-title">Chargement…</div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <!-- ─── Modal Ajout / Édition ─── -->
+  <div class="vt-modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="vt-modal">
+      <div class="vt-modal-head">
+        <h2 class="vt-modal-title" id="modalTitle">Nouvelle vente</h2>
+        <button class="vt-modal-close" id="modalClose" aria-label="Fermer">✕</button>
+      </div>
+      <div class="vt-modal-body">
+        <form id="venteForm" novalidate>
+
+          <!-- Section Montre -->
+          <div class="vt-section-title">La montre</div>
+
+          <!-- Sélection depuis le catalogue -->
+          <div id="catalogueSection">
+            <button type="button" class="vt-catalog-btn" id="openPickerBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+              Choisir depuis le catalogue
+            </button>
+          </div>
+          <div id="catalogueSelected" style="display:none"></div>
+
+          <!-- Champs montre -->
+          <div class="vt-field-group">
+            <div class="vt-field">
+              <label for="fBrand">Marque *</label>
+              <input type="text" id="fBrand" name="brand" placeholder="ex. Rolex" autocomplete="off" required>
+            </div>
+            <div class="vt-field">
+              <label for="fModel">Modèle *</label>
+              <input type="text" id="fModel" name="model" placeholder="ex. Submariner" autocomplete="off" required>
+            </div>
+          </div>
+          <div class="vt-field-group cols-3">
+            <div class="vt-field">
+              <label for="fReference">Référence</label>
+              <input type="text" id="fReference" name="reference" placeholder="ex. 116610LN" autocomplete="off">
+            </div>
+            <div class="vt-field">
+              <label for="fYear">Millésime</label>
+              <input type="number" id="fYear" name="year" placeholder="ex. 1998" min="1900" max="2099">
+            </div>
+            <div class="vt-field">
+              <label for="fSerial">N° de série</label>
+              <input type="text" id="fSerial" name="serialNumber" placeholder="optionnel" autocomplete="off">
+            </div>
+          </div>
+
+          <!-- Section Vente -->
+          <div class="vt-section-title">La transaction</div>
+          <div class="vt-field-group">
+            <div class="vt-field">
+              <label for="fPrice">Prix de vente (€) *</label>
+              <input type="number" id="fPrice" name="price" placeholder="ex. 18500" min="0" step="1" required>
+            </div>
+            <div class="vt-field">
+              <label for="fSoldAt">Date de vente *</label>
+              <input type="date" id="fSoldAt" name="soldAt" required>
+            </div>
+          </div>
+          <div class="vt-field-group cols-1">
+            <div class="vt-field">
+              <label for="fPayment">Mode de paiement</label>
+              <select id="fPayment" name="paymentMethod">
+                <option value="Virement bancaire">Virement bancaire</option>
+                <option value="Espèces">Espèces</option>
+                <option value="Chèque">Chèque</option>
+                <option value="Carte bancaire">Carte bancaire</option>
+                <option value="Cryptomonnaie">Cryptomonnaie</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Section Acheteur -->
+          <div class="vt-section-title">Acheteur <span style="font-weight:300;letter-spacing:0;text-transform:none;font-size:10px;color:var(--grey-lt)">(optionnel)</span></div>
+          <div class="vt-field-group">
+            <div class="vt-field">
+              <label for="fBuyerName">Nom de l'acheteur</label>
+              <input type="text" id="fBuyerName" name="buyerName" placeholder="ex. Jean Dupont" autocomplete="off">
+            </div>
+            <div class="vt-field">
+              <label for="fBuyerPhone">Téléphone</label>
+              <input type="tel" id="fBuyerPhone" name="buyerPhone" placeholder="ex. 06 12 34 56 78" autocomplete="off">
+            </div>
+          </div>
+
+          <!-- Note -->
+          <div class="vt-section-title">Note interne</div>
+          <div class="vt-field-group cols-1">
+            <div class="vt-field">
+              <label for="fNote">Note</label>
+              <textarea id="fNote" name="note" placeholder="Informations complémentaires sur cette vente…"></textarea>
+            </div>
+          </div>
+
+          <!-- Hidden -->
+          <input type="hidden" id="fWatchId" name="watchId">
+
+          <!-- Pied de modal -->
+          <div class="vt-modal-foot">
+            <button type="button" class="btn-secondary btn-sm" id="modalCancelBtn">Annuler</button>
+            <button type="submit" class="btn-primary btn-sm" id="modalSubmitBtn">Enregistrer la vente</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Catalogue Picker ─── -->
+  <div class="vt-picker-overlay" id="pickerOverlay" role="dialog" aria-modal="true" aria-label="Choisir une montre">
+    <div class="vt-picker">
+      <div class="vt-picker-head">
+        <span class="vt-picker-title">Choisir une montre</span>
+        <button class="vt-modal-close" id="pickerClose" aria-label="Fermer">✕</button>
+      </div>
+      <div class="vt-picker-search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="search" class="vt-picker-search" id="pickerSearch" placeholder="Rechercher dans le catalogue…" aria-label="Rechercher une montre">
+      </div>
+      <div class="vt-picker-list" id="pickerList">
+        <div class="vt-picker-empty">Chargement du catalogue…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Toast ─── -->
+  <div class="dash-toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+<script src="ventes.js"></script>
+</body>
+</html>

@@ -19,6 +19,7 @@ const { readDB } = require('../database/database');
 require('../database/usersDB');
 require('../database/favoritesDB');
 require('../database/invoicesDB');
+require('../database/ventesDB');
 
 const watchesRouter      = require('./routes/watches');
 const authRouter         = require('./routes/auth');         // admin auth
@@ -27,6 +28,7 @@ const favoritesRouter    = require('./routes/favorites');    // favoris
 const uploadRouter       = require('./routes/upload');
 const adminClientsRouter = require('./routes/adminClients'); // gestion clients (admin)
 const invoicesRouter     = require('./routes/invoices');     // facturation (🔒 admin)
+const ventesRouter       = require('./routes/ventes');       // historique ventes (🔒 admin)
 const sitemapRouter      = require('./routes/sitemap');      // sitemap.xml dynamique
 
 const { requireAuthPage }                   = require('./middleware/auth');
@@ -116,6 +118,8 @@ app.use('/api/upload',        uploadLimiter,  uploadRouter);
 app.use('/api/admin/clients', adminClientsRouter);
 // Facturation admin
 app.use('/api/admin/invoices', invoicesRouter);
+// Historique ventes admin
+app.use('/api/admin/ventes',   ventesRouter);
 
 // ─── Pages admin (protégées côté serveur) ────────────────────
 // Déclarées AVANT express.static — les fichiers admin/dashboard.html
@@ -127,6 +131,8 @@ app.get('/admin/facturation', requireAuthPage, (req, res) =>
   res.sendFile(path.join(__dirname, '../frontend/admin/facturation.html')));
 app.get('/admin/merci',      requireAuthPage, (req, res) =>
   res.sendFile(path.join(__dirname, '../frontend/admin/merci.html')));
+app.get('/admin/ventes',     requireAuthPage, (req, res) =>
+  res.sendFile(path.join(__dirname, '../frontend/admin/ventes.html')));
 app.get('/admin/login',      (req, res) =>
   res.sendFile(path.join(__dirname, '../frontend/admin/login.html')));
 

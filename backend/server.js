@@ -136,15 +136,13 @@ app.get('/admin/login',      (req, res) =>
 // /collection/ (avec slash). Safari iOS interprète ce redirect comme
 // un téléchargement de fichier au lieu d'une navigation.
 //
-//  - /collection   → route SSR ci-dessous (répond en premier)
-//  - /collection/  → redirect 301 vers /collection (ci-dessous)
-//  - /collection/collection.js → express.static sert le fichier .js
-//  - /collection/collection.css → express.static sert le fichier .css
-app.get('/collection/', (req, res) => res.redirect(301, '/collection'));
-
-// Route SSR — contenu pré-rendu pour Googlebot + envoi HTML propre
-// Content-Type: text/html est explicitement forcé → jamais de download
-app.get('/collection', (req, res) => {
+// Les deux URL sont gérées directement (sans redirect) pour éviter
+// tout problème de téléchargement sur Safari iOS / mobiles :
+//  - /collection   → SSR (répond directement)
+//  - /collection/  → SSR (répond directement, pas de redirect)
+//  - /collection/collection.js  → express.static sert le fichier
+//  - /collection/collection.css → express.static sert le fichier
+app.get(['/collection', '/collection/'], (req, res) => {
   try {
     const { watches } = readDB();
     const collFile = path.join(__dirname, '../frontend/collection/index.html');
